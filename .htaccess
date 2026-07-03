@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^casasprefabricadascoquimbo\.cl [NC]
+RewriteRule ^(.*)$ https://www.casasprefabricadascoquimbo.cl/$1 [L,R=301]
+</IfModule>

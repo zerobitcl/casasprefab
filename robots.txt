@@ -1,0 +1,15 @@
+# robots.txt — PrefabCoquimbo
+# https://www.casasprefabricadascoquimbo.cl
+
+User-agent: *
+Allow: /
+
+# Favicon — explícito para Googlebot-Image (SERP icon)
+Allow: /favicon.svg
+
+# Bloquear activos que no aportan valor SEO
+Disallow: /404.html
+Disallow: /default.php
+
+# Sitemaps
+Sitemap: https://www.casasprefabricadascoquimbo.cl/sitemap.xml
