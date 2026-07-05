@@ -2179,19 +2179,13 @@ details.aio-detail[open] .aio-icon {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 .cot-modal.is-open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  display: flex;
 }
 
 .cot-modal-overlay {
@@ -2204,6 +2198,7 @@ details.aio-detail[open] .aio-icon {
 
 .cot-modal-dialog {
   position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 420px;
   background: var(--white);
@@ -2211,11 +2206,10 @@ details.aio-detail[open] .aio-icon {
   padding: 2rem 1.75rem 1.75rem;
   box-shadow: var(--shadow-xl);
   border: 1px solid var(--slate-200);
-  transform: translateY(16px) scale(0.98);
-  transition: transform 0.35s var(--ease-out);
 }
-.cot-modal.is-open .cot-modal-dialog {
-  transform: translateY(0) scale(1);
+
+body.cot-modal-open {
+  overflow: hidden;
 }
 
 .cot-modal-close {
@@ -2280,6 +2274,16 @@ details.aio-detail[open] .aio-icon {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
+}
+
+.cot-modal-options--grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.625rem;
+}
+
+@media (max-width: 380px) {
+  .cot-modal-options--grid { grid-template-columns: 1fr; }
 }
 
 .cot-modal-opt {

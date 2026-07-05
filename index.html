@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es-CL">
+<html lang="es-CL" data-sticky-cot="Casas en La Serena/Coquimbo">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +33,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="image" href="images/casa-serena-costa.webp" type="image/webp" fetchpriority="high" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <!-- Estilos -->
   <link rel="stylesheet" href="styles.css" />
@@ -62,6 +63,9 @@
     "telephone": "+56-9-9428-4048",
     "email": "contacto@casasprefabricadascoquimbo.cl",
     "foundingDate": "2018",
+    "sameAs": [
+      "https://www.google.com/maps/search/?api=1&query=PrefabCoquimbo+La+Serena+Coquimbo"
+    ],
     "currenciesAccepted": "CLP",
     "paymentAccepted": "Transferencia bancaria, cheque, financiamiento",
     "address": {
@@ -88,25 +92,37 @@
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Proyectos Prefabricados a Medida",
+      "name": "Casas Prefabricadas a Medida — IV Región",
       "itemListElement": [
         {
           "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Cabaña o Proyecto Pequeño" },
-          "description": "Casas prefabricadas compactas para veraneo, turismo o primera vivienda. Diseño y metros cuadrados a definir."
+          "itemOffered": { "@type": "Service", "name": "Diseño y cotización de casa prefabricada a medida" },
+          "description": "Proyecto personalizado según terreno, metros cuadrados, estilo y presupuesto. Sin catálogo cerrado."
         },
         {
           "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Casa Residencial Familiar" },
-          "description": "Vivienda permanente con diseño adaptable al terreno y necesidades de cada familia."
+          "itemOffered": { "@type": "Service", "name": "Asesoría técnica por comuna" },
+          "description": "Orientación sobre clima costero, permisos DOM y materialidad (Panel SIP, Metalcon) según ubicación del terreno."
         },
         {
           "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Proyecto Premium a Medida" },
-          "description": "Casas de mayor superficie y terminación personalizada para parcelas de agrado o segunda residencia."
+          "itemOffered": { "@type": "Service", "name": "Coordinación con fabricantes locales" },
+          "description": "Red de fabricantes y constructores de la Región de Coquimbo. Cotización desglosada por WhatsApp."
         }
       ]
     }
+  }
+  </script>
+
+  <!-- JSON-LD: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PrefabCoquimbo",
+    "url": "https://www.casasprefabricadascoquimbo.cl/",
+    "description": "Casas prefabricadas a medida en La Serena, Coquimbo y la IV Región.",
+    "inLanguage": "es-CL"
   }
   </script>
 
@@ -116,6 +132,11 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta una casa prefabricada en La Serena o Coquimbo?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No publicamos precios de vitrina porque cada proyecto a medida es distinto: dependen los metros cuadrados, la comuna, el acceso al terreno, la materialidad y el nivel de terminación. Escríbenos por WhatsApp con tu comuna y una idea de lo que buscas; te enviamos una cotización desglosada sin compromiso." }
+      },
       {
         "@type": "Question",
         "name": "¿Las casas prefabricadas en Chile necesitan permiso de construcción?",
@@ -128,7 +149,7 @@
       },
       {
         "@type": "Question",
-        "name": "¿Cuál es el plazo real de entrega de una casa prefabricada?",
+        "name": "¿Cuál es el plazo real de entrega desde que firmo el contrato?",
         "acceptedAnswer": { "@type": "Answer", "text": "Depende del tamaño, nivel de terminación y condiciones del terreno. La mayoría de los proyectos son a medida, por lo que el plazo se define en la consulta personalizada. Escríbenos por WhatsApp con una idea de lo que buscas y te damos un estimado realista." }
       },
       {
@@ -167,7 +188,7 @@
 
     <!-- Desktop links -->
     <ul class="nav-links" role="list">
-      <li><a href="#modelos"    class="nav-link">Proyectos</a></li>
+      <li><a href="#modelos"    class="nav-link">Estilos</a></li>
       <li><a href="#ventajas"   class="nav-link">Ventajas</a></li>
       <li><a href="cuarta-region.html" class="nav-link">Cuarta Región</a></li>
       <li><a href="ovalle.html" class="nav-link">Ovalle / Interior</a></li>
@@ -188,7 +209,7 @@
   <!-- Mobile menu -->
   <div id="mobile-menu" class="mobile-menu" role="navigation" aria-label="Menú móvil">
     <div class="mobile-menu-inner">
-      <a href="#modelos"    class="nav-link">Tipos de Proyecto</a>
+      <a href="#modelos"    class="nav-link">Estilos de Inspiración</a>
       <a href="#ventajas"   class="nav-link">Ventajas Técnicas</a>
       <a href="cuarta-region.html" class="nav-link">Cuarta Región</a>
       <a href="ovalle.html" class="nav-link">Ovalle / Interior</a>
@@ -214,7 +235,7 @@
         <div class="hero-img-frame">
           <img
             src="images/casa-serena-costa.webp"
-            alt="Render fotorrealista de Casa Prefabricada modelo Mediterráneo instalada en La Serena"
+            alt="Casa prefabricada a medida en terreno costero de La Serena, Región de Coquimbo"
             class="hero-img"
             width="580"
             height="435"
@@ -227,8 +248,8 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
             </div>
             <div>
-              <span class="hero-img-float-main">+320 proyectos entregados</span>
-              <span class="hero-img-float-sub">en la Región de Coquimbo · desde 2018</span>
+              <span class="hero-img-float-main">Proyectos a medida en la IV Región</span>
+              <span class="hero-img-float-sub">Asesoría local · desde 2018</span>
             </div>
           </div>
         </div>
@@ -252,11 +273,14 @@
           ¿Buscas en el interior? <a href="cuarta-region.html" style="color:#FCD34D; font-weight:600; text-decoration:underline;">Guía IV Región →</a>
         </p>
 
-        <div style="display:flex; flex-wrap:wrap; gap:0.875rem; margin-bottom:2.5rem;">
+        <div style="display:flex; flex-wrap:wrap; gap:0.875rem; margin-bottom:0.75rem;">
           <button type="button" class="btn btn-primary btn-primary-lg btn-cotizador-main">
             Cotizar mi Casa Rápido ⚡
           </button>
         </div>
+        <p style="margin-bottom:2.5rem;">
+          <a href="#" data-whatsapp="Hola, me gustaría cotizar una casa a medida en La Serena o Coquimbo." style="color:rgba(255,255,255,0.55); font-size:0.875rem; font-weight:500; text-decoration:underline; text-underline-offset:3px;">¿Prefieres WhatsApp directo? Escríbenos →</a>
+        </p>
 
         <!-- Trust strip -->
         <div style="display:flex; flex-wrap:wrap; gap:1.25rem;">
@@ -284,7 +308,12 @@
 <aside class="region-hub-strip" aria-label="Cobertura en otras zonas de la IV Región">
   <div class="section-container">
     <p>
-      ¿Tu terreno está en <strong>Vicuña</strong>, el <strong>Valle del Elqui</strong> u <strong>Ovalle</strong>?
+      ¿Tu terreno está en <strong>La Serena</strong> o <strong>Coquimbo</strong>?
+      <a href="casas-prefabricadas-la-serena.html">Casas en La Serena</a>
+      <span aria-hidden="true">·</span>
+      <a href="casas-prefabricadas-coquimbo.html">Casas en Coquimbo</a>
+      <span aria-hidden="true">·</span>
+      ¿Interior?
       <a href="cuarta-region.html">Guía completa Cuarta Región</a>
       <span aria-hidden="true">·</span>
       <a href="ovalle.html">Casas para el interior y Valle del Limarí</a>
@@ -300,12 +329,12 @@
   <div class="section-container">
     <div class="stats-grid">
       <div class="stat-item">
-        <span class="stat-number">+320</span>
-        <span class="stat-label">Proyectos entregados en la IV Región</span>
+        <span class="stat-number">2018</span>
+        <span class="stat-label">Asesorando proyectos en la IV Región</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number">60</span>
-        <span class="stat-label">Días promedio de instalación</span>
+        <span class="stat-number">A medida</span>
+        <span class="stat-label">Diseños posibles — sin catálogo cerrado</span>
       </div>
       <div class="stat-item">
         <span class="stat-number">IV</span>
@@ -400,9 +429,9 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
         </div>
         <span class="model-size-tag">Estilo de inspiración</span>
-        <h3 class="model-title">Proyectos Modulares</h3>
+        <h3 class="model-title">Estilo Metalcón</h3>
         <p class="model-desc">
-          Diseño contemporáneo y crecimiento por etapas: parte con lo esencial y amplía cuando lo necesites. Perfecto para parcelas de agrado o segunda residencia con proyección.
+          Estructura metálica liviana, rápida de montar y ideal para terrenos con pendiente o segunda vivienda. Adaptamos distribución y terminaciones según tu proyecto real.
         </p>
         <ul class="model-features" aria-label="Qué adaptamos en este estilo">
           <li>Adaptable desde 30 m² a 120 m²</li>
@@ -433,7 +462,7 @@
       </h2>
       <p style="color:var(--slate-500); font-size:1rem; line-height:1.75; margin-bottom:2rem;">
         Metros cuadrados, nivel de terminación, tipo de terreno y presupuesto cambian en cada caso.
-        Escríbenos con tu idea (aunque sea aproximada) y agendamos una asesoría gratuita con opciones reales para tu comuna.
+        Escríbenos con tu idea (aunque sea aproximada) y te respondemos por WhatsApp con opciones reales para tu comuna.
       </p>
       <button type="button" class="btn btn-primary btn-primary-lg btn-cotizador-main">
         Cotizar mi Casa Rápido ⚡
@@ -608,8 +637,15 @@
           <div style="display:flex; gap:0.875rem; align-items:flex-start;">
             <div style="width:2.25rem; height:2.25rem; background:var(--amber-700); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8125rem; font-weight:700; flex-shrink:0; margin-top:2px;">3</div>
             <div>
+              <strong style="font-size:0.9375rem; color:var(--slate-900);">Indica tu comuna</strong>
+              <p style="font-size:0.875rem; color:var(--slate-500); margin-top:0.25rem;">La Serena, Coquimbo, Ovalle u otra de la IV Región.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:0.875rem; align-items:flex-start;">
+            <div style="width:2.25rem; height:2.25rem; background:var(--amber-700); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8125rem; font-weight:700; flex-shrink:0; margin-top:2px;">4</div>
+            <div>
               <strong style="font-size:0.9375rem; color:var(--slate-900);">Recibe presupuesto por WhatsApp</strong>
-              <p style="font-size:0.875rem; color:var(--slate-500); margin-top:0.25rem;">Te respondemos en menos de 2 horas, sin compromiso.</p>
+              <p style="font-size:0.875rem; color:var(--slate-500); margin-top:0.25rem;">Te respondemos el mismo día hábil, sin compromiso.</p>
             </div>
           </div>
         </div>
@@ -620,9 +656,9 @@
         <div class="cotizador-card">
           <div class="cotizador-head">
             <h3 class="cotizador-title">Cotiza en 30 segundos</h3>
-            <p class="cotizador-subtitle">3 pasos · Sin compromiso · Respuesta por WhatsApp</p>
+            <p class="cotizador-subtitle">4 pasos · Sin compromiso · Respuesta por WhatsApp</p>
             <div class="progress-track" aria-hidden="true">
-              <div class="progress-fill" style="width:100%;"></div>
+              <div class="progress-fill" style="width:0%;"></div>
             </div>
           </div>
           <div class="cotizador-body" style="text-align:center;">
@@ -663,6 +699,16 @@
       </div>
 
       <div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">
+            ¿Cuánto cuesta una casa prefabricada en La Serena o Coquimbo?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </button>
+          <div class="faq-answer" style="max-height:0;">
+            <p class="faq-answer-inner">No publicamos precios de vitrina porque cada proyecto a medida es distinto: dependen los metros cuadrados, la comuna, el acceso al terreno, la materialidad y el nivel de terminación. Escríbenos por WhatsApp con tu comuna y una idea de lo que buscas; te enviamos una cotización desglosada sin compromiso.</p>
+          </div>
+        </div>
+
         <div class="faq-item">
           <button class="faq-btn" aria-expanded="false">
             ¿Las casas prefabricadas en Chile necesitan permiso de construcción?
@@ -709,7 +755,7 @@
             <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           </button>
           <div class="faq-answer" style="max-height:0;">
-            <p class="faq-answer-inner">Sí. Trabajamos con un esquema de pago en tres etapas: 40% al firmar el contrato, 40% al despacho del kit desde fábrica y 20% a la recepción conforme en obra. También aceptamos carta de crédito hipotecario del Banco Estado u otras entidades financieras, y subsidiamos los gastos de tasación para clientes con subsidio habitacional DS-49 o DS-1. Consulta por la disponibilidad de financiamiento con tu ejecutivo asignado.</p>
+            <p class="faq-answer-inner">Sí. Trabajamos con esquemas de pago por etapas según el fabricante asignado a tu proyecto, y orientamos sobre carta de crédito hipotecario o subsidio habitacional DS-49 / DS-1 cuando aplica. Consulta las opciones disponibles para tu caso por WhatsApp.</p>
           </div>
         </div>
       </div>
@@ -724,12 +770,12 @@
 ══════════════════════════════════════════════════ -->
 <section style="background:var(--slate-900); padding:5rem 0;" aria-label="Llamada a la acción final">
   <div class="section-container" style="text-align:center; max-width:680px; margin:0 auto;">
-    <span class="badge badge-amber-on-dark" style="margin-bottom:1.5rem;">Sin compromiso · Respuesta en 2 horas</span>
+    <span class="badge badge-amber-on-dark" style="margin-bottom:1.5rem;">Sin compromiso · Respuesta el mismo día hábil</span>
     <h2 style="font-size:clamp(1.875rem,4vw,2.75rem); color:white; letter-spacing:-0.03em; margin-bottom:1.125rem;">
-      Tu Casa a Medida en La Serena o Coquimbo<br>Comienza con una Asesoría Gratuita
+      Tu Casa a Medida en La Serena o Coquimbo<br>Comienza con una Cotización Gratuita
     </h2>
     <p style="color:rgba(255,255,255,0.55); font-size:1rem; line-height:1.7; margin-bottom:2.5rem;">
-      Más de 320 familias en la IV Región ya construyeron su casa a medida con nuestra red local. Cuéntanos tu proyecto por WhatsApp y recibe orientación sin compromiso.
+      Familias de la IV Región ya construyeron con nuestra red local de fabricantes. Cuéntanos tu proyecto por WhatsApp y recibe orientación sin compromiso.
     </p>
     <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
       <button type="button" class="btn btn-primary btn-primary-lg btn-cotizador-main">Cotizar mi Casa Rápido ⚡</button>
@@ -785,7 +831,7 @@
         <ul class="footer-links">
           <li><a href="#modelos">Estilo Mediterráneo</a></li>
           <li><a href="#modelos">Estilo Tradicional</a></li>
-          <li><a href="#modelos">Proyectos Modulares</a></li>
+          <li><a href="#modelos">Estilo Metalcón</a></li>
           <li><button type="button" class="btn-cotizador-main footer-link-btn">Cotizar mi Casa Rápido ⚡</button></li>
         </ul>
       </div>
@@ -794,8 +840,8 @@
       <div>
         <p class="footer-heading">Cobertura Regional</p>
         <ul class="footer-links">
-          <li><a href="cuarta-region.html">Casas Prefabricadas La Serena</a></li>
-          <li><a href="cuarta-region.html">Casas Prefabricadas Coquimbo</a></li>
+          <li><a href="casas-prefabricadas-la-serena.html">Casas Prefabricadas La Serena</a></li>
+          <li><a href="casas-prefabricadas-coquimbo.html">Casas Prefabricadas Coquimbo</a></li>
           <li><a href="cuarta-region.html">Valle del Elqui · Vicuña</a></li>
           <li><a href="ovalle.html">Casas Prefabricadas Ovalle</a></li>
           <li><a href="ovalle.html">Valle del Limarí</a></li>
@@ -831,64 +877,6 @@
 
   </div>
 </footer>
-
-
-<!-- Sticky bar móvil -->
-<div class="sticky-cot-bar" id="sticky-cot-bar">
-  <p class="sticky-cot-bar-text">Casas en La Serena/Coquimbo</p>
-  <button type="button" class="btn btn-primary btn-cotizador-main sticky-cot-bar-btn">Cotizar mi Casa Rápido ⚡</button>
-</div>
-
-
-<!-- Modal cotizador 3 pasos -->
-<div id="cotizador-modal" class="cot-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cot-modal-title">
-  <div class="cot-modal-overlay" data-close-modal></div>
-  <div class="cot-modal-dialog">
-    <button type="button" class="cot-modal-close" aria-label="Cerrar cotizador" data-close-modal>&times;</button>
-
-    <div class="cot-modal-progress" aria-hidden="true">
-      <span class="cot-modal-dot active" data-dot="1"></span>
-      <span class="cot-modal-dot" data-dot="2"></span>
-      <span class="cot-modal-dot" data-dot="3"></span>
-    </div>
-
-    <!-- Paso 1 -->
-    <div class="cot-modal-step active" id="modal-step-1">
-      <h2 id="cot-modal-title" class="cot-modal-title">¿Qué estilo tienes en mente?</h2>
-      <div class="cot-modal-options">
-        <button type="button" class="cot-modal-opt" data-field="estilo" data-value="Mediterránea">Mediterránea</button>
-        <button type="button" class="cot-modal-opt" data-field="estilo" data-value="Tradicional">Tradicional</button>
-        <button type="button" class="cot-modal-opt" data-field="estilo" data-value="Metalcón">Metalcón</button>
-      </div>
-    </div>
-
-    <!-- Paso 2 -->
-    <div class="cot-modal-step" id="modal-step-2">
-      <h2 class="cot-modal-title">¿De cuántos metros cuadrados (aprox)?</h2>
-      <div class="cot-modal-options">
-        <button type="button" class="cot-modal-opt" data-field="metros" data-value="54m2">54m²</button>
-        <button type="button" class="cot-modal-opt" data-field="metros" data-value="72m2">72m²</button>
-        <button type="button" class="cot-modal-opt" data-field="metros" data-value="+100m2">+100m²</button>
-      </div>
-      <button type="button" class="cot-modal-back" data-goto-step="1">← Volver</button>
-    </div>
-
-    <!-- Paso 3 -->
-    <div class="cot-modal-step" id="modal-step-3">
-      <h2 class="cot-modal-title">¡Casi listo! Deja tu WhatsApp para enviarte el presupuesto ahora.</h2>
-      <form id="cot-modal-form" novalidate>
-        <label class="form-label" for="cot-modal-phone">Tu número WhatsApp</label>
-        <input class="form-input" type="tel" id="cot-modal-phone" inputmode="numeric" pattern="[0-9]*" placeholder="9 1234 5678" autocomplete="tel" required />
-        <p class="cot-modal-error" id="cot-modal-error" role="alert" hidden></p>
-        <button type="submit" class="btn btn-wa-submit">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-          Recibir presupuesto por WhatsApp
-        </button>
-      </form>
-      <button type="button" class="cot-modal-back" data-goto-step="2">← Volver</button>
-    </div>
-  </div>
-</div>
 
 
 <script src="js/main.js" defer></script>

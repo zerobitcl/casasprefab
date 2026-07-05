@@ -1,46 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Página principal — La Serena / Coquimbo (costa) -->
   <url>
     <loc>https://www.casasprefabricadascoquimbo.cl/</loc>
-    <lastmod>2026-06-30</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Pillar Page — Cuarta Región unificada -->
+  <url>
+    <loc>https://www.casasprefabricadascoquimbo.cl/casas-prefabricadas-la-serena.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+
+  <url>
+    <loc>https://www.casasprefabricadascoquimbo.cl/casas-prefabricadas-coquimbo.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+
   <url>
     <loc>https://www.casasprefabricadascoquimbo.cl/cuarta-region.html</loc>
-    <lastmod>2026-06-30</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
 
-  <!-- Satélite — Ovalle / Valle del Limarí / Interior -->
   <url>
     <loc>https://www.casasprefabricadascoquimbo.cl/ovalle.html</loc>
-    <lastmod>2026-06-30</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- Legal -->
   <url>
     <loc>https://www.casasprefabricadascoquimbo.cl/privacidad.html</loc>
-    <lastmod>2026-06-30</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.casasprefabricadascoquimbo.cl/terminos.html</loc>
-    <lastmod>2026-06-30</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.casasprefabricadascoquimbo.cl/cookies.html</loc>
-    <lastmod>2026-06-30</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es-CL">
+<html lang="es-CL" data-sticky-cot="Casas a medida en Ovalle">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +33,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="image" href="images/casa-ovalle-interior.webp" type="image/webp" fetchpriority="high" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel=\'stylesheet\'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <!-- Estilos -->
   <link rel="stylesheet" href="styles.css" />
@@ -88,22 +89,22 @@
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Casas Prefabricadas Aisladas para el Interior de Coquimbo",
+      "name": "Casas Prefabricadas a Medida — Interior Coquimbo",
       "itemListElement": [
         {
           "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Kit Parcela de Agrado 54–72 m²" },
-          "description": "Casa prefabricada con aislación EPS reforzada para parcelas de agrado en el Valle del Limarí. Cotización personalizada por WhatsApp."
+          "itemOffered": { "@type": "Service", "name": "Diseño y cotización a medida" },
+          "description": "Proyecto personalizado para Ovalle, Vicuña y el interior. Sin catálogo cerrado."
         },
         {
           "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Kit Paneles SIP 72–100 m²" },
-          "description": "Sistema SIP EPS con R-19 para aislamiento térmico extremo en el Valle de Elqui y zonas de alta amplitud térmica. Cotización personalizada por WhatsApp."
+          "itemOffered": { "@type": "Service", "name": "Asesoría climática interior" },
+          "description": "Orientación para amplitud térmica del Valle del Limarí y Elqui."
         },
         {
           "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Casa de Veraneo Llave en Mano +100 m²" },
-          "description": "Segunda residencia completamente terminada para parcelas agrícolas, turismo rural y retiro en el interior. Cotización personalizada por WhatsApp."
+          "itemOffered": { "@type": "Service", "name": "Coordinación con fabricantes locales" },
+          "description": "Cotización desglosada por WhatsApp según comuna y acceso al terreno."
         }
       ]
     }
@@ -169,7 +170,7 @@
     </ul>
 
     <div class="nav-cta">
-      <a href="#cotizador" class="btn btn-primary">Cotizar a Medida</a>
+      <button type="button" class="btn btn-primary btn-cotizador-main" data-preset-comuna="Ovalle">Cotizar mi Casa Rápido ⚡</button>
     </div>
 
     <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
@@ -184,7 +185,7 @@
       <a href="cuarta-region.html" class="nav-link">Cuarta Región</a>
       <a href="/"                class="nav-link">La Serena / Costa</a>
       <a href="#faq-ovalle"      class="nav-link">Preguntas Frecuentes</a>
-      <a href="#cotizador"       class="btn btn-primary" style="margin-top:0.75rem; width:100%; justify-content:center;">Cotizar a Medida</a>
+      <button type="button" class="btn btn-primary btn-cotizador-main"        style="margin-top:0.75rem; width:100%; justify-content:center;">Cotizar mi Casa Rápido ⚡</button>
     </div>
   </div>
 </header>
@@ -243,10 +244,9 @@
         </p>
 
         <div style="display:flex; flex-wrap:wrap; gap:0.875rem; margin-bottom:2.5rem;">
-          <a href="#cotizador" class="btn btn-primary btn-primary-lg">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-            Cotizar Proyecto a Medida
-          </a>
+          <button type="button" class="btn btn-primary btn-primary-lg btn-cotizador-main" data-preset-comuna="Ovalle">
+            Cotizar mi Casa Rápido ⚡
+          </button>
           <a href="#modelos-ovalle" class="btn btn-outline-white btn-primary-lg">
             Ver Estilos de Inspiración
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
@@ -324,7 +324,7 @@
         <p style="color:var(--slate-500); font-size:0.9375rem; line-height:1.75; margin-bottom:2rem;">
           Los <strong style="color:var(--slate-700);">paneles SIP con núcleo EPS R-19</strong> actúan como un termo: mantienen la temperatura interior estable con una variación de solo 4–6°C respecto al exterior, reduciendo el consumo energético en hasta un 45%.
         </p>
-        <a href="#cotizador" class="btn btn-primary">Consultar Factibilidad</a>
+        <button type="button" class="btn btn-primary btn-cotizador-main" >Consultar Factibilidad</button>
       </div>
 
       <!-- Data visual -->
@@ -419,9 +419,8 @@
           <li>Materialidad según amplitud térmica de tu zona</li>
         </ul>
         <div class="model-price">Cotización según materialidad <span>· sin compromiso</span></div>
-        <a href="#" data-whatsapp="Hola, me gustaría cotizar una casa a medida estilo Mediterráneo en Ovalle." class="btn btn-secondary" aria-label="Cotizar proyecto a medida estilo Mediterráneo en Ovalle">
-          Cotizar Proyecto a Medida →
-        </a>
+        <button type="button" class="btn btn-secondary btn-cotizador-main" data-preset-estilo="Mediterránea" aria-label="Cotizar proyecto a medida estilo Mediterráneo en Ovalle">Cotizar mi Casa Rápido ⚡ →
+        </button>
       </article>
 
       <!-- Modelo 2: SIP Premium (FEATURED) -->
@@ -452,9 +451,8 @@
           <li>Orientación por asesores locales del interior</li>
         </ul>
         <div class="model-price">Cotización según materialidad <span>· sin compromiso</span></div>
-        <a href="#" data-whatsapp="Hola, me gustaría cotizar una casa a medida estilo Tradicional en Ovalle." class="btn btn-primary" aria-label="Cotizar proyecto a medida estilo Tradicional en Ovalle">
-          Cotizar Proyecto a Medida →
-        </a>
+        <button type="button" class="btn btn-primary btn-cotizador-main" data-preset-estilo="Tradicional" aria-label="Cotizar proyecto a medida estilo Tradicional en Ovalle">Cotizar mi Casa Rápido ⚡ →
+        </button>
       </article>
 
       <!-- Modelo 3: Casa de Veraneo Llave en Mano -->
@@ -464,7 +462,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
         </div>
         <span class="model-size-tag">Estilo de inspiración</span>
-        <h3 class="model-title">Proyectos Modulares</h3>
+        <h3 class="model-title">Estilo Metalcón</h3>
         <p class="model-desc">
           Diseño contemporáneo y crecimiento por etapas para parcelas agrícolas, fundos vitivinícolas o retiros rurales del Valle del Limarí. Parte con lo esencial y amplía cuando lo necesites.
         </p>
@@ -475,9 +473,8 @@
           <li>Asesoría en factibilidad y accesos rurales</li>
         </ul>
         <div class="model-price">Cotización según materialidad <span>· sin compromiso</span></div>
-        <a href="#" data-whatsapp="Hola, me gustaría cotizar una casa a medida estilo Modular en Ovalle." class="btn btn-secondary" aria-label="Cotizar proyecto a medida estilo Modular en Ovalle">
-          Cotizar Proyecto a Medida →
-        </a>
+        <button type="button" class="btn btn-secondary btn-cotizador-main" data-preset-estilo="Metalcón" aria-label="Cotizar proyecto a medida estilo Modular en Ovalle">Cotizar mi Casa Rápido ⚡ →
+        </button>
       </article>
 
     </div>
@@ -639,140 +636,22 @@
             <div style="width:2rem; height:2rem; background:var(--amber-700); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; flex-shrink:0;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
             </div>
-            <span style="font-size:0.875rem; color:var(--slate-700);">Sin compromiso · Respuesta en 2 horas hábiles</span>
+            <span style="font-size:0.875rem; color:var(--slate-700);">Sin compromiso · Respuesta el mismo día hábil</span>
           </div>
         </div>
       </div>
 
-      <!-- Form (mismo componente JS) -->
+      <!-- CTA card -->
       <div>
         <div class="cotizador-card">
           <div class="cotizador-head">
-            <h3 class="cotizador-title">Cotiza tu Proyecto Interior</h3>
-            <p class="cotizador-subtitle">4 pasos · Para Ovalle y el Valle del Limarí</p>
-            <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso del formulario">
-              <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <div class="steps-nav" id="steps-nav" role="list" aria-label="Pasos del formulario"></div>
+            <h3 class="cotizador-title">Cotiza en 30 segundos</h3>
+            <p class="cotizador-subtitle">4 pasos · Ovalle y Valle del Limarí</p>
+            <div class="progress-track" aria-hidden="true"><div class="progress-fill" style="width:0%;"></div></div>
           </div>
-
-          <div class="cotizador-body">
-            <form id="cotizador-form" novalidate>
-              <div id="form-steps">
-
-                <div class="form-step" id="fstep-1" role="group" aria-labelledby="ov-step1-title">
-                  <p id="ov-step1-title" class="form-step-title">¿Qué diseño buscas para el interior?</p>
-                  <p class="form-step-desc">Selecciona el estilo arquitectónico de tu proyecto.</p>
-                  <div class="options-grid">
-                    <button type="button" class="option-card" data-group="tipo-casa" data-value="Mediterránea" aria-pressed="false">
-                      <span class="option-card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><rect x="8" y="13" width="3" height="5" rx="0.5"/><rect x="13" y="13" width="3" height="5" rx="0.5"/></svg></span>
-                      <span class="option-card-label">Mediterránea</span>
-                      <small class="option-card-sub">Fachada moderna, tejado inclinado</small>
-                    </button>
-                    <button type="button" class="option-card" data-group="tipo-casa" data-value="Tradicional" aria-pressed="false">
-                      <span class="option-card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
-                      <span class="option-card-label">Tradicional</span>
-                      <small class="option-card-sub">Clásico y funcional</small>
-                    </button>
-                    <button type="button" class="option-card" data-group="tipo-casa" data-value="Modular" aria-pressed="false">
-                      <span class="option-card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10l8-8 8 8v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M10 22v-9h4v9"/></svg></span>
-                      <span class="option-card-label">Modular</span>
-                      <small class="option-card-sub">Crece por etapas, ampliable</small>
-                    </button>
-                  </div>
-                  <div class="form-nav" style="justify-content:flex-end;">
-                    <button type="button" id="btn-next-1" class="btn btn-primary">Continuar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
-                  </div>
-                </div>
-
-                <div class="form-step" id="fstep-2" role="group" aria-labelledby="ov-step2-title">
-                  <p id="ov-step2-title" class="form-step-title">¿En qué zona se ubica el terreno?</p>
-                  <p class="form-step-desc">Los costos de transporte varían según la distancia y el acceso.</p>
-                  <div class="form-field">
-                    <label class="form-label" for="select-comuna">Selecciona tu comuna</label>
-                    <select class="form-select" id="select-comuna" name="comuna" aria-required="true">
-                      <option value="">— Elige una opción —</option>
-                      <option value="Ovalle">Ovalle</option>
-                      <option value="Vicuña">Vicuña</option>
-                      <option value="Monte Patria">Monte Patria</option>
-                      <option value="Punitaqui">Punitaqui</option>
-                      <option value="Combarbalá">Combarbalá</option>
-                      <option value="Río Hurtado">Río Hurtado</option>
-                      <option value="Andacollo">Andacollo</option>
-                      <option value="La Serena">La Serena</option>
-                      <option value="Coquimbo">Coquimbo</option>
-                      <option value="Otra">Otra zona</option>
-                    </select>
-                  </div>
-                  <div class="form-nav">
-                    <button type="button" id="btn-prev-2" class="btn btn-ghost">← Volver</button>
-                    <button type="button" id="btn-next-2" class="btn btn-primary">Continuar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
-                  </div>
-                </div>
-
-                <div class="form-step" id="fstep-3" role="group" aria-labelledby="ov-step3-title">
-                  <p id="ov-step3-title" class="form-step-title">¿Qué nivel de terminación necesitas?</p>
-                  <p class="form-step-desc">Selecciona el alcance del kit para el interior.</p>
-                  <div class="options-grid" style="grid-template-columns:1fr;">
-                    <button type="button" class="option-card" data-group="tipo-kit" data-value="Kit Básico" aria-pressed="false" style="flex-direction:row; text-align:left; padding:1rem 1.25rem;">
-                      <span class="option-card-icon" style="flex-shrink:0;" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span>
-                      <div><span class="option-card-label">Kit Básico (Obra Gruesa)</span><small class="option-card-sub" style="display:block;">Estructura + cubierta + vanos. Terminaciones a cargo del cliente.</small></div>
-                    </button>
-                    <button type="button" class="option-card" data-group="tipo-kit" data-value="Kit Completo" aria-pressed="false" style="flex-direction:row; text-align:left; padding:1rem 1.25rem;">
-                      <span class="option-card-icon" style="flex-shrink:0;" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
-                      <div><span class="option-card-label">Kit Completo (Habitabilidad)</span><small class="option-card-sub" style="display:block;">Con instalaciones, terminaciones y sistema SIP según modelo elegido.</small></div>
-                    </button>
-                    <button type="button" class="option-card" data-group="tipo-kit" data-value="Llave en Mano" aria-pressed="false" style="flex-direction:row; text-align:left; padding:1rem 1.25rem;">
-                      <span class="option-card-icon" style="flex-shrink:0;" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5"/></svg></span>
-                      <div><span class="option-card-label">Llave en Mano (Todo incluido)</span><small class="option-card-sub" style="display:block;">Casa 100% terminada con cisterna, terraza y áreas exteriores.</small></div>
-                    </button>
-                  </div>
-                  <div class="form-nav">
-                    <button type="button" id="btn-prev-3" class="btn btn-ghost">← Volver</button>
-                    <button type="button" id="btn-next-3" class="btn btn-primary">Continuar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
-                  </div>
-                </div>
-
-                <div class="form-step" id="fstep-4" role="group" aria-labelledby="ov-step4-title">
-                  <p id="ov-step4-title" class="form-step-title">¿A dónde enviamos el catálogo SIP?</p>
-                  <p class="form-step-desc">Te llegará por WhatsApp con especificaciones y cotización personalizada para el interior.</p>
-                  <div class="form-field">
-                    <label class="form-label" for="input-nombre">Nombre completo</label>
-                    <input class="form-input" type="text" id="input-nombre" name="nombre" placeholder="Ej: Carlos Muñoz" autocomplete="name" aria-required="true" />
-                  </div>
-                  <div class="form-row">
-                    <div class="form-field">
-                      <label class="form-label" for="input-telefono">Teléfono (WhatsApp)</label>
-                      <input class="form-input" type="tel" id="input-telefono" name="telefono" placeholder="+56 9 8765 4321" autocomplete="tel" aria-required="true" />
-                    </div>
-                    <div class="form-field">
-                      <label class="form-label" for="input-email">Correo electrónico</label>
-                      <input class="form-input" type="email" id="input-email" name="email" placeholder="tu@email.com" autocomplete="email" aria-required="true" />
-                    </div>
-                  </div>
-                  <p style="font-size:0.8125rem; color:var(--slate-400); line-height:1.5; margin-bottom:1.25rem;">Al enviar acepta que un especialista de PrefabCoquimbo lo contacte para entregar el presupuesto. No compartimos tus datos.</p>
-                  <div class="form-nav">
-                    <button type="button" id="btn-prev-4" class="btn btn-ghost">← Volver</button>
-                    <button type="submit" class="btn btn-primary" style="gap:0.625rem;">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                      Enviar por WhatsApp
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="form-error" id="form-error" role="alert" aria-live="assertive"></div>
-
-              <div class="form-success" id="form-success" role="status">
-                <div class="success-icon" aria-hidden="true">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
-                </div>
-                <h3 style="font-size:1.375rem; font-weight:800; color:var(--slate-900); margin-bottom:0.625rem;">¡Solicitud enviada!</h3>
-                <p style="color:var(--slate-500); font-size:0.9375rem; line-height:1.65; margin-bottom:1.5rem;">Estamos abriendo WhatsApp con tu cotización para el interior. Un especialista te confirmará el presupuesto en menos de 2 horas hábiles.</p>
-                <a href="#modelos-ovalle" class="btn btn-secondary">Ver estilos de inspiración</a>
-              </div>
-            </form>
+          <div class="cotizador-body" style="text-align:center;">
+            <p style="color:var(--slate-500); font-size:0.9375rem; line-height:1.7; margin-bottom:1.75rem;">Estilo, metros, comuna y WhatsApp. Te respondemos el mismo día hábil.</p>
+            <button type="button" class="btn btn-primary btn-primary-lg btn-cotizador-main" data-preset-comuna="Ovalle" style="width:100%; justify-content:center;">Cotizar mi Casa Rápido ⚡</button>
           </div>
         </div>
       </div>
@@ -905,7 +784,7 @@
           Dudas Sobre Casas Prefabricadas en Ovalle y el Valle
         </h2>
         <p style="color:var(--slate-500); font-size:0.9375rem; line-height:1.75; margin-bottom:2rem;">Las preguntas que nos hacen los clientes del interior de la IV Región antes de decidir su proyecto.</p>
-        <a href="#" data-whatsapp="Hola, me gustaría cotizar una casa a medida en Ovalle. ¿Podrían agendar una asesoría?" class="btn btn-primary">Agendar Asesoría Gratuita</a>
+        <button type="button" class="btn btn-primary btn-cotizador-main" data-preset-comuna="Ovalle">Cotizar mi Casa Rápido ⚡</button>
       </div>
 
       <div>
@@ -968,7 +847,7 @@
       No instales una casa prefabricada genérica sin aislamiento en una zona con 40°C de amplitud térmica. Contáctanos y te asesoramos en el sistema correcto para tu predio en Ovalle, Monte Patria, Vicuña o Punitaqui.
     </p>
     <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-      <a href="#cotizador" class="btn btn-primary btn-primary-lg">Cotizar Proyecto a Medida</a>
+      <button type="button" class="btn btn-primary btn-cotizador-main btn-primary-lg" >Cotizar mi Casa Rápido ⚡</button>
       <a href="/" class="btn btn-outline-white btn-primary-lg">Ver Estilos para La Serena</a>
     </div>
   </div>
@@ -1012,19 +891,19 @@
         <ul class="footer-links">
           <li><a href="#modelos-ovalle">Estilo Mediterráneo</a></li>
           <li><a href="#modelos-ovalle">Estilo Tradicional</a></li>
-          <li><a href="#modelos-ovalle">Proyectos Modulares</a></li>
-          <li><a href="#cotizador">Cotizar Proyecto a Medida</a></li>
+          <li><a href="#modelos-ovalle">Estilo Metalcón</a></li>
+          <li><button type="button" class="btn-cotizador-main footer-link-btn">Cotizar mi Casa Rápido ⚡</button></li>
         </ul>
       </div>
 
       <div>
         <p class="footer-heading">Zonas de Cobertura</p>
         <ul class="footer-links">
-          <li><a href="#cotizador">Casas Prefabricadas Ovalle</a></li>
-          <li><a href="#cotizador">Casas Prefabricadas Vicuña</a></li>
-          <li><a href="#cotizador">Casas Prefabricadas Monte Patria</a></li>
-          <li><a href="#cotizador">Casas Prefabricadas Punitaqui</a></li>
-          <li><a href="#cotizador">Valle del Limarí y Valle de Elqui</a></li>
+          <li><button type="button" class="btn-cotizador-main footer-link-btn">Casas Prefabricadas Ovalle</button></li>
+          <li><button type="button" class="btn-cotizador-main footer-link-btn">Casas Prefabricadas Vicuña</button></li>
+          <li><button type="button" class="btn-cotizador-main footer-link-btn">Casas Prefabricadas Monte Patria</button></li>
+          <li><button type="button" class="btn-cotizador-main footer-link-btn">Casas Prefabricadas Punitaqui</button></li>
+          <li><button type="button" class="btn-cotizador-main footer-link-btn">Valle del Limarí y Valle de Elqui</button></li>
         </ul>
       </div>
 
