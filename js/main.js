@@ -5,7 +5,7 @@ const CONFIG = {
   businessEmail: 'contacto@casasprefabricadascoquimbo.cl',
   siteName: 'PrefabCoquimbo',
   whatsappDefaultMessage: 'Hola, me gustaría cotizar una casa a medida en la Región de Coquimbo. ¿Podrían orientarme?',
-  ga4Id: '', // Ej: 'G-XXXXXXXXXX' — dejar vacío hasta configurar GA4
+  ga4Id: '', // Pegar tu ID: 'G-XXXXXXXXXX' — activa eventos whatsapp_direct_click, cotizador_open, cotizador_submit
 };
 
 const cotizadorState = {
@@ -168,7 +168,7 @@ function ensureCotizadorUI() {
 function getStickyBarHTML(text) {
   return `<div class="sticky-cot-bar" id="sticky-cot-bar">
   <p class="sticky-cot-bar-text">${text}</p>
-  <button type="button" class="btn btn-primary btn-cotizador-main sticky-cot-bar-btn">Cotizar mi Casa Rápido ⚡</button>
+  <a href="https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(CONFIG.whatsappDefaultMessage)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary sticky-cot-bar-btn" data-whatsapp="${CONFIG.whatsappDefaultMessage.replace(/"/g, '&quot;')}">Cotizar por WhatsApp ⚡</a>
 </div>`;
 }
 
@@ -220,7 +220,10 @@ function getCotizadorModalHTML() {
         <p class="cot-modal-error" id="cot-modal-error" role="alert" hidden></p>
         <button type="submit" class="btn btn-wa-submit">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-          Recibir presupuesto por WhatsApp
+          Enviar consulta por WhatsApp
+        </button>
+        <button type="button" class="cot-modal-skip btn btn-secondary" style="width:100%; margin-top:0.75rem; justify-content:center;">
+          Saltar y escribir directo por WhatsApp
         </button>
       </form>
       <button type="button" class="cot-modal-back" data-goto-step="3">← Volver</button>
@@ -233,7 +236,7 @@ function getCotizadorModalHTML() {
 function initCotizadorModal() {
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.btn-cotizador-main');
-    if (!trigger) return;
+    if (!trigger || trigger.hasAttribute('data-whatsapp')) return;
     e.preventDefault();
     e.stopPropagation();
     openCotizadorModal(trigger.dataset.presetEstilo || '', trigger.dataset.presetComuna || '');
@@ -260,6 +263,11 @@ function initCotizadorModal() {
       e.preventDefault();
       submitCotizadorModal();
     });
+  }
+
+  const skipBtn = modal.querySelector('.cot-modal-skip');
+  if (skipBtn) {
+    skipBtn.addEventListener('click', submitCotizadorSkipPhone);
   }
 
   document.addEventListener('keydown', (e) => {
@@ -370,6 +378,19 @@ function submitCotizadorModal() {
   const msg = `Hola, vengo de la web. Quiero cotizar una casa ${estilo} de ${metros} en ${comuna}. Mi WhatsApp: ${phone}.`;
 
   trackEvent('cotizador_submit', { estilo, metros, comuna });
+  window.open(whatsappUrl(msg), '_blank', 'noopener,noreferrer');
+  closeCotizadorModal();
+}
+
+function submitCotizadorSkipPhone() {
+  const { estilo, metros, comuna } = cotizadorState;
+  const parts = ['Hola, vengo de la web. Quiero cotizar una casa a medida'];
+  if (estilo) parts.push(`estilo ${estilo}`);
+  if (metros) parts.push(`de ${metros}`);
+  if (comuna) parts.push(`en ${comuna}`);
+  const msg = parts.join(' ') + '.';
+
+  trackEvent('cotizador_skip_phone', { estilo, metros, comuna });
   window.open(whatsappUrl(msg), '_blank', 'noopener,noreferrer');
   closeCotizadorModal();
 }
