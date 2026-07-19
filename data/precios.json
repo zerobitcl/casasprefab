@@ -1,0 +1,117 @@
+{
+  "version": "2026.07",
+  "moneda": "CLP",
+  "iva": 0.19,
+  "validezDias": 15,
+  "nota": "Valores referenciales para la IV Región. No constituyen oferta cerrada. El presupuesto final lo confirma el fabricante según terreno y proyecto.",
+  "empresa": {
+    "nombre": "PrefabCoquimbo",
+    "giro": "Asesoría y cotización de viviendas prefabricadas",
+    "email": "contacto@casasprefabricadascoquimbo.cl",
+    "whatsapp": "+56 9 9428 4048",
+    "web": "https://www.casasprefabricadascoquimbo.cl",
+    "direccion": "La Serena · Región de Coquimbo",
+    "horario": "Lun–Vie 09:00–18:30 · Sáb 09:30–14:00"
+  },
+  "estilos": {
+    "Tradicional": {
+      "label": "Tradicional",
+      "clpPorM2": 265000,
+      "descripcion": "Líneas clásicas, techo a dos aguas, terminación familiar."
+    },
+    "Mediterránea": {
+      "label": "Mediterránea",
+      "clpPorM2": 282000,
+      "descripcion": "Volúmenes limpios, aleros y acentos costeros."
+    },
+    "Metalcón": {
+      "label": "Metalcón",
+      "clpPorM2": 272000,
+      "descripcion": "Estructura liviana, plazos más ágiles, mantención simple."
+    }
+  },
+  "metros": {
+    "54": { "m2": 54, "label": "54 m²", "dormitorios": "2D / 1B", "hint": "Pareja o familia chica" },
+    "72": { "m2": 72, "label": "72 m²", "dormitorios": "3D / 1–2B", "hint": "Familia típica" },
+    "100": { "m2": 100, "label": "100 m²", "dormitorios": "3–4D / 2B", "hint": "Más espacio y visitas" }
+  },
+  "materialidad": {
+    "sip": { "label": "Panel SIP", "factor": 1.0 },
+    "metalcon": { "label": "Metalcon", "factor": 0.97 },
+    "mixta": { "label": "Mixta (SIP + Metalcon)", "factor": 1.03 }
+  },
+  "terminacion": {
+    "basica": {
+      "label": "Básica habitable",
+      "clpPorM2": 0,
+      "incluye": "Pintura interior, piso vinílico, ventanas PVC estándar, baño y cocina sin muebles altos."
+    },
+    "estandar": {
+      "label": "Estándar familiar",
+      "clpPorM2": 28000,
+      "incluye": "Piso SPC, cocina con muebles bajos, vanitorio, iluminación LED, molduras."
+    },
+    "confort": {
+      "label": "Confort",
+      "clpPorM2": 52000,
+      "incluye": "Cocina completa, segundo baño (desde 72 m²), mejor aislación, revestimiento exterior reforzado."
+    }
+  },
+  "fijos": {
+    "asesoria": {
+      "codigo": "ASE",
+      "nombre": "Asesoría de proyecto y coordinación con fabricante",
+      "clp": 250000
+    },
+    "fundaciones": {
+      "codigo": "FUN",
+      "nombre": "Fundaciones / radier referencial",
+      "clpPorM2": 48000
+    },
+    "montaje": {
+      "codigo": "MON",
+      "nombre": "Montaje e instalación en terreno",
+      "clpPorM2": 38000
+    }
+  },
+  "traslado": {
+    "La Serena": { "clp": 250000, "zona": "Costa" },
+    "Coquimbo": { "clp": 250000, "zona": "Costa" },
+    "La Higuera": { "clp": 320000, "zona": "Costa norte" },
+    "Ovalle": { "clp": 380000, "zona": "Interior" },
+    "Vicuña": { "clp": 410000, "zona": "Valle" },
+    "Otra comuna": { "clp": 480000, "zona": "IV Región (consultar)" }
+  },
+  "extras": [
+    {
+      "id": "terraza",
+      "nombre": "Terraza techada 12 m²",
+      "clp": 1280000,
+      "default": false
+    },
+    {
+      "id": "bano_extra",
+      "nombre": "Baño completo adicional",
+      "clp": 980000,
+      "default": false
+    },
+    {
+      "id": "cocina_equipada",
+      "nombre": "Cocina equipada (muebles + cubierta)",
+      "clp": 1450000,
+      "default": true
+    },
+    {
+      "id": "aislacion_extra",
+      "nombre": "Aislación reforzada (costa / frío valle)",
+      "clp": 720000,
+      "default": false
+    },
+    {
+      "id": "permisos_orientacion",
+      "nombre": "Orientación permisos DOM (no incluye honorarios arquitecto)",
+      "clp": 150000,
+      "default": true
+    }
+  ]
+}

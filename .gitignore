@@ -1,0 +1,12 @@
+# Secretos — nunca subir al repo
+api/config.php
+.env
+.env.*
+*.pem
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

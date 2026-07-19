@@ -1,0 +1,10 @@
+# Bloquear acceso directo a config
+<Files "config.php">
+  Require all denied
+</Files>
+<Files "config.example.php">
+  Require all denied
+</Files>
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
