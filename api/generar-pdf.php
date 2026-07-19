@@ -139,7 +139,10 @@ function api2pdfRequest(string $endpoint, string $apiKey, string $payload): arra
     ]);
     $response = @file_get_contents($endpoint, false, $ctx);
     $status = 0;
-    if (isset($http_response_header[0]) && preg_match('/\s(\d{3})\s/', $http_response_header[0], $m)) {
+    $headers = function_exists('http_get_last_response_headers')
+        ? (http_get_last_response_headers() ?: [])
+        : ($http_response_header ?? []);
+    if (isset($headers[0]) && preg_match('/\s(\d{3})\s/', $headers[0], $m)) {
         $status = (int) $m[1];
     }
     if ($response === false) {
@@ -320,117 +323,136 @@ function renderPdfHtml(array $q, array $precios): string
     line-height: 1.45;
     background: #fff;
   }
-  .sheet { padding: 0 2mm; }
-  .top {
+  .sheet { padding: 0; }
+  .band {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    color: #fff;
+    padding: 22px 24px 20px;
+    margin-bottom: 18px;
+  }
+  .band-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    border-bottom: 3px solid #B45309;
-    padding-bottom: 14px;
-    margin-bottom: 18px;
+    gap: 16px;
   }
   .brand-name {
     font-size: 22px;
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     margin: 0;
   }
-  .brand-name span { color: #B45309; }
-  .brand-sub { color: #64748B; margin-top: 4px; font-size: 10px; }
+  .brand-name span { color: #FBBF24; }
+  .brand-sub { color: rgba(255,255,255,0.55); margin-top: 5px; font-size: 10px; }
   .meta { text-align: right; }
   .doc-title {
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #B45309;
-    margin: 0 0 4px;
+    letter-spacing: 0.12em;
+    color: #FBBF24;
+    margin: 0 0 6px;
   }
-  .meta strong { font-size: 13px; }
+  .meta strong { font-size: 14px; letter-spacing: -0.02em; }
+  .meta div { color: rgba(255,255,255,0.65); font-size: 10px; margin-top: 2px; }
+  .body { padding: 0 24px 18px; }
   .grid {
     display: flex;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   .box {
     flex: 1;
-    background: #FFFBEB;
-    border: 1px solid #FEF3C7;
-    border-radius: 8px;
-    padding: 10px 12px;
+    background: #F8F6F2;
+    border-radius: 10px;
+    padding: 12px 14px;
   }
-  .box-muted {
-    background: #F8FAFC;
-    border-color: #E2E8F0;
-  }
+  .box-amber { background: #FFFBEB; }
   .box-label {
     font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     color: #92400E;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
   }
   .box-muted .box-label { color: #64748B; }
-  .box-body { color: #334155; }
+  .box-body { color: #334155; font-size: 11px; }
+  .box-body strong { color: #0F172A; font-size: 12px; }
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 8px 0 14px;
+    margin: 6px 0 16px;
   }
   th {
     text-align: left;
     font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #64748B;
+    letter-spacing: 0.06em;
+    color: #94A3B8;
     border-bottom: 1px solid #E2E8F0;
-    padding: 6px 4px;
+    padding: 8px 4px;
   }
   td {
-    padding: 8px 4px;
+    padding: 9px 4px;
     border-bottom: 1px solid #F1F5F9;
     vertical-align: top;
   }
-  td.code { width: 48px; color: #94A3B8; font-size: 10px; }
-  td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .totals {
-    width: 260px;
-    margin-left: auto;
+  td.code { width: 44px; color: #CBD5E1; font-size: 9px; font-weight: 700; }
+  td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .totals-wrap {
+    display: flex;
+    justify-content: flex-end;
     margin-bottom: 16px;
+  }
+  .totals {
+    width: 280px;
+    background: #0F172A;
+    color: #fff;
+    border-radius: 12px;
+    padding: 14px 16px;
   }
   .totals .row {
     display: flex;
     justify-content: space-between;
-    padding: 4px 0;
-    color: #475569;
+    padding: 3px 0;
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
   }
   .totals .grand {
-    margin-top: 6px;
-    padding-top: 8px;
-    border-top: 2px solid #0F172A;
-    font-size: 15px;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(251, 191, 36, 0.35);
+    font-size: 16px;
     font-weight: 800;
-    color: #0F172A;
+    color: #fff;
   }
-  .totals .grand span:last-child { color: #B45309; }
+  .totals .grand span:last-child { color: #FBBF24; }
+  .totals .per {
+    margin-top: 4px;
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    display: flex;
+    justify-content: space-between;
+  }
   .hint {
     font-size: 10px;
     color: #64748B;
     margin: 0 0 10px;
   }
   .notes {
-    background: #F8FAFC;
+    background: #F8F6F2;
     border-left: 3px solid #D97706;
-    padding: 8px 10px;
+    padding: 8px 12px;
     margin: 0 0 12px;
+    border-radius: 0 8px 8px 0;
   }
   .legal {
     font-size: 9px;
     color: #94A3B8;
     border-top: 1px solid #E2E8F0;
-    padding-top: 10px;
-    margin-top: 8px;
+    padding-top: 12px;
+    margin-top: 4px;
   }
   .foot {
     display: flex;
@@ -443,24 +465,27 @@ function renderPdfHtml(array $q, array $precios): string
 </head>
 <body>
 <div class="sheet">
-  <div class="top">
-    <div>
-      <p class="brand-name">Prefab<span>Coquimbo</span></p>
-      <div class="brand-sub">
-        ' . h($emp['giro']) . '<br>
-        ' . h($emp['direccion']) . ' · ' . h($emp['web']) . '
+  <div class="band">
+    <div class="band-row">
+      <div>
+        <p class="brand-name">Prefab<span>Coquimbo</span></p>
+        <div class="brand-sub">
+          ' . h($emp['giro']) . '<br>
+          ' . h($emp['direccion']) . ' · ' . h($emp['web']) . '
+        </div>
       </div>
-    </div>
-    <div class="meta">
-      <p class="doc-title">Presupuesto referencial</p>
-      <div><strong>' . h($q['numero']) . '</strong></div>
-      <div>Fecha: ' . h($q['fecha']) . '</div>
-      <div>Válido hasta: ' . h($q['vence']) . '</div>
+      <div class="meta">
+        <p class="doc-title">Presupuesto referencial</p>
+        <div><strong>' . h($q['numero']) . '</strong></div>
+        <div>Fecha: ' . h($q['fecha']) . '</div>
+        <div>Válido hasta: ' . h($q['vence']) . '</div>
+      </div>
     </div>
   </div>
 
+  <div class="body">
   <div class="grid">
-    ' . $clienteBlock . '
+    ' . ($clienteBlock !== '' ? str_replace('class="box"', 'class="box box-amber"', $clienteBlock) : '') . '
     <div class="box box-muted">
       <div class="box-label">Proyecto</div>
       <div class="box-body">
@@ -486,21 +511,24 @@ function renderPdfHtml(array $q, array $precios): string
     <tbody>' . $rows . '</tbody>
   </table>
 
-  <div class="totals">
-    <div class="row"><span>Neto</span><span>' . clp($t['neto']) . '</span></div>
-    <div class="row"><span>IVA 19%</span><span>' . clp($t['iva']) . '</span></div>
-    <div class="row grand"><span>Total</span><span>' . clp($t['total']) . '</span></div>
-    <div class="row" style="font-size:10px;margin-top:4px;"><span>Equiv. / m²</span><span>' . clp($t['clpPorM2']) . '</span></div>
+  <div class="totals-wrap">
+    <div class="totals">
+      <div class="row"><span>Neto</span><span>' . clp($t['neto']) . '</span></div>
+      <div class="row"><span>IVA 19%</span><span>' . clp($t['iva']) . '</span></div>
+      <div class="row grand"><span>Total</span><span>' . clp($t['total']) . '</span></div>
+      <div class="per"><span>Equiv. / m²</span><span>' . clp($t['clpPorM2']) . '</span></div>
+    </div>
   </div>
 
   <div class="legal">
     ' . h($precios['nota']) . '
-    Valores en pesos chilenos. Estimación orientativa para conversar opciones de financiamiento familiar (crédito hipotecario, ahorro, subsidios según elegibilidad). PrefabCoquimbo asesora y cotiza; la ejecución la realiza el fabricante acordado.
+    Valores en pesos chilenos. Estimación orientativa para conversar opciones de financiamiento familiar. PrefabCoquimbo asesora y cotiza; la ejecución la realiza el fabricante acordado.
   </div>
 
   <div class="foot">
     <div>' . h($emp['email']) . ' · WhatsApp ' . h($emp['whatsapp']) . '</div>
     <div>' . h($emp['horario']) . '</div>
+  </div>
   </div>
 </div>
 </body>

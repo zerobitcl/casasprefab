@@ -126,18 +126,25 @@ function buildQuoteLocal() {
 
 function renderForm(root) {
   const p = state.precios;
+  const estiloIcons = { Tradicional: '01', Mediterránea: '02', Metalcón: '03' };
 
   const estiloOpts = Object.keys(p.estilos)
-    .map(
-      (k) =>
-        `<button type="button" class="pq-chip${state.estilo === k ? ' is-on' : ''}" data-field="estilo" data-value="${escapeHtml(k)}">${escapeHtml(p.estilos[k].label)}</button>`
-    )
+    .map((k) => {
+      const e = p.estilos[k];
+      return `<button type="button" class="pq-style${state.estilo === k ? ' is-on' : ''}" data-field="estilo" data-value="${escapeHtml(k)}">
+        <span class="pq-style-idx">${estiloIcons[k] || '—'}</span>
+        <span class="pq-style-body">
+          <strong>${escapeHtml(e.label)}</strong>
+          <em>${escapeHtml(e.descripcion)}</em>
+        </span>
+      </button>`;
+    })
     .join('');
 
   const metrosOpts = Object.keys(p.metros)
     .map((k) => {
       const m = p.metros[k];
-      return `<button type="button" class="pq-card-opt${state.metros === k ? ' is-on' : ''}" data-field="metros" data-value="${escapeHtml(k)}">
+      return `<button type="button" class="pq-size${state.metros === k ? ' is-on' : ''}" data-field="metros" data-value="${escapeHtml(k)}">
         <strong>${escapeHtml(m.label)}</strong>
         <span>${escapeHtml(m.dormitorios)}</span>
         <em>${escapeHtml(m.hint)}</em>
@@ -155,15 +162,19 @@ function renderForm(root) {
   const matOpts = Object.keys(p.materialidad)
     .map(
       (k) =>
-        `<button type="button" class="pq-chip${state.materialidad === k ? ' is-on' : ''}" data-field="materialidad" data-value="${escapeHtml(k)}">${escapeHtml(p.materialidad[k].label)}</button>`
+        `<button type="button" class="pq-seg${state.materialidad === k ? ' is-on' : ''}" data-field="materialidad" data-value="${escapeHtml(k)}">${escapeHtml(p.materialidad[k].label)}</button>`
     )
     .join('');
 
   const termOpts = Object.keys(p.terminacion)
     .map((k) => {
       const t = p.terminacion[k];
-      return `<button type="button" class="pq-term${state.terminacion === k ? ' is-on' : ''}" data-field="terminacion" data-value="${escapeHtml(k)}">
-        <strong>${escapeHtml(t.label)}</strong>
+      const plus = t.clpPorM2 > 0 ? `+${formatClp(t.clpPorM2)}/m²` : 'Incluida en base';
+      return `<button type="button" class="pq-finish${state.terminacion === k ? ' is-on' : ''}" data-field="terminacion" data-value="${escapeHtml(k)}">
+        <span class="pq-finish-top">
+          <strong>${escapeHtml(t.label)}</strong>
+          <b>${plus}</b>
+        </span>
         <span>${escapeHtml(t.incluye)}</span>
       </button>`;
     })
@@ -174,6 +185,7 @@ function renderForm(root) {
       const on = state.extras.has(ex.id);
       return `<label class="pq-extra${on ? ' is-on' : ''}">
         <input type="checkbox" data-extra="${escapeHtml(ex.id)}"${on ? ' checked' : ''} />
+        <span class="pq-extra-check" aria-hidden="true"></span>
         <span class="pq-extra-text">
           <strong>${escapeHtml(ex.nombre)}</strong>
           <em>${formatClp(ex.clp)}</em>
@@ -185,69 +197,113 @@ function renderForm(root) {
   root.innerHTML = `
     <div class="pq-layout">
       <section class="pq-panel" aria-label="Armar presupuesto">
-        <div class="pq-block">
-          <h2 class="pq-label">Estilo</h2>
-          <div class="pq-chips" id="pq-estilo">${estiloOpts}</div>
-          <p class="pq-hint" id="pq-estilo-hint"></p>
+        <div class="pq-step">
+          <header class="pq-step-head">
+            <span class="pq-step-num">01</span>
+            <div>
+              <h2 class="pq-step-title">Estilo de inspiración</h2>
+              <p class="pq-step-sub" id="pq-estilo-hint"></p>
+            </div>
+          </header>
+          <div class="pq-styles" id="pq-estilo">${estiloOpts}</div>
         </div>
 
-        <div class="pq-block">
-          <h2 class="pq-label">Metros</h2>
-          <div class="pq-cards" id="pq-metros">${metrosOpts}</div>
+        <div class="pq-step">
+          <header class="pq-step-head">
+            <span class="pq-step-num">02</span>
+            <div>
+              <h2 class="pq-step-title">Metros y distribución</h2>
+              <p class="pq-step-sub">Escenarios típicos de familia en la región</p>
+            </div>
+          </header>
+          <div class="pq-sizes" id="pq-metros">${metrosOpts}</div>
         </div>
 
-        <div class="pq-block pq-block--row">
-          <div>
-            <h2 class="pq-label">Comuna</h2>
-            <select class="pq-select" id="pq-comuna">${comunaOpts}</select>
+        <div class="pq-step">
+          <header class="pq-step-head">
+            <span class="pq-step-num">03</span>
+            <div>
+              <h2 class="pq-step-title">Ubicación y materialidad</h2>
+              <p class="pq-step-sub">Define traslado e izaje según comuna</p>
+            </div>
+          </header>
+          <div class="pq-split">
+            <label class="pq-field">
+              <span>Comuna del terreno</span>
+              <select class="pq-select" id="pq-comuna">${comunaOpts}</select>
+            </label>
+            <div class="pq-field">
+              <span>Sistema constructivo</span>
+              <div class="pq-segment" id="pq-mat" role="group">${matOpts}</div>
+            </div>
           </div>
-          <div>
-            <h2 class="pq-label">Materialidad</h2>
-            <div class="pq-chips" id="pq-mat">${matOpts}</div>
-          </div>
         </div>
 
-        <div class="pq-block">
-          <h2 class="pq-label">Nivel de terminación</h2>
-          <div class="pq-terms" id="pq-term">${termOpts}</div>
+        <div class="pq-step">
+          <header class="pq-step-head">
+            <span class="pq-step-num">04</span>
+            <div>
+              <h2 class="pq-step-title">Terminación</h2>
+              <p class="pq-step-sub">Desde habitable hasta más confort</p>
+            </div>
+          </header>
+          <div class="pq-finishes" id="pq-term">${termOpts}</div>
         </div>
 
-        <div class="pq-block">
-          <h2 class="pq-label">Opcionales</h2>
+        <div class="pq-step">
+          <header class="pq-step-head">
+            <span class="pq-step-num">05</span>
+            <div>
+              <h2 class="pq-step-title">Opcionales</h2>
+              <p class="pq-step-sub">Sumá solo lo que necesites</p>
+            </div>
+          </header>
           <div class="pq-extras" id="pq-extras">${extrasOpts}</div>
         </div>
 
-        <div class="pq-block">
-          <h2 class="pq-label">Datos del cliente <span>(opcional para el PDF)</span></h2>
+        <div class="pq-step pq-step--soft">
+          <header class="pq-step-head">
+            <span class="pq-step-num">06</span>
+            <div>
+              <h2 class="pq-step-title">Datos para el PDF</h2>
+              <p class="pq-step-sub">Opcional — aparecen en el documento</p>
+            </div>
+          </header>
           <div class="pq-fields">
-            <input class="form-input" type="text" id="pq-nombre" placeholder="Nombre" autocomplete="name" />
-            <input class="form-input" type="tel" id="pq-telefono" placeholder="WhatsApp" inputmode="numeric" autocomplete="tel" />
-            <input class="form-input" type="email" id="pq-email" placeholder="Email" autocomplete="email" />
-            <textarea class="form-input pq-textarea" id="pq-notas" placeholder="Notas del terreno, acceso, plazos…" rows="2"></textarea>
+            <label class="pq-field"><span>Nombre</span><input class="form-input" type="text" id="pq-nombre" placeholder="Nombre completo" autocomplete="name" /></label>
+            <label class="pq-field"><span>WhatsApp</span><input class="form-input" type="tel" id="pq-telefono" placeholder="9 1234 5678" inputmode="numeric" autocomplete="tel" /></label>
+            <label class="pq-field pq-field--full"><span>Email</span><input class="form-input" type="email" id="pq-email" placeholder="correo@ejemplo.cl" autocomplete="email" /></label>
+            <label class="pq-field pq-field--full"><span>Notas</span><textarea class="form-input pq-textarea" id="pq-notas" placeholder="Terreno, acceso, plazos…" rows="2"></textarea></label>
           </div>
         </div>
       </section>
 
       <aside class="pq-summary" aria-live="polite">
         <div class="pq-summary-inner">
-          <p class="pq-summary-kicker">Estimación referencial</p>
-          <h2 class="pq-summary-title" id="pq-summary-title">—</h2>
-          <p class="pq-summary-sub" id="pq-summary-sub"></p>
+          <div class="pq-summary-top">
+            <p class="pq-summary-kicker">Estimación referencial</p>
+            <h2 class="pq-summary-title" id="pq-summary-title">—</h2>
+            <p class="pq-summary-sub" id="pq-summary-sub"></p>
+          </div>
+
+          <div class="pq-summary-amount">
+            <span>Total c/IVA</span>
+            <strong id="pq-total" class="pq-total-pulse">—</strong>
+            <em id="pq-perm2"></em>
+          </div>
 
           <ul class="pq-lines" id="pq-lines"></ul>
 
           <div class="pq-totals">
             <div class="pq-tot-row"><span>Neto</span><strong id="pq-neto">—</strong></div>
             <div class="pq-tot-row"><span>IVA 19%</span><strong id="pq-iva">—</strong></div>
-            <div class="pq-tot-row pq-tot-row--grand"><span>Total</span><strong id="pq-total">—</strong></div>
-            <p class="pq-per-m2" id="pq-perm2"></p>
           </div>
 
           <p class="pq-disclaimer">${escapeHtml(p.nota)}</p>
 
           <div class="pq-actions">
             <button type="button" class="btn btn-primary" id="pq-pdf">Descargar PDF</button>
-            <button type="button" class="btn btn-secondary" id="pq-wa">Enviar por WhatsApp</button>
+            <button type="button" class="btn btn-secondary pq-btn-ghost" id="pq-wa">Enviar por WhatsApp</button>
           </div>
           <p class="pq-status" id="pq-status" hidden></p>
         </div>
@@ -311,9 +367,15 @@ function refreshQuote() {
 
   document.getElementById('pq-neto').textContent = formatClp(q.totales.neto);
   document.getElementById('pq-iva').textContent = formatClp(q.totales.iva);
-  document.getElementById('pq-total').textContent = formatClp(q.totales.total);
+  const totalEl = document.getElementById('pq-total');
+  if (totalEl) {
+    totalEl.textContent = formatClp(q.totales.total);
+    totalEl.classList.remove('pq-total-pulse');
+    void totalEl.offsetWidth;
+    totalEl.classList.add('pq-total-pulse');
+  }
   document.getElementById('pq-perm2').textContent =
-    `${formatClp(q.totales.clpPorM2)} / m² c/IVA · pensado para familia en IV Región`;
+    `${formatClp(q.totales.clpPorM2)} / m² · escenario familiar IV Región`;
 }
 
 function payloadFromForm() {

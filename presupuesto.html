@@ -19,11 +19,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="image" href="images/casa-serena-costa.webp" type="image/webp" fetchpriority="high" />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="page-presupuesto">
 
 <header class="site-header" role="banner">
   <nav class="nav-container" aria-label="Principal">
@@ -55,45 +56,51 @@
 </header>
 
 <main>
-  <section class="pq-hero">
-    <div class="pq-hero-bg" aria-hidden="true"></div>
-    <div class="section-container pq-hero-inner">
-      <p class="pq-eyebrow">PrefabCoquimbo · IV Región</p>
-      <h1 class="pq-hero-title">Armá tu estimación<br /><span>sin inventarte un millón</span></h1>
-      <p class="pq-hero-lead">
-        Números aterrizados para familias en La Serena, Coquimbo y el interior.
-        Elegís estilo, metros y terminación; nosotros te damos el desglose y el PDF.
-        Es referencial: el cierre lo afinamos según tu terreno.
-      </p>
+  <section class="pq-hero" aria-label="Presupuesto referencial">
+    <div class="pq-hero-media" aria-hidden="true">
+      <img src="images/casa-serena-costa.webp" alt="" width="1600" height="1067" fetchpriority="high" decoding="async" />
+      <div class="pq-hero-shade"></div>
+    </div>
+    <div class="section-container pq-hero-copy">
+      <p class="pq-brand">Prefab<span>Coquimbo</span></p>
+      <h1 class="pq-hero-title">Tu casa, en números<br />que se pueden pagar</h1>
+      <p class="pq-hero-lead">Estimación referencial para la IV Región. Armás el escenario y bajás el PDF.</p>
+      <a href="#armador" class="btn btn-primary pq-hero-cta">Empezar a armar</a>
     </div>
   </section>
 
-  <section class="pq-section" aria-label="Armador de presupuesto">
+  <section class="pq-section" id="armador" aria-label="Armador de presupuesto">
     <div class="section-container">
       <div id="presupuesto-app" class="pq-app">
-        <p class="pq-loading">Cargando armador…</p>
+        <div class="pq-loading" aria-live="polite">
+          <span class="pq-loading-dot"></span>
+          Preparando armador…
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="pq-range section-container">
-    <h2 class="pq-range-title">Orden de magnitud (c/IVA, escenario típico)</h2>
-    <div class="pq-range-grid">
-      <article>
-        <strong>54 m²</strong>
-        <span>Desde ~$24–29 millones</span>
-        <em>Pareja o familia chica · terminación estándar</em>
-      </article>
-      <article>
-        <strong>72 m²</strong>
-        <span>Desde ~$32–39 millones</span>
-        <em>3 dormitorios · lo más pedido</em>
-      </article>
-      <article>
-        <strong>100 m²</strong>
-        <span>Desde ~$43–52 millones</span>
-        <em>Más espacio sin irse a lujo</em>
-      </article>
+  <section class="pq-range" aria-label="Orden de magnitud">
+    <div class="section-container">
+      <p class="pq-range-kicker">Orden de magnitud · c/IVA</p>
+      <h2 class="pq-range-title">Lo que suele salir en familia</h2>
+      <div class="pq-range-grid">
+        <article class="pq-range-item">
+          <span class="pq-range-m2">54 m²</span>
+          <strong>$24–29 M</strong>
+          <p>Pareja o familia chica</p>
+        </article>
+        <article class="pq-range-item">
+          <span class="pq-range-m2">72 m²</span>
+          <strong>$32–39 M</strong>
+          <p>3 dormitorios · lo más pedido</p>
+        </article>
+        <article class="pq-range-item">
+          <span class="pq-range-m2">100 m²</span>
+          <strong>$43–52 M</strong>
+          <p>Más espacio, sin irse a lujo</p>
+        </article>
+      </div>
     </div>
   </section>
 </main>
