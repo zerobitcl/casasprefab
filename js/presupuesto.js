@@ -450,7 +450,7 @@ function sendWhatsApp() {
   if (cliente.notas) parts.push(`• Notas: ${cliente.notas}`);
   parts.push('¿Me ayudan a ajustar al terreno?');
 
-  const phone = (typeof CONFIG !== 'undefined' && CONFIG.whatsappNumber) || '569977164000';
+  const phone = (typeof CONFIG !== 'undefined' && CONFIG.whatsappNumber) || '56977164000';
   const url = `https://wa.me/${phone}?text=${encodeURIComponent(parts.join('\n'))}`;
   if (typeof trackEvent === 'function') {
     trackEvent('presupuesto_whatsapp', { estilo: state.estilo, metros: state.metros, total: q.totales.total });

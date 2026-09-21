@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       if (typeof whatsappUrl === 'function') {
         waBtn.setAttribute('href', whatsappUrl(msg));
       } else {
-        const phone = (typeof CONFIG !== 'undefined' && CONFIG.whatsappNumber) || '569977164000';
+        const phone = (typeof CONFIG !== 'undefined' && CONFIG.whatsappNumber) || '56977164000';
         waBtn.setAttribute('href', `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
       }
     }
