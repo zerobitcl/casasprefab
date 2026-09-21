@@ -3121,40 +3121,54 @@ body.cot-modal-open {
   .pq-total-pulse { animation: none !important; }
 }
 
-/* ─── HERO BANNER (casa fondo) ───────────────────── */
-.hero-section--banner {
-  min-height: min(92vh, 760px);
-  display: flex;
+/* --- HERO BANNER (casa fondo) --- */
+.hero-section.hero-section--banner {
+  min-height: min(88vh, 720px);
+  max-height: none;
+  display: flex !important;
   align-items: flex-end;
-  padding: 0;
+  padding: 0 !important;
   background: #0A1628;
+  position: relative;
+  overflow: hidden;
 }
-.hero-section--banner::before { display: none; }
+.hero-section.hero-section--banner::before {
+  display: none !important;
+  content: none !important;
+}
 .hero-banner-media {
-  position: absolute;
+  position: absolute !important;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 .hero-banner-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 42%;
-}
-.hero-banner-overlay {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(105deg, rgba(8,15,28,0.88) 0%, rgba(8,15,28,0.62) 48%, rgba(8,15,28,0.28) 100%),
-    linear-gradient(to top, rgba(8,15,28,0.75) 0%, transparent 45%);
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center 40%;
+  display: block;
 }
-.hero-section--banner .section-container {
+.hero-banner-overlay {
+  position: absolute !important;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, rgba(8,15,28,0.88) 0%, rgba(8,15,28,0.58) 48%, rgba(8,15,28,0.25) 100%),
+    linear-gradient(to top, rgba(8,15,28,0.78) 0%, transparent 42%);
+}
+.hero-section.hero-section--banner > .section-container {
   position: relative;
   z-index: 2;
   width: 100%;
-  padding-top: 7rem;
-  padding-bottom: 4.5rem;
+  padding-top: 6.5rem;
+  padding-bottom: 4rem;
 }
 .hero-banner-copy {
   max-width: 640px;
@@ -3186,9 +3200,15 @@ body.cot-modal-open {
   gap: 1rem 1.5rem;
 }
 @media (max-width: 720px) {
-  .hero-section--banner { min-height: min(88vh, 640px); align-items: flex-end; }
-  .hero-section--banner .section-container { padding-top: 5.5rem; padding-bottom: 3rem; }
-  .hero-banner-media img { object-position: 62% center; }
+  .hero-section.hero-section--banner {
+    min-height: min(82vh, 620px);
+    align-items: flex-end;
+  }
+  .hero-section.hero-section--banner > .section-container {
+    padding-top: 5.25rem;
+    padding-bottom: 2.75rem;
+  }
+  .hero-banner-media img { object-position: 58% center; }
 }
 
 /* ─── MODULAR BUILDER ────────────────────────────── */
