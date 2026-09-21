@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const PRECIOS_URL = 'data/precios.json';
 const PDF_API = 'api/generar-pdf.php';
@@ -450,7 +450,7 @@ function sendWhatsApp() {
   if (cliente.notas) parts.push(`• Notas: ${cliente.notas}`);
   parts.push('¿Me ayudan a ajustar al terreno?');
 
-  const phone = (typeof CONFIG !== 'undefined' && CONFIG.whatsappNumber) || '56994284048';
+  const phone = (typeof CONFIG !== 'undefined' && CONFIG.whatsappNumber) || '569977164000';
   const url = `https://wa.me/${phone}?text=${encodeURIComponent(parts.join('\n'))}`;
   if (typeof trackEvent === 'function') {
     trackEvent('presupuesto_whatsapp', { estilo: state.estilo, metros: state.metros, total: q.totales.total });
