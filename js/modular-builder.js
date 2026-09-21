@@ -2,43 +2,51 @@
 
 /**
  * Configurador visual de módulos: arrastrar rectángulos (18–24,5 m²)
- * para entender el sistema modular y filtrar curiosos antes de WhatsApp.
+ * Presets pegados + snap magnético + escala responsive.
  */
 document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   const PRICE_PER_M2 = 700000;
-  const CELL = 26;
-  const GRID_W = 24;
-  const GRID_H = 14;
+  const GRID_W = 20;
+  const GRID_H = 12;
+  const SNAP = 0.4;
 
+  /** Dimensiones en enteros de grilla para que se peguen sin huecos */
   const SIZES = [
     { id: '18', label: '18 m²', w: 6, h: 3, m2: 18 },
     { id: '20', label: '20 m²', w: 5, h: 4, m2: 20 },
-    { id: '22', label: '22 m²', w: 5.5, h: 4, m2: 22 },
-    { id: '24.5', label: '24,5 m²', w: 7, h: 3.5, m2: 24.5 },
+    { id: '22', label: '22 m²', w: 5, h: 4, m2: 22 },
+    { id: '24.5', label: '24,5 m²', w: 7, h: 3, m2: 24.5 },
   ];
 
+  /**
+   * Presets con lados compartidos (módulos conectados).
+   * Coordenadas relativas; se centran al aplicar.
+   */
   const PRESETS = {
+    /* ─── en línea: lados cortos pegados ─── */
     linea: [
-      { sizeId: '24.5', x: 1, y: 5, rot: 0 },
-      { sizeId: '24.5', x: 8.5, y: 5, rot: 0 },
-      { sizeId: '18', x: 16.5, y: 5, rot: 0 },
+      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
+      { sizeId: '24.5', x: 7, y: 0, rot: 0 },
+      { sizeId: '18', x: 14, y: 0, rot: 0 },
     ],
+    /* ─── L: horizontal + vertical compartiendo borde ─── */
     ele: [
-      { sizeId: '24.5', x: 3, y: 2, rot: 0 },
-      { sizeId: '24.5', x: 3, y: 6, rot: 90 },
-      { sizeId: '20', x: 7, y: 6.5, rot: 0 },
+      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
+      { sizeId: '24.5', x: 0, y: 3, rot: 90 },
+      { sizeId: '20', x: 3, y: 3, rot: 0 },
     ],
+    /* ─── C: superior + lateral + inferior, todos pegados ─── */
     ce: [
-      { sizeId: '22', x: 3, y: 2, rot: 0 },
-      { sizeId: '22', x: 3, y: 8.5, rot: 0 },
-      { sizeId: '18', x: 9, y: 2, rot: 90 },
-      { sizeId: '18', x: 9, y: 8, rot: 90 },
+      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
+      { sizeId: '20', x: 3, y: 3, rot: 90 },
+      { sizeId: '24.5', x: 0, y: 8, rot: 0 },
     ],
+    /* ─── patio / U: laterales + base continua ─── */
     patio: [
-      { sizeId: '24.5', x: 2, y: 2, rot: 0 },
-      { sizeId: '20', x: 2, y: 8, rot: 0 },
-      { sizeId: '24.5', x: 12, y: 2, rot: 90 },
-      { sizeId: '18', x: 12, y: 9.5, rot: 0 },
+      { sizeId: '24.5', x: 0, y: 0, rot: 90 },
+      { sizeId: '24.5', x: 0, y: 7, rot: 0 },
+      { sizeId: '18', x: 7, y: 7, rot: 0 },
+      { sizeId: '24.5', x: 10, y: 0, rot: 90 },
     ],
   };
 
@@ -49,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   let selectedId = null;
   let drag = null;
   let selectedSizeId = '24.5';
+  let cell = 28;
 
   const root = document.getElementById('modular-builder');
   if (!root) return;
@@ -90,6 +99,82 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     mod.y = Math.max(0, Math.min(GRID_H - d.h, mod.y));
   }
 
+  function overlapsY(a, ah, b, bh) {
+    return a < b + bh && a + ah > b;
+  }
+
+  function overlapsX(a, aw, b, bw) {
+    return a < b + bw && a + aw > b;
+  }
+
+  /** Pega el módulo a vecinos cercanos (bordes compartidos) */
+  function snapToNeighbors(mod) {
+    const d = dims(mod);
+    let bestX = null;
+    let bestY = null;
+    let bestXd = SNAP;
+    let bestYd = SNAP;
+
+    modules.forEach((other) => {
+      if (other.id === mod.id) return;
+      const o = dims(other);
+
+      if (overlapsY(mod.y, d.h, other.y, o.h)) {
+        const toRight = Math.abs(mod.x - (other.x + o.w));
+        const toLeft = Math.abs(mod.x + d.w - other.x);
+        if (toRight < bestXd) { bestXd = toRight; bestX = other.x + o.w; }
+        if (toLeft < bestXd) { bestXd = toLeft; bestX = other.x - d.w; }
+
+        const alignL = Math.abs(mod.x - other.x);
+        const alignR = Math.abs(mod.x + d.w - (other.x + o.w));
+        if (alignL < bestXd) { bestXd = alignL; bestX = other.x; }
+        if (alignR < bestXd) { bestXd = alignR; bestX = other.x + o.w - d.w; }
+      }
+
+      if (overlapsX(mod.x, d.w, other.x, o.w)) {
+        const toBottom = Math.abs(mod.y - (other.y + o.h));
+        const toTop = Math.abs(mod.y + d.h - other.y);
+        if (toBottom < bestYd) { bestYd = toBottom; bestY = other.y + o.h; }
+        if (toTop < bestYd) { bestYd = toTop; bestY = other.y - d.h; }
+
+        const alignT = Math.abs(mod.y - other.y);
+        const alignB = Math.abs(mod.y + d.h - (other.y + o.h));
+        if (alignT < bestYd) { bestYd = alignT; bestY = other.y; }
+        if (alignB < bestYd) { bestYd = alignB; bestY = other.y + o.h - d.h; }
+      }
+    });
+
+    if (bestX != null) mod.x = bestX;
+    if (bestY != null) mod.y = bestY;
+    clamp(mod);
+  }
+
+  function centerPreset(list) {
+    let maxR = 0;
+    let maxB = 0;
+    list.forEach((p) => {
+      const s = sizeById(p.sizeId);
+      const rot = (p.rot || 0) % 180 !== 0;
+      const w = rot ? s.h : s.w;
+      const h = rot ? s.w : s.h;
+      maxR = Math.max(maxR, p.x + w);
+      maxB = Math.max(maxB, p.y + h);
+    });
+    const ox = Math.max(0, Math.floor((GRID_W - maxR) / 2));
+    const oy = Math.max(0, Math.floor((GRID_H - maxB) / 2));
+    return list.map((p) => ({ ...p, x: p.x + ox, y: p.y + oy }));
+  }
+
+  function computeCell() {
+    if (!stage) return 28;
+    const pad = 16;
+    const availW = Math.max(200, stage.clientWidth - pad);
+    const availH = Math.max(180, Math.min(stage.clientHeight || 360, window.innerWidth < 640 ? 280 : 420) - pad);
+    const byW = Math.floor(availW / GRID_W);
+    const byH = Math.floor(availH / GRID_H);
+    return Math.max(12, Math.min(32, Math.min(byW, byH)));
+  }
+
   function updateSummary() {
     const t = totals();
     if (totalM2El) totalM2El.textContent = t.m2.toLocaleString('es-CL', { maximumFractionDigits: 1 }) + ' m²';
@@ -114,21 +199,34 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     }
   }
 
+  function clientToGrid(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = (GRID_W * cell) / rect.width;
+    const scaleY = (GRID_H * cell) / rect.height;
+    return {
+      x: (clientX - rect.left) * scaleX / cell,
+      y: (clientY - rect.top) * scaleY / cell,
+    };
+  }
+
   function render() {
     if (!canvas) return;
+    cell = computeCell();
+    if (stage) stage.style.setProperty('--mb-cell', cell + 'px');
+
+    canvas.style.width = GRID_W * cell + 'px';
+    canvas.style.height = GRID_H * cell + 'px';
     canvas.innerHTML = '';
-    canvas.style.width = GRID_W * CELL + 'px';
-    canvas.style.height = GRID_H * CELL + 'px';
 
     modules.forEach((mod, idx) => {
       const d = dims(mod);
       const el = document.createElement('button');
       el.type = 'button';
       el.className = 'mb-module' + (mod.id === selectedId ? ' is-selected' : '');
-      el.style.left = mod.x * CELL + 'px';
-      el.style.top = mod.y * CELL + 'px';
-      el.style.width = d.w * CELL + 'px';
-      el.style.height = d.h * CELL + 'px';
+      el.style.left = mod.x * cell + 'px';
+      el.style.top = mod.y * cell + 'px';
+      el.style.width = d.w * cell + 'px';
+      el.style.height = d.h * cell + 'px';
       el.style.background = COLORS[idx % COLORS.length];
       el.setAttribute('aria-label', `Módulo ${idx + 1}, ${d.label}. Arrastrar para mover.`);
       el.innerHTML = `<span class="mb-module-label">${d.label}</span><span class="mb-module-idx">M${idx + 1}</span>`;
@@ -136,34 +234,35 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       el.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         selectedId = mod.id;
-        const rect = canvas.getBoundingClientRect();
+        const g = clientToGrid(e.clientX, e.clientY);
         drag = {
           id: mod.id,
-          ox: e.clientX - rect.left - mod.x * CELL,
-          oy: e.clientY - rect.top - mod.y * CELL,
+          ox: g.x - mod.x,
+          oy: g.y - mod.y,
+          moved: false,
         };
         el.setPointerCapture(e.pointerId);
-        render();
+        root.querySelectorAll('.mb-module').forEach((n) => n.classList.toggle('is-selected', n === el));
       });
 
       el.addEventListener('pointermove', (e) => {
         if (!drag || drag.id !== mod.id) return;
-        const rect = canvas.getBoundingClientRect();
-        mod.x = (e.clientX - rect.left - drag.ox) / CELL;
-        mod.y = (e.clientY - rect.top - drag.oy) / CELL;
+        drag.moved = true;
+        const g = clientToGrid(e.clientX, e.clientY);
+        mod.x = g.x - drag.ox;
+        mod.y = g.y - drag.oy;
         clamp(mod);
-        el.style.left = mod.x * CELL + 'px';
-        el.style.top = mod.y * CELL + 'px';
+        el.style.left = mod.x * cell + 'px';
+        el.style.top = mod.y * cell + 'px';
       });
 
       el.addEventListener('pointerup', () => {
         if (!drag || drag.id !== mod.id) return;
-        mod.x = Math.round(mod.x * 2) / 2;
-        mod.y = Math.round(mod.y * 2) / 2;
-        clamp(mod);
+        mod.x = Math.round(mod.x);
+        mod.y = Math.round(mod.y);
+        snapToNeighbors(mod);
         drag = null;
         render();
-        updateSummary();
       });
 
       canvas.appendChild(el);
@@ -177,11 +276,18 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     const mod = {
       id: nextId++,
       sizeId: s.id,
-      x: 1 + (modules.length % 3) * 0.5,
-      y: 1 + (modules.length % 4) * 0.5,
+      x: Math.floor(GRID_W / 2 - s.w / 2),
+      y: Math.floor(GRID_H / 2 - s.h / 2),
       rot: 0,
     };
+    if (modules.length) {
+      const last = modules[modules.length - 1];
+      const ld = dims(last);
+      mod.x = last.x + ld.w;
+      mod.y = last.y;
+    }
     clamp(mod);
+    snapToNeighbors(mod);
     modules.push(mod);
     selectedId = mod.id;
     render();
@@ -203,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     mod.rot = (mod.rot + 90) % 360;
     selectedId = mod.id;
     clamp(mod);
+    snapToNeighbors(mod);
     render();
   }
 
@@ -215,7 +322,8 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   function applyPreset(name) {
     const list = PRESETS[name];
     if (!list) return;
-    modules = list.map((p) => {
+    const centered = centerPreset(list);
+    modules = centered.map((p) => {
       const mod = {
         id: nextId++,
         sizeId: p.sizeId,
@@ -246,9 +354,11 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     btn.addEventListener('click', () => applyPreset(btn.getAttribute('data-mb-preset')));
   });
 
-  if (stage) {
-    stage.style.setProperty('--mb-cell', CELL + 'px');
-  }
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(render, 120);
+  }, { passive: true });
 
   applyPreset('linea');
   root.querySelector('[data-mb-size="24.5"]')?.classList.add('is-active');
