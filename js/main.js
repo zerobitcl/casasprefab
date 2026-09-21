@@ -1,10 +1,10 @@
-'use strict';
+﻿'use strict';
 
 const CONFIG = {
-  whatsappNumber: '56994284048',
+  whatsappNumber: '569977164000',
   businessEmail: 'contacto@casasprefabricadascoquimbo.cl',
   siteName: 'PrefabCoquimbo',
-  whatsappDefaultMessage: 'Hola, me gustaría cotizar una casa a medida en la Región de Coquimbo. ¿Podrían orientarme?',
+  whatsappDefaultMessage: 'Hola, me gustaría cotizar una casa (modular o a medida) en la Cuarta Región. ¿Podrían orientarme?',
   ga4Id: '', // Pegar tu ID: 'G-XXXXXXXXXX' — activa eventos whatsapp_direct_click, cotizador_open, cotizador_submit
 };
 
