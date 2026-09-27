@@ -3,4 +3,7 @@ RewriteEngine On
 RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} ^casasprefabricadascoquimbo\.cl [NC]
 RewriteRule ^(.*)$ https://www.casasprefabricadascoquimbo.cl/$1 [L,R=301]
+
+# Demo retirada: estuvo en el sitemap, se redirige para no perder la URL indexada
+RewriteRule ^presupuesto\.html$ https://www.casasprefabricadascoquimbo.cl/ [L,R=301]
 </IfModule>
