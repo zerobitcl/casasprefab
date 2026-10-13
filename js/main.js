@@ -5,7 +5,7 @@ const CONFIG = {
   businessEmail: 'contacto@casasprefabricadascoquimbo.cl',
   siteName: 'PrefabCoquimbo',
   whatsappDefaultMessage: 'Hola, me gustaría cotizar una casa (modular o a medida) en la Cuarta Región. ¿Podrían orientarme?',
-  ga4Id: '', // Pegar tu ID: 'G-XXXXXXXXXX' — activa eventos whatsapp_direct_click, cotizador_open, cotizador_submit
+  ga4Id: 'G-G10232ZBMD', // Activa eventos whatsapp_direct_click, cotizador_open, cotizador_submit
 };
 
 const cotizadorState = {
