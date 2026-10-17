@@ -2200,7 +2200,9 @@ details.aio-detail[open] .aio-icon {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
+  max-height: min(92vh, 720px);
+  overflow-y: auto;
   background: var(--white);
   border-radius: 1.25rem;
   padding: 2rem 1.75rem 1.75rem;
@@ -2265,9 +2267,25 @@ body.cot-modal-open {
   color: var(--slate-900);
   letter-spacing: -0.025em;
   line-height: 1.3;
-  margin-bottom: 1.375rem;
+  margin-bottom: 0.5rem;
   text-align: center;
   padding-right: 1.5rem;
+}
+
+.cot-modal-desc {
+  font-size: 0.875rem;
+  color: var(--slate-500);
+  text-align: center;
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+}
+
+.cot-modal-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--slate-700);
+  margin: 0 0 0.625rem;
+  text-align: left;
 }
 
 .cot-modal-options {
@@ -2288,7 +2306,7 @@ body.cot-modal-open {
 
 .cot-modal-opt {
   width: 100%;
-  padding: 1rem 1.25rem;
+  padding: 0.9375rem 1.125rem;
   border: 2px solid var(--slate-200);
   border-radius: 0.875rem;
   background: var(--white);
@@ -2299,16 +2317,39 @@ body.cot-modal-open {
   cursor: pointer;
   text-align: center;
   transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.cot-modal-opt--sm {
+  padding: 0.75rem 0.625rem;
+  font-size: 0.8125rem;
+}
+.cot-modal-opt-sub {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--slate-500);
+  line-height: 1.35;
 }
 .cot-modal-opt:hover {
   border-color: rgba(180, 83, 9, 0.45);
   background: var(--amber-50);
   color: var(--amber-800);
 }
+.cot-modal-opt:hover .cot-modal-opt-sub { color: var(--amber-700); }
 .cot-modal-opt.selected {
   border-color: var(--amber-700);
   background: var(--amber-50);
   box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.12);
+}
+.cot-modal-opt.selected .cot-modal-opt-sub { color: var(--amber-800); }
+
+#cot-step3-next:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .cot-modal-back {
@@ -2394,19 +2435,39 @@ body.cot-modal-open {
 }
 
 .sticky-cot-bar-text {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   margin: 0;
   line-height: 1.3;
   flex-shrink: 1;
+  max-width: 36%;
+}
+
+.sticky-cot-bar-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  align-items: center;
 }
 
 .sticky-cot-bar-btn {
   flex-shrink: 0;
-  padding: 0.75rem 1rem !important;
-  font-size: 0.8125rem !important;
+  padding: 0.65rem 0.85rem !important;
+  font-size: 0.75rem !important;
   white-space: nowrap;
+  gap: 0.35rem;
+}
+
+.sticky-cot-bar .btn-secondary {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.35);
+  color: white;
+}
+.sticky-cot-bar .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: white;
 }
 
 @media (max-width: 767px) {

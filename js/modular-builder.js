@@ -186,16 +186,12 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
         const d = dims(m);
         return `M${i + 1}: ${d.label}`;
       }).join(', ');
-      const msg = t.count === 0
-        ? 'Hola, me interesa una casa modular en la Cuarta Región. ¿Me orientan?'
-        : `Hola, armé una configuración modular en el sitio: ${t.count} módulo(s), ${t.m2} m² aprox. (${layout}). Valor referencial ~${formatCLP(t.price)} a $700.000/m². ¿Me cotizan en la Cuarta Región?`;
-      waBtn.setAttribute('data-whatsapp', msg);
-      if (typeof whatsappUrl === 'function') {
-        waBtn.setAttribute('href', whatsappUrl(msg));
-      } else {
-        const phone = (typeof CONFIG !== 'undefined' && CONFIG.whatsappNumber) || '56977164000';
-        waBtn.setAttribute('href', `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
-      }
+      const note = t.count === 0
+        ? 'Interés en casa modular (sin layout aún)'
+        : `${t.count} módulo(s), ${t.m2} m² (${layout}). Ref. ~${formatCLP(t.price)}`;
+      window.__prefabModularLayout = note;
+      waBtn.setAttribute('data-preset-layout', note);
+      waBtn.setAttribute('data-preset-tipo', 'Modular');
     }
   }
 
