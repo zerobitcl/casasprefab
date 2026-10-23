@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es-CL" data-sticky-cot="Casas en la Cuarta Región">
+<html lang="es-CL" data-sticky-cot="Elige tu línea" data-dual-lines="true">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -38,7 +38,7 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="styles.css?v=20261017" />
+  <link rel="stylesheet" href="styles.css?v=20261023c" />
 
   <!-- JSON-LD: ProfessionalService (asesoría + cotización) -->
   <script type="application/ld+json">
@@ -61,8 +61,26 @@
       "height": "800"
     },
     "description": "Casas prefabricadas a medida y casas modulares en La Serena, Coquimbo y la Cuarta Región. Módulos desde 18 a 24,5 m², llave en mano. Consulta por WhatsApp.",
-    "telephone": "+56-9-7716-4000",
+    "telephone": "+56-9-9428-4048",
     "email": "contacto@casasprefabricadascoquimbo.cl",
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "+56-9-7716-4000",
+        "contactType": "sales",
+        "name": "Ventas casas modulares",
+        "areaServed": "CL",
+        "availableLanguage": "Spanish"
+      },
+      {
+        "@type": "ContactPoint",
+        "telephone": "+56-9-9428-4048",
+        "contactType": "sales",
+        "name": "Ventas casas prefabricadas",
+        "areaServed": "CL",
+        "availableLanguage": "Spanish"
+      }
+    ],
     "areaServed": [
       { "@type": "AdministrativeArea", "name": "Región de Coquimbo" },
       { "@type": "City", "name": "La Serena",  "containedInPlace": { "@type": "AdministrativeArea", "name": "Región de Coquimbo" } },
@@ -185,8 +203,15 @@
     </ul>
 
     <!-- Desktop CTA -->
-    <div class="nav-cta">
-      <a href="tel:+56977164000" class="btn btn-primary" aria-label="Llamar a PrefabCoquimbo">Llamar ahora</a>
+    <div class="nav-cta nav-cta-lines">
+      <a href="tel:+56977164000" class="nav-line nav-line--modular" data-line="modular" aria-label="Llamar a la línea de casas modulares">
+        <span class="nav-line-kicker">Modulares</span>
+        <span class="nav-line-name" data-line-number>+56 9 7716 4000</span>
+      </a>
+      <a href="tel:+56994284048" class="nav-line nav-line--prefab" data-line="prefab" aria-label="Llamar a la línea de casas prefabricadas">
+        <span class="nav-line-kicker">Prefabricadas</span>
+        <span class="nav-line-name" data-line-number>+56 9 9428 4048</span>
+      </a>
     </div>
 
     <!-- Mobile menu button -->
@@ -204,8 +229,17 @@
       <a href="cuarta-region.html" class="nav-link">Cuarta Región</a>
       <a href="ovalle.html" class="nav-link">Ovalle / Interior</a>
       <a href="#faq"        class="nav-link">Preguntas Frecuentes</a>
-      <a href="tel:+56977164000" class="btn btn-primary" style="margin-top:0.75rem; width:100%; justify-content:center;" aria-label="Llamar a PrefabCoquimbo">Llamar ahora</a>
-      <button type="button" class="btn btn-secondary btn-cotizador-main" style="margin-top:0.5rem; width:100%; justify-content:center;">Cotizar por WhatsApp</button>
+      <div class="line-menu">
+        <a href="tel:+56977164000" class="nav-line nav-line--modular" data-line="modular" aria-label="Llamar a la línea de casas modulares">
+          <span class="nav-line-kicker">Modulares</span>
+          <span class="nav-line-name" data-line-number>+56 9 7716 4000</span>
+        </a>
+        <a href="tel:+56994284048" class="nav-line nav-line--prefab" data-line="prefab" aria-label="Llamar a la línea de casas prefabricadas">
+          <span class="nav-line-kicker">Prefabricadas</span>
+          <span class="nav-line-name" data-line-number>+56 9 9428 4048</span>
+        </a>
+      </div>
+      <button type="button" class="btn btn-secondary btn-cotizador-main" style="margin-top:0.5rem; width:100%; justify-content:center;">Dejar mis datos</button>
     </div>
   </div>
 </header>
@@ -240,28 +274,26 @@
 
       <p class="hero-lead">
         La Serena, Coquimbo, Ovalle, Vicuña y el interior.
-        A medida o por módulos de 18 a 24,5 m² que armas como quieras — llama o deja tus datos y te contactamos.
+        Módulos de 18 a 24,5 m² o un proyecto a medida. Cada producto tiene su propio número.
       </p>
 
       <div class="hero-banner-actions">
-        <a
-          href="tel:+56977164000"
-          class="btn btn-primary btn-primary-lg"
-          aria-label="Llamar a PrefabCoquimbo"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 2.19 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          Llamar ahora
-        </a>
-        <button type="button" class="btn btn-outline-white btn-primary-lg btn-cotizador-main">
-          Cotizar por WhatsApp
+        <div class="line-pair line-pair--on-dark">
+          <a class="line-card line-card--modular" data-line="modular" href="tel:+56977164000" aria-label="Llamar a la línea de casas modulares">
+            <span class="line-card-kicker">Casas modulares</span>
+            <span class="line-card-action">Llamar <span data-line-number>+56 9 7716 4000</span></span>
+          </a>
+          <a class="line-card line-card--prefab" data-line="prefab" href="tel:+56994284048" aria-label="Llamar a la línea de casas prefabricadas">
+            <span class="line-card-kicker">Casas prefabricadas</span>
+            <span class="line-card-action">Llamar <span data-line-number>+56 9 9428 4048</span></span>
+          </a>
+        </div>
+        <button type="button" class="btn-form-quiet btn-cotizador-main">
+          O deja tus datos y te escribimos por WhatsApp
         </button>
       </div>
 
       <div class="hero-banner-trust">
-        <div class="trust-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 2.19 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          +56 9 7716 4000
-        </div>
         <div class="trust-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           Módulos llave en mano
@@ -290,7 +322,7 @@
       <span aria-hidden="true">·</span>
       <a href="casas-prefabricadas-coquimbo.html">Coquimbo</a>
       <span aria-hidden="true">·</span>
-      <a href="https://wa.me/56977164000?text=Hola%2C+tengo+terreno+en+la+Cuarta+Regi%C3%B3n+y+quiero+cotizar." target="_blank" rel="noopener noreferrer" data-whatsapp="Hola, tengo terreno en la Cuarta Región y quiero cotizar.">Cotizar mi comuna →</a>
+      <button type="button" class="region-hub-cotizar btn-cotizador-main">Cotizar mi comuna →</button>
     </p>
   </div>
 </aside>
@@ -353,6 +385,10 @@
           <span class="modular-chip">Cuarta Región</span>
         </div>
         <p style="font-size:0.75rem; color:var(--slate-400); margin-top:0.75rem;">*Según módulo y distribución elegida.</p>
+        <p class="product-line-note">Línea de venta propia, distinta a la de casas prefabricadas.</p>
+        <a href="tel:+56977164000" class="btn btn-primary" data-line="modular" aria-label="Llamar a la línea de casas modulares">
+          Llamar modulares · <span data-line-number>+56 9 7716 4000</span>
+        </a>
       </div>
       <div class="modular-photo">
         <img
@@ -420,7 +456,7 @@
             <span>Referencia</span>
             <strong data-mb-total-price>$0</strong>
           </div>
-          <p class="mb-note">~ $700.000 / m² · referencial · Cuarta Región</p>
+          <p class="mb-note">~ $700.000 / m² · referencial · Cuarta Región. Esta cotización va a la línea de casas modulares.</p>
           <button
             type="button"
             class="btn btn-primary mb-wa btn-cotizador-main"
@@ -429,6 +465,9 @@
           >
             Cotizar esta configuración
           </button>
+          <a href="tel:+56977164000" class="btn btn-secondary" data-line="modular" aria-label="Llamar a la línea de casas modulares">
+            Llamar modulares · <span data-line-number>+56 9 7716 4000</span>
+          </a>
         </div>
       </aside>
     </div>
@@ -452,6 +491,10 @@
         Además de los módulos, diseñamos casas a medida según tu terreno, metros y presupuesto en la Cuarta Región.
         Elige un estilo de partida y lo adaptamos por completo.
       </p>
+      <p class="product-line-note">Esta sección es la línea de <strong style="color:var(--slate-800);">casas prefabricadas</strong>. Los módulos se cotizan en otro número.</p>
+      <a href="tel:+56977164000" class="btn btn-primary" data-line="prefab" aria-label="Llamar a la línea de casas prefabricadas">
+        Llamar prefabricadas · <span data-line-number>+56 9 9428 4048</span>
+      </a>
     </div>
 
     <div class="grid-auto-cards">
@@ -474,7 +517,7 @@
         </ul>
         <div class="model-price">Cotización según materialidad <span>· sin compromiso</span></div>
         <button type="button" class="btn btn-secondary btn-cotizador-main" data-preset-estilo="Mediterránea" data-preset-tipo="A medida" aria-label="Cotizar casa estilo Mediterránea">
-          Cotizar por WhatsApp
+          Dejar mis datos
         </button>
       </article>
 
@@ -497,7 +540,7 @@
         </ul>
         <div class="model-price">Cotización según materialidad <span>· sin compromiso</span></div>
         <button type="button" class="btn btn-primary btn-cotizador-main" data-preset-estilo="Tradicional" data-preset-tipo="A medida" aria-label="Cotizar casa estilo Tradicional">
-          Cotizar por WhatsApp
+          Dejar mis datos
         </button>
       </article>
 
@@ -519,7 +562,7 @@
         </ul>
         <div class="model-price">Cotización según materialidad <span>· sin compromiso</span></div>
         <button type="button" class="btn btn-secondary btn-cotizador-main" data-preset-estilo="Metalcón" data-preset-tipo="A medida" aria-label="Cotizar casa estilo Metalcón">
-          Cotizar por WhatsApp
+          Dejar mis datos
         </button>
       </article>
 
@@ -537,21 +580,25 @@
       <p class="section-label">¿No sabes por dónde empezar?</p>
       <div class="divider-amber" style="margin:0 auto 1.25rem;"></div>
       <h2 id="comparativa-title" style="font-size:clamp(1.75rem,3.5vw,2.25rem); margin-bottom:1rem;">
-        Cada Proyecto es Distinto —<br>Hablemos por teléfono
+        Cada producto tiene su número
       </h2>
       <p style="color:var(--slate-500); font-size:1rem; line-height:1.75; margin-bottom:2rem;">
-        Metros cuadrados, nivel de terminación y tipo de terreno cambian en cada caso.
-        Llámanos o completa el formulario: te orientamos con opciones reales para tu comuna.
+        Modulares y prefabricadas se atienden por separado.
+        Llama a la línea que corresponde o cuéntanos tu caso por WhatsApp.
       </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.875rem; justify-content:center;">
-        <a href="tel:+56977164000" class="btn btn-primary btn-primary-lg" aria-label="Llamar a PrefabCoquimbo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 2.19 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          Llamar ahora
+      <div class="line-pair" style="margin:0 auto 0.875rem;">
+        <a class="line-card line-card--modular" data-line="modular" href="tel:+56977164000" aria-label="Llamar a la línea de casas modulares">
+          <span class="line-card-kicker">Casas modulares</span>
+          <span class="line-card-action">Llamar <span data-line-number>+56 9 7716 4000</span></span>
         </a>
-        <button type="button" class="btn btn-secondary btn-primary-lg btn-cotizador-main">
-          Cotizar por WhatsApp
-        </button>
+        <a class="line-card line-card--prefab" data-line="prefab" href="tel:+56994284048" aria-label="Llamar a la línea de casas prefabricadas">
+          <span class="line-card-kicker">Casas prefabricadas</span>
+          <span class="line-card-action">Llamar <span data-line-number>+56 9 9428 4048</span></span>
+        </a>
       </div>
+      <button type="button" class="btn btn-secondary btn-primary-lg btn-cotizador-main">
+        Dejar mis datos
+      </button>
     </div>
   </div>
 </section>
@@ -698,10 +745,10 @@
         <p class="section-label">Cotizador guiado</p>
         <div class="divider-amber"></div>
         <h2 id="cotizador-title" style="font-size:clamp(1.75rem,3vw,2.375rem); margin-bottom:1.25rem;">
-          Cotiza en minutos y envía<br>tu info por WhatsApp
+          Lo más directo es llamar
         </h2>
         <p style="color:var(--slate-500); font-size:0.9375rem; line-height:1.75; margin-bottom:2rem;">
-          4 preguntas para filtrar tu caso (sin pedir presupuesto). Al final puedes mandar todo por WhatsApp o llamarnos.
+          Cada producto tiene su número. Si prefieres no llamar, completa el formulario: tipo, comuna, terreno y tus datos salen juntos en el WhatsApp.
         </p>
 
         <div style="display:flex; flex-direction:column; gap:1.125rem;">
@@ -729,8 +776,8 @@
           <div style="display:flex; gap:0.875rem; align-items:flex-start;">
             <div style="width:2.25rem; height:2.25rem; background:var(--amber-700); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8125rem; font-weight:700; flex-shrink:0; margin-top:2px;">4</div>
             <div>
-              <strong style="font-size:0.9375rem; color:var(--slate-900);">Nombre + teléfono → WhatsApp</strong>
-              <p style="font-size:0.875rem; color:var(--slate-500); margin-top:0.25rem;">Enviamos el mensaje listo; tú confirmas el envío.</p>
+              <strong style="font-size:0.9375rem; color:var(--slate-900);">Tus datos, completos</strong>
+              <p style="font-size:0.875rem; color:var(--slate-500); margin-top:0.25rem;">Nombre, contacto, qué buscas y el detalle. Si lo llenas entero, se envía por WhatsApp.</p>
             </div>
           </div>
         </div>
@@ -744,13 +791,11 @@
             <p class="cotizador-subtitle">Sin presupuesto · Respuesta el mismo día hábil</p>
           </div>
           <div class="cotizador-body" style="text-align:center;">
-            <p style="color:var(--slate-500); font-size:0.9375rem; line-height:1.7; margin-bottom:1.25rem;">
-              Completa tipo, comuna, terreno y tus datos. Al final puedes enviarlo directo a WhatsApp.
-            </p>
-            <button type="button" class="btn btn-primary btn-primary-lg btn-cotizador-main" style="width:100%; justify-content:center; margin-bottom:0.75rem;">
-              Empezar cotización
+            <a href="tel:+56977164000" class="btn btn-primary" data-line="modular" style="width:100%; justify-content:center; margin-bottom:0.5rem;" aria-label="Llamar a la línea de casas modulares">Modulares · <span data-line-number>+56 9 7716 4000</span></a>
+            <a href="tel:+56994284048" class="btn btn-primary" data-line="prefab" style="width:100%; justify-content:center;" aria-label="Llamar a la línea de casas prefabricadas">Prefabricadas · <span data-line-number>+56 9 9428 4048</span></a>
+            <button type="button" class="btn-form-quiet btn-form-quiet--dark btn-cotizador-main" style="margin-top:0.9rem;">
+              O deja tus datos completos
             </button>
-            <a href="tel:+56977164000" class="btn btn-secondary" style="width:100%; justify-content:center;">Llamar ahora · +56 9 7716 4000</a>
           </div>
         </div>
       </div>
@@ -776,7 +821,16 @@
         <p style="color:var(--slate-500); font-size:0.9375rem; line-height:1.75; margin-bottom:2rem;">
           Resolvemos las dudas más habituales sobre casas prefabricadas en la Región de Coquimbo.
         </p>
-        <a href="tel:+56977164000" class="btn btn-primary" aria-label="Llamar a PrefabCoquimbo">Llamar ahora</a>
+        <div class="line-pair" style="width:100%; max-width:none;">
+          <a class="line-card line-card--modular" data-line="modular" href="tel:+56977164000" aria-label="Llamar a la línea de casas modulares">
+            <span class="line-card-kicker">Casas modulares</span>
+            <span class="line-card-action">Llamar <span data-line-number>+56 9 7716 4000</span></span>
+          </a>
+          <a class="line-card line-card--prefab" data-line="prefab" href="tel:+56994284048" aria-label="Llamar a la línea de casas prefabricadas">
+            <span class="line-card-kicker">Casas prefabricadas</span>
+            <span class="line-card-action">Llamar <span data-line-number>+56 9 9428 4048</span></span>
+          </a>
+        </div>
       </div>
 
       <div>
@@ -853,20 +907,24 @@
   <div class="section-container" style="text-align:center; max-width:680px; margin:0 auto;">
     <span class="badge badge-amber-on-dark" style="margin-bottom:1.5rem;">Sin compromiso · Respuesta el mismo día hábil</span>
     <h2 style="font-size:clamp(1.875rem,4vw,2.75rem); color:white; letter-spacing:-0.03em; margin-bottom:1.125rem;">
-      Casa modular o a medida en la Cuarta Región<br>Empieza con una llamada
+      Modular o prefabricada,<br>llama a la línea correcta
     </h2>
     <p style="color:rgba(255,255,255,0.55); font-size:1rem; line-height:1.7; margin-bottom:2.5rem;">
-      Da igual si tu terreno está en la costa o en el interior — La Serena, Coquimbo, Ovalle, Vicuña u otra comuna. Llámanos o deja tus datos y te respondemos sin compromiso.
+      Da igual si tu terreno está en la costa o en el interior — La Serena, Coquimbo, Ovalle, Vicuña u otra comuna. Elige el producto y te atiende esa línea.
     </p>
-    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-      <a href="tel:+56977164000" class="btn btn-primary btn-primary-lg" aria-label="Llamar a PrefabCoquimbo">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 2.19 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        Llamar ahora
+    <div class="line-pair line-pair--on-dark" style="margin:0 auto 1rem;">
+      <a class="line-card line-card--modular" data-line="modular" href="tel:+56977164000" aria-label="Llamar a la línea de casas modulares">
+        <span class="line-card-kicker">Casas modulares</span>
+        <span class="line-card-action">Llamar <span data-line-number>+56 9 7716 4000</span></span>
       </a>
-      <button type="button" class="btn btn-outline-white btn-primary-lg btn-cotizador-main">
-        Cotizar por WhatsApp
-      </button>
+      <a class="line-card line-card--prefab" data-line="prefab" href="tel:+56994284048" aria-label="Llamar a la línea de casas prefabricadas">
+        <span class="line-card-kicker">Casas prefabricadas</span>
+        <span class="line-card-action">Llamar <span data-line-number>+56 9 9428 4048</span></span>
+      </a>
     </div>
+    <button type="button" class="btn btn-outline-white btn-primary-lg btn-cotizador-main">
+      Dejar mis datos
+    </button>
   </div>
 </section>
 
@@ -893,20 +951,33 @@
           Casas prefabricadas a medida y casas modulares en la Cuarta Región. Cotiza por WhatsApp — sin dirección pública, atención regional.
         </p>
         <div style="display:flex; flex-direction:column; gap:0.5rem;">
-          <a href="tel:+56977164000" style="font-size:0.875rem; color:rgba(255,255,255,0.65); text-decoration:none; display:flex; align-items:center; gap:0.5rem; transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 2.19 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-            +56 9 7716 4000
+          <a href="tel:+56977164000" data-line="modular" style="font-size:0.875rem; color:rgba(255,255,255,0.65); text-decoration:none; display:flex; align-items:center; gap:0.5rem; transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">
+            <span class="footer-line-label">Modulares</span>
+            <span data-line-number>+56 9 7716 4000</span>
+          </a>
+          <a href="tel:+56994284048" data-line="prefab" style="font-size:0.875rem; color:rgba(255,255,255,0.65); text-decoration:none; display:flex; align-items:center; gap:0.5rem; transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">
+            <span class="footer-line-label">Prefabricadas</span>
+            <span data-line-number>+56 9 9428 4048</span>
           </a>
           <a
             href="https://wa.me/56977164000"
             target="_blank"
             rel="noopener noreferrer"
             class="footer-wa-link"
-            data-whatsapp="Hola, me gustaría cotizar una casa a medida en la Región de Coquimbo."
+            data-line="modular"
+            data-whatsapp="Hola, quiero cotizar una casa modular en la Cuarta Región."
             style="font-size:0.875rem; color:rgba(255,255,255,0.65); text-decoration:none; display:flex; align-items:center; gap:0.5rem; transition:color 0.2s;"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-            WhatsApp
+            WhatsApp modulares
+          </a>
+          <a
+            href="https://wa.me/56994284048"
+            data-whatsapp="Hola, quiero cotizar una casa prefabricada a medida en la Cuarta Región."
+            style="font-size:0.875rem; color:rgba(255,255,255,0.65); text-decoration:none; display:flex; align-items:center; gap:0.5rem; transition:color 0.2s;"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            WhatsApp prefabricadas
           </a>
           <a href="mailto:contacto@casasprefabricadascoquimbo.cl" style="font-size:0.875rem; color:rgba(255,255,255,0.65); text-decoration:none; display:flex; align-items:center; gap:0.5rem; transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -922,8 +993,9 @@
           <li><a href="#modulares">Casas Modulares</a></li>
           <li><a href="#modelos">Casas a Medida</a></li>
           <li><a href="#modulares">Configurador de módulos</a></li>
-          <li><a href="tel:+56977164000" class="footer-link-btn" style="display:inline;">Llamar ahora</a></li>
-          <li><button type="button" class="btn-cotizador-main footer-link-btn">Cotizar por WhatsApp</button></li>
+          <li><a href="tel:+56977164000" data-line="modular" class="footer-link-btn" style="display:inline;">Llamar modulares</a></li>
+          <li><a href="tel:+56994284048" data-line="prefab" class="footer-link-btn" style="display:inline;">Llamar prefabricadas</a></li>
+          <li><button type="button" class="btn-cotizador-main footer-link-btn">Dejar mis datos</button></li>
         </ul>
       </div>
 
@@ -972,7 +1044,7 @@
 </footer>
 
 
-<script src="js/main.js?v=20261017" defer></script>
+<script src="js/main.js?v=20261023b" defer></script>
 <script src="js/modular-builder.js" defer></script>
 </body>
 </html>

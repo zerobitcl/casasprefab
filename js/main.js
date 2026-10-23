@@ -1,12 +1,30 @@
 ﻿'use strict';
 
+/* Dos líneas de venta. Cambia solo `digits` (sin + ni espacios) y `display`.
+   Al cambiar el de modulares, actualiza también el contactPoint en index.html. */
+const LINES = {
+  modular: {
+    id: 'modular',
+    digits: '56977164000',
+    display: '+56 9 7716 4000',
+    label: 'Casas modulares',
+    short: 'Modulares',
+    waHello: 'Hola, quiero cotizar una casa modular (módulos de 18 a 24,5 m²) en la Cuarta Región.',
+  },
+  prefab: {
+    id: 'prefab',
+    digits: '56994284048',
+    display: '+56 9 9428 4048',
+    label: 'Casas prefabricadas',
+    short: 'Prefabricadas',
+    waHello: 'Hola, quiero cotizar una casa prefabricada a medida en la Cuarta Región.',
+  },
+};
+
 const CONFIG = {
-  whatsappNumber: '56977164000',
-  phoneHref: 'tel:+56977164000',
-  phoneDisplay: '+56 9 7716 4000',
   businessEmail: 'contacto@casasprefabricadascoquimbo.cl',
   siteName: 'PrefabCoquimbo',
-  whatsappDefaultMessage: 'Hola, me gustaría cotizar una casa (modular o a medida) en la Cuarta Región. ¿Podrían orientarme?',
+  whatsappDefaultMessage: LINES.prefab.waHello,
   ga4Id: 'G-G10232ZBMD',
 };
 
@@ -29,18 +47,13 @@ function boot() {
   safeInit(initScrollReveal);
   safeInit(initFAQ);
   safeInit(initSmoothScroll);
+  safeInit(applyContactLines);
   safeInit(initWhatsAppLinks);
   safeInit(initCallLinks);
 }
 
 function safeInit(fn) {
   try { fn(); } catch (err) { console.error('[PrefabCoquimbo]', err); }
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', boot);
-} else {
-  boot();
 }
 
 /* ─── GA4 ─── */
@@ -60,26 +73,96 @@ function trackEvent(name, params) {
   if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
 }
 
-function whatsappUrl(text) {
-  const msg = text || CONFIG.whatsappDefaultMessage;
-  return `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+function lineById(id) {
+  return LINES[id] || null;
 }
 
-function initWhatsAppLinks() {
-  document.querySelectorAll('[data-whatsapp]').forEach(el => {
-    const text = el.dataset.whatsapp || CONFIG.whatsappDefaultMessage;
-    el.setAttribute('href', whatsappUrl(text));
+function defaultLineId() {
+  const id = document.documentElement.dataset.defaultLine;
+  return LINES[id] ? id : 'prefab';
+}
+
+function lineIdForTipo(tipo) {
+  if (tipo === 'Modular') return 'modular';
+  if (tipo === 'A medida') return 'prefab';
+  return '';
+}
+
+function whatsappUrl(text, lineId) {
+  const line = lineById(lineId) || lineById(defaultLineId());
+  const msg = text || line.waHello;
+  return `https://wa.me/${line.digits}?text=${encodeURIComponent(msg)}`;
+}
+
+function waTextFromHref(href) {
+  if (!href || href.indexOf('wa.me') === -1) return '';
+  try {
+    return new URL(href, 'https://wa.me').searchParams.get('text') || '';
+  } catch (err) {
+    return '';
+  }
+}
+
+function paintLineNumbers(root, line) {
+  if (!root || !line) return;
+  if (root.hasAttribute('data-line-number')) root.textContent = line.display;
+  root.querySelectorAll('[data-line-number]').forEach((node) => {
+    node.textContent = line.display;
+  });
+  root.querySelectorAll('[data-line-label]').forEach((node) => {
+    node.textContent = line.short;
+  });
+}
+
+function bindLine(el, lineId) {
+  const line = lineById(lineId);
+  if (!el || !line) return;
+  el.dataset.line = line.id;
+  const href = el.getAttribute('href') || '';
+  const isTel = el.tagName === 'A' && (href.startsWith('tel:') || el.hasAttribute('data-tel'));
+  const isWa = el.tagName === 'A' && (href.includes('wa.me/') || el.hasAttribute('data-whatsapp'));
+  if (isTel) el.href = `tel:+${line.digits}`;
+  if (isWa) {
+    const text = el.dataset.whatsapp || waTextFromHref(href) || line.waHello;
+    el.dataset.whatsapp = text;
+    el.href = whatsappUrl(text, line.id);
     if (!el.getAttribute('target')) {
       el.setAttribute('target', '_blank');
       el.setAttribute('rel', 'noopener noreferrer');
     }
-    el.addEventListener('click', () => trackEvent('whatsapp_direct_click', { link_text: el.textContent?.trim().slice(0, 40) }));
+  }
+  paintLineNumbers(el, line);
+}
+
+function applyContactLines() {
+  document.querySelectorAll('[data-line]').forEach((el) => {
+    if (LINES[el.dataset.line]) bindLine(el, el.dataset.line);
+  });
+  const pageDefault = document.documentElement.dataset.defaultLine;
+  if (!pageDefault || !LINES[pageDefault]) return;
+  document.querySelectorAll('a[href^="tel:"], a[href*="wa.me/"]').forEach((el) => {
+    if (el.dataset.line) return;
+    bindLine(el, pageDefault);
+  });
+}
+
+function initWhatsAppLinks() {
+  document.querySelectorAll('[data-whatsapp]').forEach((el) => {
+    const lineId = el.dataset.line && LINES[el.dataset.line] ? el.dataset.line : defaultLineId();
+    bindLine(el, lineId);
+    el.addEventListener('click', () => trackEvent('whatsapp_direct_click', {
+      line: lineId,
+      link_text: el.textContent?.trim().slice(0, 40),
+    }));
   });
 }
 
 function initCallLinks() {
-  document.querySelectorAll('a[href^="tel:"]').forEach(el => {
-    el.addEventListener('click', () => trackEvent('call_click', { link_text: el.textContent?.trim().slice(0, 40) }));
+  document.querySelectorAll('a[href^="tel:"]').forEach((el) => {
+    el.addEventListener('click', () => trackEvent('call_click', {
+      line: el.dataset.line || defaultLineId(),
+      link_text: el.textContent?.trim().slice(0, 40),
+    }));
   });
 }
 
@@ -182,10 +265,21 @@ function ensureCotizadorUI() {
 }
 
 function getStickyBarHTML(text) {
+  const dual = document.documentElement.dataset.dualLines === 'true';
+  if (dual) {
+    return `<div class="sticky-cot-bar sticky-cot-bar--dual" id="sticky-cot-bar">
+  <div class="sticky-cot-bar-actions">
+    <a href="tel:+${LINES.modular.digits}" data-line="modular" class="btn btn-primary sticky-cot-bar-btn sticky-cot-bar-btn--stack" aria-label="Llamar casas modulares ${LINES.modular.display}"><span class="sticky-line-kicker">Modulares</span><span class="sticky-line-num" data-line-number>${LINES.modular.display}</span></a>
+    <a href="tel:+${LINES.prefab.digits}" data-line="prefab" class="btn sticky-cot-bar-btn sticky-line-prefab sticky-cot-bar-btn--stack" aria-label="Llamar casas prefabricadas ${LINES.prefab.display}"><span class="sticky-line-kicker">Prefabricadas</span><span class="sticky-line-num" data-line-number>${LINES.prefab.display}</span></a>
+    <button type="button" class="btn btn-secondary sticky-cot-bar-btn btn-cotizador-main">Datos</button>
+  </div>
+</div>`;
+  }
+  const line = lineById(defaultLineId());
   return `<div class="sticky-cot-bar" id="sticky-cot-bar">
   <p class="sticky-cot-bar-text">${text}</p>
   <div class="sticky-cot-bar-actions">
-    <a href="${CONFIG.phoneHref}" class="btn btn-primary sticky-cot-bar-btn">${PHONE_ICON} Llamar</a>
+    <a href="tel:+${line.digits}" data-line="${line.id}" class="btn btn-primary sticky-cot-bar-btn" aria-label="Llamar ${line.display}">${PHONE_ICON} <span data-line-number>${line.display}</span></a>
     <button type="button" class="btn btn-secondary sticky-cot-bar-btn btn-cotizador-main">Cotizar</button>
   </div>
 </div>`;
@@ -205,7 +299,7 @@ function getCotizadorModalHTML() {
 
     <div class="cot-modal-step active" id="modal-step-1">
       <h2 id="cot-modal-title" class="cot-modal-title">¿Qué tipo de casa buscas?</h2>
-      <p class="cot-modal-desc">Así filtramos opciones reales para tu caso.</p>
+      <p class="cot-modal-desc">Modulares y prefabricadas se atienden en números distintos.</p>
       <div class="cot-modal-options">
         <button type="button" class="cot-modal-opt" data-field="tipo" data-value="Modular">
           Casa modular
@@ -259,26 +353,84 @@ function getCotizadorModalHTML() {
     </div>
 
     <div class="cot-modal-step" id="modal-step-4">
-      <h2 class="cot-modal-title">Tus datos para enviarlo por WhatsApp</h2>
-      <p class="cot-modal-desc">Armamos el mensaje con tu info. Tú decides enviarlo.</p>
-      <form id="cot-modal-form" novalidate>
-        <div class="form-field">
-          <label class="form-label" for="cot-modal-nombre">Nombre</label>
-          <input class="form-input" type="text" id="cot-modal-nombre" name="nombre" placeholder="Ej: María González" autocomplete="name" required />
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="cot-modal-phone">Teléfono / WhatsApp</label>
-          <input class="form-input" type="tel" id="cot-modal-phone" inputmode="numeric" placeholder="9 1234 5678" autocomplete="tel" required />
-        </div>
-        <p class="cot-modal-error" id="cot-modal-error" role="alert" hidden></p>
-        <button type="submit" class="btn btn-wa-submit">
-          ${WA_ICON}
-          Enviar info por WhatsApp
-        </button>
-        <a href="${CONFIG.phoneHref}" class="btn btn-secondary" style="width:100%; justify-content:center; margin-top:0.75rem;">
+      <h2 class="cot-modal-title">Llama, o déjanos el caso completo</h2>
+      <p class="cot-modal-desc">Lo más directo es llamar. Si completas todo el formulario, armamos el mensaje y lo envías por WhatsApp.</p>
+      <a href="tel:+${LINES.prefab.digits}" id="cot-call-single" data-line="prefab" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom:1rem;">
+        ${PHONE_ICON}
+        Llamar <span data-line-number>${LINES.prefab.display}</span>
+      </a>
+      <div id="cot-call-both" class="cot-line-chooser" hidden>
+        <a href="tel:+${LINES.modular.digits}" data-line="modular" class="btn btn-primary" style="width:100%; justify-content:center; background:var(--slate-900); border-color:var(--slate-900);">
           ${PHONE_ICON}
-          Prefiero llamar
+          Modulares · <span data-line-number>${LINES.modular.display}</span>
         </a>
+        <a href="tel:+${LINES.prefab.digits}" data-line="prefab" class="btn btn-primary" style="width:100%; justify-content:center;">
+          ${PHONE_ICON}
+          Prefabricadas · <span data-line-number>${LINES.prefab.display}</span>
+        </a>
+      </div>
+      <form id="cot-modal-form" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="cot-modal-nombre">Nombre</label>
+            <input class="form-input" type="text" id="cot-modal-nombre" name="nombre" placeholder="María" autocomplete="given-name" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="cot-modal-apellido">Apellido</label>
+            <input class="form-input" type="text" id="cot-modal-apellido" name="apellido" placeholder="González" autocomplete="family-name" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="cot-modal-email">Email</label>
+            <input class="form-input" type="email" id="cot-modal-email" name="email" placeholder="maria@email.com" autocomplete="email" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="cot-modal-phone">Teléfono</label>
+            <input class="form-input" type="tel" id="cot-modal-phone" inputmode="numeric" placeholder="9 1234 5678" autocomplete="tel" required />
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="cot-modal-busca">Qué buscas</label>
+          <select class="form-select" id="cot-modal-busca" required>
+            <option value="">Elige una opción</option>
+            <option>Vivienda permanente</option>
+            <option>Segunda vivienda o cabaña</option>
+            <option>Local, bodega u oficina</option>
+            <option>Aún no lo defino</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="cot-modal-fuente">¿Cómo nos conociste?</label>
+          <select class="form-select" id="cot-modal-fuente" required>
+            <option value="">Elige una opción</option>
+            <option>Google</option>
+            <option>Instagram o Facebook</option>
+            <option>Recomendación</option>
+            <option>Letrero u obra</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="cot-modal-detalle">Cuéntanos qué necesitas</label>
+          <textarea class="form-input" id="cot-modal-detalle" rows="3" placeholder="Metros, dormitorios, comuna y cualquier dato del terreno." required></textarea>
+        </div>
+        <p class="cot-modal-desc" id="cot-line-hint" hidden></p>
+        <p class="cot-modal-error" id="cot-modal-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-wa-submit" id="cot-submit-single">
+          ${WA_ICON}
+          Enviar mis datos por WhatsApp
+        </button>
+        <div id="cot-line-chooser" class="cot-line-chooser" hidden>
+          <button type="submit" class="btn btn-wa-submit" data-submit-line="modular">
+            ${WA_ICON}
+            Enviar a WhatsApp modulares
+          </button>
+          <button type="submit" class="btn btn-wa-submit" data-submit-line="prefab">
+            ${WA_ICON}
+            Enviar a WhatsApp prefabricadas
+          </button>
+        </div>
       </form>
       <button type="button" class="cot-modal-back" data-goto-step="3">← Volver</button>
     </div>
@@ -324,7 +476,7 @@ function initCotizadorModal() {
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      submitCotizadorModal();
+      submitCotizadorModal(e.submitter?.dataset?.submitLine || '');
     });
   }
 
@@ -336,7 +488,7 @@ function initCotizadorModal() {
 function openCotizadorModal(presets = {}) {
   const modal = document.getElementById('cotizador-modal');
   if (!modal) {
-    window.location.href = CONFIG.phoneHref;
+    window.location.href = `tel:+${LINES.prefab.digits}`;
     return;
   }
 
@@ -361,10 +513,18 @@ function openCotizadorModal(presets = {}) {
   });
 
   const nombreInput = document.getElementById('cot-modal-nombre');
+  const apellidoInput = document.getElementById('cot-modal-apellido');
+  const emailInput = document.getElementById('cot-modal-email');
   const phoneInput = document.getElementById('cot-modal-phone');
+  const buscaInput = document.getElementById('cot-modal-busca');
+  const fuenteInput = document.getElementById('cot-modal-fuente');
+  const detalleInput = document.getElementById('cot-modal-detalle');
   const errorEl = document.getElementById('cot-modal-error');
-  if (nombreInput) nombreInput.value = '';
-  if (phoneInput) phoneInput.value = '';
+  [nombreInput, apellidoInput, emailInput, phoneInput, detalleInput].forEach((input) => {
+    if (input) input.value = '';
+  });
+  if (buscaInput) buscaInput.value = '';
+  if (fuenteInput) fuenteInput.value = '';
   if (errorEl) errorEl.hidden = true;
   updateStep3Next();
 
@@ -411,7 +571,38 @@ function showModalStep(n) {
     dot.classList.toggle('active', dotN === n);
     dot.classList.toggle('done', dotN < n);
   });
-  if (n === 4) setTimeout(() => document.getElementById('cot-modal-nombre')?.focus(), 100);
+  if (n === 4) {
+    syncModalDestination();
+    setTimeout(() => document.getElementById('cot-modal-nombre')?.focus(), 100);
+  }
+}
+
+function syncModalDestination() {
+  const lineId = lineIdForTipo(cotizadorState.tipo);
+  const single = document.getElementById('cot-submit-single');
+  const chooser = document.getElementById('cot-line-chooser');
+  const call = document.getElementById('cot-call-single');
+  const callBoth = document.getElementById('cot-call-both');
+  const hint = document.getElementById('cot-line-hint');
+  if (single) {
+    single.hidden = !lineId;
+    single.disabled = !lineId;
+  }
+  if (call) {
+    call.hidden = !lineId;
+    if (lineId) bindLine(call, lineId);
+  }
+  if (callBoth) callBoth.hidden = Boolean(lineId);
+  if (chooser) {
+    chooser.hidden = Boolean(lineId);
+    chooser.querySelectorAll('button').forEach((btn) => { btn.disabled = Boolean(lineId); });
+  }
+  if (hint) {
+    hint.hidden = false;
+    hint.textContent = lineId
+      ? `Si envías el formulario, llega a la línea de ${LINES[lineId].label.toLowerCase()}.`
+      : 'Son dos números distintos. Elige a qué línea enviamos tus datos.';
+  }
 }
 
 function handleModalOption(opt) {
@@ -445,49 +636,75 @@ function modalSelectOption(field, value) {
   });
 }
 
-function buildCotizadorMessage(nombre, phone) {
+function buildCotizadorMessage(lead) {
   const { tipo, comuna, terreno, plazo, estilo, layoutNote } = cotizadorState;
   const lines = [
-    `Hola, soy *${nombre}* y vengo de la web.`,
+    `Hola, soy *${lead.nombre} ${lead.apellido}* y vengo de la web.`,
     `Quiero cotizar una casa *${tipo || 'prefab'}* en *${comuna}*.`,
   ];
-  if (estilo) lines.push(`Estilo de interés: ${estilo}.`);
+  if (estilo) lines.push(`Estilo: ${estilo}.`);
+  lines.push(`Busca: ${lead.busca}.`);
   lines.push(`Terreno: ${terreno}.`);
   lines.push(`Plazo: ${plazo}.`);
-  lines.push(`Mi teléfono: ${phone}.`);
+  lines.push(`Email: ${lead.email}.`);
+  lines.push(`Teléfono: ${lead.phone}.`);
+  lines.push(`Nos conoció por: ${lead.fuente}.`);
+  lines.push(`Detalle: ${lead.detalle}`);
   if (layoutNote) lines.push(`Configuración modular: ${layoutNote}`);
   return lines.join('\n');
 }
 
-function submitCotizadorModal() {
-  const nombreInput = document.getElementById('cot-modal-nombre');
-  const phoneInput = document.getElementById('cot-modal-phone');
+function showFormError(message, focusEl) {
   const errorEl = document.getElementById('cot-modal-error');
+  if (errorEl) {
+    errorEl.textContent = message;
+    errorEl.hidden = false;
+  }
+  focusEl?.focus();
+}
+
+function submitCotizadorModal(forcedLine) {
+  const nombreInput = document.getElementById('cot-modal-nombre');
+  const apellidoInput = document.getElementById('cot-modal-apellido');
+  const emailInput = document.getElementById('cot-modal-email');
+  const phoneInput = document.getElementById('cot-modal-phone');
+  const buscaInput = document.getElementById('cot-modal-busca');
+  const fuenteInput = document.getElementById('cot-modal-fuente');
+  const detalleInput = document.getElementById('cot-modal-detalle');
+  const errorEl = document.getElementById('cot-modal-error');
+  if (errorEl) errorEl.hidden = true;
+
   const nombre = nombreInput?.value.trim() ?? '';
+  const apellido = apellidoInput?.value.trim() ?? '';
+  const email = emailInput?.value.trim() ?? '';
   const phone = phoneInput?.value.replace(/\D/g, '') ?? '';
+  const busca = buscaInput?.value ?? '';
+  const fuente = fuenteInput?.value ?? '';
+  const detalle = detalleInput?.value.trim() ?? '';
 
-  if (nombre.length < 2) {
-    if (errorEl) {
-      errorEl.textContent = 'Ingresa tu nombre.';
-      errorEl.hidden = false;
-    }
-    nombreInput?.focus();
-    return;
-  }
+  if (nombre.length < 2) return showFormError('Ingresa tu nombre.', nombreInput);
+  if (apellido.length < 2) return showFormError('Ingresa tu apellido.', apellidoInput);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showFormError('Ingresa un email válido.', emailInput);
+  if (phone.length < 8) return showFormError('Ingresa un teléfono válido (mínimo 8 dígitos).', phoneInput);
+  if (!busca) return showFormError('Cuéntanos qué buscas.', buscaInput);
+  if (!fuente) return showFormError('Indica cómo nos conociste.', fuenteInput);
+  if (detalle.length < 12) return showFormError('Cuéntanos un poco más sobre lo que necesitas.', detalleInput);
 
-  if (phone.length < 8) {
-    if (errorEl) {
-      errorEl.textContent = 'Ingresa un número válido (mínimo 8 dígitos).';
-      errorEl.hidden = false;
-    }
-    phoneInput?.focus();
-    return;
-  }
+  const derived = lineIdForTipo(cotizadorState.tipo);
+  const lineId = (forcedLine && LINES[forcedLine]) ? forcedLine : derived;
+  if (!lineId) return showFormError('Elige si tus datos van a casas modulares o prefabricadas.');
+  if (!derived) cotizadorState.tipo = lineId === 'modular' ? 'Modular' : 'A medida';
 
   const { tipo, comuna, terreno, plazo } = cotizadorState;
-  const msg = buildCotizadorMessage(nombre, phone);
+  const msg = buildCotizadorMessage({ nombre, apellido, email, phone, busca, fuente, detalle });
 
-  trackEvent('cotizador_submit', { tipo, comuna, terreno, plazo });
-  window.open(whatsappUrl(msg), '_blank', 'noopener,noreferrer');
+  trackEvent('cotizador_submit', { tipo, comuna, terreno, plazo, line: lineId });
+  window.open(whatsappUrl(msg, lineId), '_blank', 'noopener,noreferrer');
   closeCotizadorModal();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
 }
