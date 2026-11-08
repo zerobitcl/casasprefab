@@ -1,0 +1,9 @@
+# La clave y el arranque no se ejecutan por URL. leads.php y session.php sí.
+<FilesMatch "^(config\.php|config\.example\.php|bootstrap\.php)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>

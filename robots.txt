@@ -10,6 +10,9 @@ Allow: /favicon.svg
 # Bloquear activos que no aportan valor SEO
 Disallow: /404.html
 Disallow: /default.php
+Disallow: /panel/
+Disallow: /api/
+Disallow: /data/
 
 # Sitemaps
 Sitemap: https://www.casasprefabricadascoquimbo.cl/sitemap.xml

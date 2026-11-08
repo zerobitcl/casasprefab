@@ -4,6 +4,10 @@ api/config.php
 .env.*
 *.pem
 
+# Seguimiento de clientes
+data/*.json
+data/sessions/
+
 # OS / editor
 .DS_Store
 Thumbs.db

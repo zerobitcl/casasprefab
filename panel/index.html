@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seguimiento · PrefabCoquimbo</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="panel.css?v=20261107a" />
+</head>
+<body>
+  <div id="boot-view" class="boot">Cargando seguimiento…</div>
+
+  <main id="login-view" class="login" hidden>
+    <form id="login-form" class="login-card">
+      <p class="kicker">PrefabCoquimbo</p>
+      <h1>Seguimiento</h1>
+      <p class="login-lead">Casas modulares y casas prefabricadas, cada una con su bandeja.</p>
+      <label class="field-label" for="panel-password">Clave</label>
+      <input class="field" id="panel-password" type="password" name="password" autocomplete="current-password" required />
+      <p class="form-error" id="login-error" role="alert" hidden></p>
+      <button class="btn btn-ink" type="submit">Entrar</button>
+    </form>
+  </main>
+
+  <main id="app-view" class="app" hidden>
+    <header class="top">
+      <div>
+        <p class="kicker">PrefabCoquimbo</p>
+        <h1>Seguimiento</h1>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn btn-ghost" id="refresh-btn">Actualizar</button>
+        <button type="button" class="btn btn-ghost" id="logout-btn">Salir</button>
+      </div>
+    </header>
+
+    <div class="line-switch" role="tablist" aria-label="Línea de venta">
+      <button type="button" class="line-card is-modular" id="tab-modular" role="tab" aria-selected="true" data-line="modular">
+        <span class="line-kicker">Casas modulares</span>
+        <strong class="line-count" id="count-modular">0</strong>
+        <span class="line-sub" id="sub-modular">sin revisar</span>
+      </button>
+      <button type="button" class="line-card is-prefab" id="tab-prefab" role="tab" aria-selected="false" data-line="prefab">
+        <span class="line-kicker">Casas prefabricadas</span>
+        <strong class="line-count" id="count-prefab">0</strong>
+        <span class="line-sub" id="sub-prefab">sin revisar</span>
+      </button>
+    </div>
+
+    <p class="inbox-note" id="inbox-note"></p>
+
+    <section class="metrics" aria-label="Resumen de la línea">
+      <div><span id="metric-new">0</span><small>Sin revisar</small></div>
+      <div><span id="metric-week">0</span><small>Llegaron en 7 días</small></div>
+      <div><span id="metric-open">0</span><small>En curso</small></div>
+    </section>
+
+    <div class="tools">
+      <label class="search">
+        <span class="visually-hidden">Buscar contacto</span>
+        <input id="search" type="search" placeholder="Nombre, teléfono, comuna o detalle" autocomplete="off" />
+      </label>
+      <div class="filters" id="filters" role="toolbar" aria-label="Estado"></div>
+    </div>
+
+    <p class="form-error" id="list-error" role="alert" hidden></p>
+    <div id="list" class="list"></div>
+  </main>
+
+  <script src="panel.js?v=20261107b" defer></script>
+</body>
+</html>

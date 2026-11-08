@@ -415,21 +415,29 @@ function getCotizadorModalHTML() {
           <label class="form-label" for="cot-modal-detalle">Cuéntanos qué necesitas</label>
           <textarea class="form-input" id="cot-modal-detalle" rows="3" placeholder="Metros, dormitorios, comuna y cualquier dato del terreno." required></textarea>
         </div>
+        <div class="cot-hp" aria-hidden="true">
+          <label for="cot-modal-web">Sitio web</label>
+          <input type="text" id="cot-modal-web" name="website" tabindex="-1" autocomplete="off" />
+        </div>
         <p class="cot-modal-desc" id="cot-line-hint" hidden></p>
         <p class="cot-modal-error" id="cot-modal-error" role="alert" hidden></p>
-        <button type="submit" class="btn btn-wa-submit" id="cot-submit-single">
-          ${WA_ICON}
-          Enviar mis datos por WhatsApp
-        </button>
-        <div id="cot-line-chooser" class="cot-line-chooser" hidden>
-          <button type="submit" class="btn btn-wa-submit" data-submit-line="modular">
+        <p class="cot-wa-gate" id="cot-wa-gate">Completa tus datos. Cuando estén listos, aparece el envío por WhatsApp.</p>
+        <div id="cot-wa-actions" hidden>
+          <p class="cot-wa-consent">Guardamos la solicitud para hacerte seguimiento y se abre WhatsApp con el mensaje listo.</p>
+          <button type="submit" class="btn btn-wa-submit" id="cot-submit-single">
             ${WA_ICON}
-            Enviar a WhatsApp modulares
+            Enviar mis datos por WhatsApp
           </button>
-          <button type="submit" class="btn btn-wa-submit" data-submit-line="prefab">
-            ${WA_ICON}
-            Enviar a WhatsApp prefabricadas
-          </button>
+          <div id="cot-line-chooser" class="cot-line-chooser" hidden>
+            <button type="submit" class="btn btn-wa-submit" data-submit-line="modular">
+              ${WA_ICON}
+              Enviar a WhatsApp modulares
+            </button>
+            <button type="submit" class="btn btn-wa-submit" data-submit-line="prefab">
+              ${WA_ICON}
+              Enviar a WhatsApp prefabricadas
+            </button>
+          </div>
         </div>
       </form>
       <button type="button" class="cot-modal-back" data-goto-step="3">← Volver</button>
@@ -478,6 +486,14 @@ function initCotizadorModal() {
       e.preventDefault();
       submitCotizadorModal(e.submitter?.dataset?.submitLine || '');
     });
+    form.addEventListener('input', () => {
+      if (contactIssue(readContact()) == null) {
+        const errorEl = document.getElementById('cot-modal-error');
+        if (errorEl) errorEl.hidden = true;
+      }
+      syncWaGate();
+    });
+    form.addEventListener('change', syncWaGate);
   }
 
   document.addEventListener('keydown', (e) => {
@@ -519,14 +535,16 @@ function openCotizadorModal(presets = {}) {
   const buscaInput = document.getElementById('cot-modal-busca');
   const fuenteInput = document.getElementById('cot-modal-fuente');
   const detalleInput = document.getElementById('cot-modal-detalle');
+  const webInput = document.getElementById('cot-modal-web');
   const errorEl = document.getElementById('cot-modal-error');
-  [nombreInput, apellidoInput, emailInput, phoneInput, detalleInput].forEach((input) => {
+  [nombreInput, apellidoInput, emailInput, phoneInput, detalleInput, webInput].forEach((input) => {
     if (input) input.value = '';
   });
   if (buscaInput) buscaInput.value = '';
   if (fuenteInput) fuenteInput.value = '';
   if (errorEl) errorEl.hidden = true;
   updateStep3Next();
+  syncWaGate();
 
   let startStep = 1;
   if (tipo && comuna) startStep = 3;
@@ -573,6 +591,7 @@ function showModalStep(n) {
   });
   if (n === 4) {
     syncModalDestination();
+    syncWaGate();
     setTimeout(() => document.getElementById('cot-modal-nombre')?.focus(), 100);
   }
 }
@@ -663,40 +682,95 @@ function showFormError(message, focusEl) {
   focusEl?.focus();
 }
 
+function readContact() {
+  return {
+    nombre: document.getElementById('cot-modal-nombre')?.value.trim() ?? '',
+    apellido: document.getElementById('cot-modal-apellido')?.value.trim() ?? '',
+    email: document.getElementById('cot-modal-email')?.value.trim() ?? '',
+    phone: document.getElementById('cot-modal-phone')?.value.replace(/\D/g, '') ?? '',
+    busca: document.getElementById('cot-modal-busca')?.value ?? '',
+    fuente: document.getElementById('cot-modal-fuente')?.value ?? '',
+    detalle: document.getElementById('cot-modal-detalle')?.value.trim() ?? '',
+    website: document.getElementById('cot-modal-web')?.value ?? '',
+  };
+}
+
+function contactIssue(contact) {
+  if (contact.nombre.length < 2) return ['Ingresa tu nombre.', 'cot-modal-nombre'];
+  if (contact.apellido.length < 2) return ['Ingresa tu apellido.', 'cot-modal-apellido'];
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email)) return ['Ingresa un email válido.', 'cot-modal-email'];
+  if (contact.phone.length < 8) return ['Ingresa un teléfono válido (mínimo 8 dígitos).', 'cot-modal-phone'];
+  if (!contact.busca) return ['Cuéntanos qué buscas.', 'cot-modal-busca'];
+  if (!contact.fuente) return ['Indica cómo nos conociste.', 'cot-modal-fuente'];
+  if (contact.detalle.length < 12) return ['Cuéntanos un poco más sobre lo que necesitas.', 'cot-modal-detalle'];
+  return null;
+}
+
+function syncWaGate() {
+  const ready = contactIssue(readContact()) == null;
+  const gate = document.getElementById('cot-wa-gate');
+  const actions = document.getElementById('cot-wa-actions');
+  if (gate) gate.hidden = ready;
+  if (actions) actions.hidden = !ready;
+}
+
+/* El POST no puede esperar: si abrimos WhatsApp después del await, el navegador bloquea la ventana. */
+function queueLead(payload) {
+  if (payload.website) return;
+  const body = JSON.stringify(payload);
+  let queued = false;
+  try {
+    queued = navigator.sendBeacon('/api/leads.php', new Blob([body], { type: 'application/json' }));
+  } catch (err) {
+    queued = false;
+  }
+  if (!queued) {
+    fetch('/api/leads.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      keepalive: true,
+    }).catch(() => {});
+  }
+}
+
 function submitCotizadorModal(forcedLine) {
-  const nombreInput = document.getElementById('cot-modal-nombre');
-  const apellidoInput = document.getElementById('cot-modal-apellido');
-  const emailInput = document.getElementById('cot-modal-email');
-  const phoneInput = document.getElementById('cot-modal-phone');
-  const buscaInput = document.getElementById('cot-modal-busca');
-  const fuenteInput = document.getElementById('cot-modal-fuente');
-  const detalleInput = document.getElementById('cot-modal-detalle');
   const errorEl = document.getElementById('cot-modal-error');
   if (errorEl) errorEl.hidden = true;
 
-  const nombre = nombreInput?.value.trim() ?? '';
-  const apellido = apellidoInput?.value.trim() ?? '';
-  const email = emailInput?.value.trim() ?? '';
-  const phone = phoneInput?.value.replace(/\D/g, '') ?? '';
-  const busca = buscaInput?.value ?? '';
-  const fuente = fuenteInput?.value ?? '';
-  const detalle = detalleInput?.value.trim() ?? '';
-
-  if (nombre.length < 2) return showFormError('Ingresa tu nombre.', nombreInput);
-  if (apellido.length < 2) return showFormError('Ingresa tu apellido.', apellidoInput);
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showFormError('Ingresa un email válido.', emailInput);
-  if (phone.length < 8) return showFormError('Ingresa un teléfono válido (mínimo 8 dígitos).', phoneInput);
-  if (!busca) return showFormError('Cuéntanos qué buscas.', buscaInput);
-  if (!fuente) return showFormError('Indica cómo nos conociste.', fuenteInput);
-  if (detalle.length < 12) return showFormError('Cuéntanos un poco más sobre lo que necesitas.', detalleInput);
+  const contact = readContact();
+  const issue = contactIssue(contact);
+  if (issue) return showFormError(issue[0], document.getElementById(issue[1]));
+  if (!cotizadorState.comuna || !cotizadorState.terreno || !cotizadorState.plazo) {
+    return showFormError('Faltan datos del proyecto. Vuelve un paso.');
+  }
 
   const derived = lineIdForTipo(cotizadorState.tipo);
   const lineId = (forcedLine && LINES[forcedLine]) ? forcedLine : derived;
   if (!lineId) return showFormError('Elige si tus datos van a casas modulares o prefabricadas.');
   if (!derived) cotizadorState.tipo = lineId === 'modular' ? 'Modular' : 'A medida';
 
-  const { tipo, comuna, terreno, plazo } = cotizadorState;
-  const msg = buildCotizadorMessage({ nombre, apellido, email, phone, busca, fuente, detalle });
+  const { tipo, comuna, terreno, plazo, estilo, layoutNote } = cotizadorState;
+  const msg = buildCotizadorMessage(contact);
+
+  queueLead({
+    line: lineId,
+    nombre: contact.nombre,
+    apellido: contact.apellido,
+    email: contact.email,
+    phone: contact.phone,
+    busca: contact.busca,
+    fuente: contact.fuente,
+    detalle: contact.detalle,
+    tipo,
+    comuna,
+    terreno,
+    plazo,
+    estilo,
+    layoutNote,
+    page: location.pathname || '/',
+    website: contact.website,
+  });
 
   trackEvent('cotizador_submit', { tipo, comuna, terreno, plazo, line: lineId });
   window.open(whatsappUrl(msg, lineId), '_blank', 'noopener,noreferrer');
