@@ -20,8 +20,8 @@
   <meta property="og:title"       content="Casas Modulares y Prefabricadas · Región de Coquimbo | PrefabCoquimbo" />
   <meta property="og:description" content="Casas prefabricadas para la Región de Coquimbo: catálogo de 15 a 171 m², Kit Inicial y Vulcometal. Sucursal en Sector Peñuelas." />
   <meta property="og:image"       content="https://www.casasprefabricadascoquimbo.cl/images/modular-costa.jpg" />
-  <meta property="og:image:width"  content="1600" />
-  <meta property="og:image:height" content="900" />
+  <meta property="og:image:width"  content="1024" />
+  <meta property="og:image:height" content="617" />
   <meta property="og:locale"      content="es_CL" />
   <meta property="og:site_name"   content="PrefabCoquimbo" />
 
@@ -147,12 +147,12 @@
   <!-- ══ GOOGLE FONTS — self-hosting alternativa si se prioriza PSI 100 ══ -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="image" href="images/modular-costa.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="images/modular-costa.webp?v=20261110d" type="image/webp" fetchpriority="high" />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel=\'stylesheet\'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <!-- ══ ESTILOS ══ -->
-  <link rel="stylesheet" href="styles.css?v=20261110c" />
+  <link rel="stylesheet" href="styles.css?v=20261110d" />
 </head>
 <body>
 
@@ -232,14 +232,17 @@
 ══════════════════════════════════════════════════ -->
 <section class="hero-section hero-section--banner" aria-labelledby="hero-title">
   <div class="hero-banner-media" aria-hidden="true">
-    <img
-      src="images/modular-costa.jpg"
-      alt=""
-      width="1600"
-      height="900"
-      fetchpriority="high"
-      decoding="async"
-    />
+    <picture>
+      <source srcset="images/modular-costa.webp?v=20261110d" type="image/webp" />
+      <img
+        src="images/modular-costa.jpg?v=20261110d"
+        alt=""
+        width="1024"
+        height="617"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
   </div>
   <div class="hero-banner-overlay" aria-hidden="true"></div>
 

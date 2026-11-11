@@ -19,8 +19,8 @@
   <meta property="og:title"       content="Casas Prefabricadas y Modulares | La Serena · Coquimbo · IV Región" />
   <meta property="og:description" content="Casas prefabricadas de 15 a 171 m² y casas modulares en la Región de Coquimbo. Catálogo regional y cotización por WhatsApp." />
   <meta property="og:image"       content="https://www.casasprefabricadascoquimbo.cl/images/casa-fondo.jpg" />
-  <meta property="og:image:width"  content="1200" />
-  <meta property="og:image:height" content="800" />
+  <meta property="og:image:width"  content="1024" />
+  <meta property="og:image:height" content="571" />
   <meta property="og:locale"      content="es_CL" />
   <meta property="og:site_name"   content="PrefabCoquimbo" />
 
@@ -33,12 +33,12 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="image" href="images/casa-fondo.jpg" type="image/jpeg" fetchpriority="high" />
+  <link rel="preload" as="image" href="images/casa-fondo.webp?v=20261110d" type="image/webp" fetchpriority="high" />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="styles.css?v=20261110c" />
+  <link rel="stylesheet" href="styles.css?v=20261110d" />
 
   <!-- JSON-LD: ProfessionalService (asesoría + cotización) -->
   <script type="application/ld+json">
@@ -51,14 +51,14 @@
     "logo": {
       "@type":  "ImageObject",
       "url":    "https://www.casasprefabricadascoquimbo.cl/images/logo.png",
-      "width":  "336",
-      "height": "84"
+      "width":  "360",
+      "height": "360"
     },
     "image": {
       "@type":  "ImageObject",
       "url":    "https://www.casasprefabricadascoquimbo.cl/images/casa-fondo.jpg",
-      "width":  "1200",
-      "height": "800"
+      "width":  "1024",
+      "height": "571"
     },
     "description": "Casas prefabricadas de 15 a 171 m² y casas modulares en La Serena, Coquimbo y la Región de Coquimbo. Módulos desde 18 a 24,5 m², llave en mano. Consulta por WhatsApp.",
     "telephone": "+56-9-9428-4048",
@@ -250,14 +250,17 @@
 ══════════════════════════════════════════════════ -->
 <section class="hero-section hero-section--banner" aria-labelledby="hero-title">
   <div class="hero-banner-media" aria-hidden="true">
-    <img
-      src="images/casa-fondo.jpg"
-      alt=""
-      width="1600"
-      height="896"
-      fetchpriority="high"
-      decoding="async"
-    />
+    <picture>
+      <source srcset="images/casa-fondo.webp?v=20261110d" type="image/webp" />
+      <img
+        src="images/casa-fondo.jpg?v=20261110d"
+        alt=""
+        width="1024"
+        height="571"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
   </div>
   <div class="hero-banner-overlay" aria-hidden="true"></div>
 
@@ -317,7 +320,7 @@
     <div class="line-fork-grid">
       <article class="fork-card fork-card--modular">
         <div class="fork-card-media">
-          <img src="images/modular-costa.jpg" alt="Casa modular llave en mano en la Región de Coquimbo" width="720" height="480" loading="lazy" decoding="async" />
+          <img src="images/modular-costa.webp?v=20261110d" alt="Casa modular llave en mano en la Región de Coquimbo" width="1024" height="617" loading="lazy" decoding="async" />
         </div>
         <div class="fork-card-body">
           <p class="fork-card-kicker">Línea modular</p>
@@ -408,10 +411,10 @@
       </div>
       <div class="modular-photo">
         <img
-          src="images/modular-bosque.jpg"
+          src="images/modular-bosque.webp?v=20261110d"
           alt="Casa modular tipo tiny house con terraza, ideal para la Cuarta Región"
-          width="720"
-          height="540"
+          width="1024"
+          height="686"
           loading="lazy"
           decoding="async"
         />
