@@ -25,7 +25,6 @@
   const TERRENOS = ['Sí, listo', 'En compra', 'Aún no'];
   const PLAZOS = ['Lo antes posible', '1 a 3 meses', '3 a 6 meses', 'Solo explorando'];
   const BUSCA = ['Vivienda permanente', 'Segunda vivienda o cabaña', 'Local, bodega u oficina', 'Aún no lo defino'];
-  const FUENTES = ['Google', 'Instagram o Facebook', 'Recomendación', 'Letrero u obra', 'Otro'];
 
   const KIT_GROUPS = [
     ['Pisos y cielos', ['Kit Piso', 'Kit Viga a la Vista', 'Kit Cielo Madera', 'Kit Cielo (tipo Vulcometal)']],
@@ -217,11 +216,8 @@
     const base = `${label}. Materialidad ${material}. ${config}. Terreno en ${comuna}, Región de Coquimbo.`;
     return {
       nombre: (document.getElementById('pf-nombre')?.value || '').trim(),
-      apellido: (document.getElementById('pf-apellido')?.value || '').trim(),
-      email: (document.getElementById('pf-email')?.value || '').trim(),
       phone: (document.getElementById('pf-phone')?.value || '').replace(/\D/g, ''),
       busca: document.getElementById('pf-busca')?.value || '',
-      fuente: document.getElementById('pf-fuente')?.value || '',
       comuna,
       terreno: document.getElementById('pf-terreno')?.value || '',
       plazo: document.getElementById('pf-plazo')?.value || '',
@@ -229,7 +225,7 @@
       config,
       kits,
       label,
-      detalle: note.length >= 12 ? note : `${base}${note ? ` ${note}` : ''}`,
+      detalle: note || base,
       website: document.getElementById('pf-web')?.value || '',
     };
   }
@@ -241,10 +237,9 @@
     if (!quote.config) return 'Elige si partes solo con el kit o sumas adicionales.';
     if (!quote.comuna) return 'Indica la comuna o el sector del terreno.';
     if (!quote.terreno || !quote.plazo) return 'Cuéntanos el estado del terreno y el plazo.';
-    if (quote.nombre.length < 2 || quote.apellido.length < 2) return 'Escribe nombre y apellido.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(quote.email)) return 'Revisa el email.';
+    if (quote.nombre.length < 2) return 'Escribe tu nombre.';
     if (quote.phone.length < 8 || quote.phone.length > 15) return 'Revisa el teléfono.';
-    if (!quote.busca || !quote.fuente) return 'Completa qué buscas y cómo nos conociste.';
+    if (!quote.busca) return 'Cuéntanos qué buscas.';
     return '';
   }
 
@@ -289,7 +284,7 @@
 
   function messageFor(quote) {
     const lines = [
-      `Hola, soy *${quote.nombre} ${quote.apellido}* y vengo de la web.`,
+      `Hola, soy *${quote.nombre}* y vengo de la web.`,
       `Quiero cotizar el *${quote.label}*.`,
       `Materialidad: *${quote.material}*.`,
       `Configuración: *${quote.config}*.`,
@@ -299,9 +294,8 @@
     lines.push(`Terreno: ${quote.terreno}.`);
     lines.push(`Plazo: ${quote.plazo}.`);
     lines.push(`Busca: ${quote.busca}.`);
-    lines.push(`Email: ${quote.email}.`);
     lines.push(`Teléfono: ${quote.phone}.`);
-    lines.push(`Detalle: ${quote.detalle}`);
+    if (quote.detalle) lines.push(`Mensaje: ${quote.detalle}`);
     return lines.join('\n');
   }
 
@@ -362,11 +356,11 @@
       line: 'prefab',
       tipo: 'Prefabricada',
       nombre: quote.nombre,
-      apellido: quote.apellido,
-      email: quote.email,
+      apellido: '',
+      email: '',
       phone: quote.phone,
       busca: quote.busca,
-      fuente: quote.fuente,
+      fuente: '',
       detalle: quote.detalle,
       comuna: quote.comuna,
       terreno: quote.terreno,
@@ -388,7 +382,6 @@
     fillSelect(document.getElementById('pf-terreno'), TERRENOS, 'Estado del terreno');
     fillSelect(document.getElementById('pf-plazo'), PLAZOS, 'Plazo');
     fillSelect(document.getElementById('pf-busca'), BUSCA, 'Qué buscas');
-    fillSelect(document.getElementById('pf-fuente'), FUENTES, 'Cómo nos conociste');
     showSegment('compacta');
 
     document.querySelectorAll('.pf-tab').forEach((tab) => {

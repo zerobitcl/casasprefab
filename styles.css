@@ -3251,11 +3251,19 @@ body.cot-modal-open {
   text-transform: uppercase;
   color: var(--slate-500);
 }
+.mb-widths,
 .mb-sizes {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 0.4rem;
 }
+.mb-widths {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 0.75rem;
+}
+.mb-sizes {
+  grid-template-columns: 1fr 1fr;
+}
+.mb-widths button,
 .mb-sizes button,
 .mb-tools button {
   font-family: inherit;
@@ -3280,6 +3288,8 @@ body.cot-modal-open {
   font-weight: 600;
   color: var(--slate-500);
 }
+.mb-widths button.is-active,
+.mb-widths button:hover,
 .mb-sizes button.is-active,
 .mb-sizes button:hover,
 .mb-tools button:hover {
@@ -3420,9 +3430,9 @@ body.cot-modal-open {
     letter-spacing: -0.03em;
   }
   .mb-dock-fig span {
-    color: #fcd34d;
-    font-size: 0.82rem;
-    font-weight: 800;
+    color: rgba(255,255,255,0.72);
+    font-size: 0.78rem;
+    font-weight: 600;
   }
   .mb-dock-cta {
     min-height: 44px;

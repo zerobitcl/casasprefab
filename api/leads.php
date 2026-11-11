@@ -136,13 +136,15 @@ function normalize_public_lead($body) {
     $plazo = one_of($body['plazo'] ?? '', LEAD_PLAZO);
 
     if ($line === '') return ['error' => 'Línea inválida'];
-    if (strlen($nombre) < 2 || strlen($apellido) < 2) return ['error' => 'Nombre incompleto'];
-    if (!preg_match('/^[^\s@]+@[^\s@]+\.[^\s@]+$/', $email)) return ['error' => 'Email inválido'];
+    if (strlen($nombre) < 2) return ['error' => 'Nombre incompleto'];
+    if ($email !== '' && !preg_match('/^[^\s@]+@[^\s@]+\.[^\s@]+$/', $email)) {
+        return ['error' => 'Email inválido'];
+    }
     if (strlen($phone) < 8 || strlen($phone) > 15) return ['error' => 'Teléfono inválido'];
-    if ($busca === '' || $fuente === '' || $tipo === '' || $comuna === '' || $terreno === '' || $plazo === '') {
+    if ($busca === '' || $tipo === '' || $comuna === '' || $terreno === '' || $plazo === '') {
         return ['error' => 'Faltan datos del proyecto'];
     }
-    if (strlen($detalle) < 12) return ['error' => 'Detalle demasiado corto'];
+    if ($detalle === '') $detalle = 'Quiere que lo contacten.';
 
     $page = clip($body['page'] ?? '', 180);
     if ($page !== '' && !preg_match('#^/[a-z0-9._/-]*$#i', $page)) {

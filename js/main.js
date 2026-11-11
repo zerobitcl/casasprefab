@@ -353,8 +353,8 @@ function getCotizadorModalHTML() {
     </div>
 
     <div class="cot-modal-step" id="modal-step-4">
-      <h2 class="cot-modal-title">Llama, o déjanos el caso completo</h2>
-      <p class="cot-modal-desc">Lo más directo es llamar. Si completas todo el formulario, armamos el mensaje y lo envías por WhatsApp.</p>
+      <h2 class="cot-modal-title">Llama, o déjanos tus datos</h2>
+      <p class="cot-modal-desc">Lo más directo es llamar. Si prefieres, deja tu nombre, teléfono y un mensaje: armamos el WhatsApp por ti.</p>
       <a href="tel:+${LINES.prefab.digits}" id="cot-call-single" data-line="prefab" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom:1rem;">
         ${PHONE_ICON}
         Llamar <span data-line-number>${LINES.prefab.display}</span>
@@ -373,17 +373,7 @@ function getCotizadorModalHTML() {
         <div class="form-row">
           <div class="form-field">
             <label class="form-label" for="cot-modal-nombre">Nombre</label>
-            <input class="form-input" type="text" id="cot-modal-nombre" name="nombre" placeholder="María" autocomplete="given-name" required />
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="cot-modal-apellido">Apellido</label>
-            <input class="form-input" type="text" id="cot-modal-apellido" name="apellido" placeholder="González" autocomplete="family-name" required />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label" for="cot-modal-email">Email</label>
-            <input class="form-input" type="email" id="cot-modal-email" name="email" placeholder="maria@email.com" autocomplete="email" required />
+            <input class="form-input" type="text" id="cot-modal-nombre" name="nombre" placeholder="María" autocomplete="name" required />
           </div>
           <div class="form-field">
             <label class="form-label" for="cot-modal-phone">Teléfono</label>
@@ -401,19 +391,8 @@ function getCotizadorModalHTML() {
           </select>
         </div>
         <div class="form-field">
-          <label class="form-label" for="cot-modal-fuente">¿Cómo nos conociste?</label>
-          <select class="form-select" id="cot-modal-fuente" required>
-            <option value="">Elige una opción</option>
-            <option>Google</option>
-            <option>Instagram o Facebook</option>
-            <option>Recomendación</option>
-            <option>Letrero u obra</option>
-            <option>Otro</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="cot-modal-detalle">Cuéntanos qué necesitas</label>
-          <textarea class="form-input" id="cot-modal-detalle" rows="3" placeholder="Metros, dormitorios, comuna y cualquier dato del terreno." required></textarea>
+          <label class="form-label" for="cot-modal-detalle">Mensaje <span style="font-weight:400;color:var(--slate-500);">(opcional)</span></label>
+          <textarea class="form-input" id="cot-modal-detalle" rows="3" placeholder="Metros, dormitorios o lo que quieras que sepamos."></textarea>
         </div>
         <div class="cot-hp" aria-hidden="true">
           <label for="cot-modal-web">Sitio web</label>
@@ -421,7 +400,7 @@ function getCotizadorModalHTML() {
         </div>
         <p class="cot-modal-desc" id="cot-line-hint" hidden></p>
         <p class="cot-modal-error" id="cot-modal-error" role="alert" hidden></p>
-        <p class="cot-wa-gate" id="cot-wa-gate">Completa tus datos. Cuando estén listos, aparece el envío por WhatsApp.</p>
+        <p class="cot-wa-gate" id="cot-wa-gate">Con nombre, teléfono y qué buscas, aparece el envío por WhatsApp.</p>
         <div id="cot-wa-actions" hidden>
           <p class="cot-wa-consent">Guardamos la solicitud para hacerte seguimiento y se abre WhatsApp con el mensaje listo.</p>
           <button type="submit" class="btn btn-wa-submit" id="cot-submit-single">
@@ -529,19 +508,15 @@ function openCotizadorModal(presets = {}) {
   });
 
   const nombreInput = document.getElementById('cot-modal-nombre');
-  const apellidoInput = document.getElementById('cot-modal-apellido');
-  const emailInput = document.getElementById('cot-modal-email');
   const phoneInput = document.getElementById('cot-modal-phone');
   const buscaInput = document.getElementById('cot-modal-busca');
-  const fuenteInput = document.getElementById('cot-modal-fuente');
   const detalleInput = document.getElementById('cot-modal-detalle');
   const webInput = document.getElementById('cot-modal-web');
   const errorEl = document.getElementById('cot-modal-error');
-  [nombreInput, apellidoInput, emailInput, phoneInput, detalleInput, webInput].forEach((input) => {
+  [nombreInput, phoneInput, detalleInput, webInput].forEach((input) => {
     if (input) input.value = '';
   });
   if (buscaInput) buscaInput.value = '';
-  if (fuenteInput) fuenteInput.value = '';
   if (errorEl) errorEl.hidden = true;
   updateStep3Next();
   syncWaGate();
@@ -658,17 +633,15 @@ function modalSelectOption(field, value) {
 function buildCotizadorMessage(lead) {
   const { tipo, comuna, terreno, plazo, estilo, layoutNote } = cotizadorState;
   const lines = [
-    `Hola, soy *${lead.nombre} ${lead.apellido}* y vengo de la web.`,
+    `Hola, soy *${lead.nombre}* y vengo de la web.`,
     `Quiero cotizar una casa *${tipo || 'prefab'}* en *${comuna}*.`,
   ];
   if (estilo) lines.push(`Estilo: ${estilo}.`);
   lines.push(`Busca: ${lead.busca}.`);
   lines.push(`Terreno: ${terreno}.`);
   lines.push(`Plazo: ${plazo}.`);
-  lines.push(`Email: ${lead.email}.`);
   lines.push(`Teléfono: ${lead.phone}.`);
-  lines.push(`Nos conoció por: ${lead.fuente}.`);
-  lines.push(`Detalle: ${lead.detalle}`);
+  if (lead.detalle) lines.push(`Mensaje: ${lead.detalle}`);
   if (layoutNote) lines.push(`Configuración modular: ${layoutNote}`);
   return lines.join('\n');
 }
@@ -685,11 +658,8 @@ function showFormError(message, focusEl) {
 function readContact() {
   return {
     nombre: document.getElementById('cot-modal-nombre')?.value.trim() ?? '',
-    apellido: document.getElementById('cot-modal-apellido')?.value.trim() ?? '',
-    email: document.getElementById('cot-modal-email')?.value.trim() ?? '',
     phone: document.getElementById('cot-modal-phone')?.value.replace(/\D/g, '') ?? '',
     busca: document.getElementById('cot-modal-busca')?.value ?? '',
-    fuente: document.getElementById('cot-modal-fuente')?.value ?? '',
     detalle: document.getElementById('cot-modal-detalle')?.value.trim() ?? '',
     website: document.getElementById('cot-modal-web')?.value ?? '',
   };
@@ -697,12 +667,8 @@ function readContact() {
 
 function contactIssue(contact) {
   if (contact.nombre.length < 2) return ['Ingresa tu nombre.', 'cot-modal-nombre'];
-  if (contact.apellido.length < 2) return ['Ingresa tu apellido.', 'cot-modal-apellido'];
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email)) return ['Ingresa un email válido.', 'cot-modal-email'];
   if (contact.phone.length < 8) return ['Ingresa un teléfono válido (mínimo 8 dígitos).', 'cot-modal-phone'];
   if (!contact.busca) return ['Cuéntanos qué buscas.', 'cot-modal-busca'];
-  if (!contact.fuente) return ['Indica cómo nos conociste.', 'cot-modal-fuente'];
-  if (contact.detalle.length < 12) return ['Cuéntanos un poco más sobre lo que necesitas.', 'cot-modal-detalle'];
   return null;
 }
 
@@ -756,12 +722,12 @@ function submitCotizadorModal(forcedLine) {
   queueLead({
     line: lineId,
     nombre: contact.nombre,
-    apellido: contact.apellido,
-    email: contact.email,
+    apellido: '',
+    email: '',
     phone: contact.phone,
     busca: contact.busca,
-    fuente: contact.fuente,
-    detalle: contact.detalle,
+    fuente: '',
+    detalle: contact.detalle || 'Quiere que lo contacten.',
     tipo,
     comuna,
     terreno,

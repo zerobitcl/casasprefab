@@ -98,7 +98,7 @@ function relative(iso) {
 }
 
 function fullName(lead) {
-  return (lead.nombre + ' ' + lead.apellido).trim();
+  return [lead.nombre, lead.apellido].filter(Boolean).join(' ').trim();
 }
 
 function haystack(lead) {

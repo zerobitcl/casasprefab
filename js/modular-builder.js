@@ -1,13 +1,13 @@
 ﻿'use strict';
 
 /**
- * Configurador de módulos a escala real (ancho fijo 3,5 m).
+ * Configurador de módulos a escala real (anchos 2,5 / 3 / 3,5 m).
  * El estado vive en metros, no en celdas: así el dibujo coincide con los m²
  * y el imán puede pegar bordes sin depender de una grilla entera.
  */
 document.addEventListener('DOMContentLoaded', function initModularBuilder() {
-  const PRICE_PER_M2 = 700000;
-  const WIDTH = 3.5;
+  const DEFAULT_WIDTH = 3.5;
+  const WIDTHS = [2.5, 3, 3.5];
   const PLOT_W = 24;
   const PLOT_H = 16;
   const SNAP = 0.6;
@@ -20,30 +20,30 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     { id: '24.5', label: '24,5 m²', m2: 24.5 },
   ];
 
-  const len = (m2) => m2 / WIDTH;
+  const len = (m2, width) => m2 / (width || DEFAULT_WIDTH);
 
   /** Coordenadas en metros, origen arriba-izquierda, antes de centrar. */
   const PRESETS = {
     linea: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-      { sizeId: '24.5', x: len(24.5), y: 0, rot: 0 },
-      { sizeId: '18', x: len(24.5) * 2, y: 0, rot: 0 },
+      { sizeId: '24.5', width: 3.5, x: 0, y: 0, rot: 0 },
+      { sizeId: '24.5', width: 3.5, x: len(24.5, 3.5), y: 0, rot: 0 },
+      { sizeId: '18', width: 3.5, x: len(24.5, 3.5) * 2, y: 0, rot: 0 },
     ],
     ele: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-      { sizeId: '24.5', x: 0, y: WIDTH, rot: 90 },
-      { sizeId: '20', x: WIDTH, y: WIDTH, rot: 0 },
+      { sizeId: '24.5', width: 3.5, x: 0, y: 0, rot: 0 },
+      { sizeId: '24.5', width: 3.5, x: 0, y: 3.5, rot: 90 },
+      { sizeId: '20', width: 3.5, x: 3.5, y: 3.5, rot: 0 },
     ],
     ce: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-      { sizeId: '20', x: 0, y: WIDTH, rot: 90 },
-      { sizeId: '24.5', x: 0, y: WIDTH + len(20), rot: 0 },
+      { sizeId: '24.5', width: 3.5, x: 0, y: 0, rot: 0 },
+      { sizeId: '20', width: 3.5, x: 0, y: 3.5, rot: 90 },
+      { sizeId: '24.5', width: 3.5, x: 0, y: 3.5 + len(20, 3.5), rot: 0 },
     ],
     patio: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 90 },
-      { sizeId: '24.5', x: 0, y: len(24.5), rot: 0 },
-      { sizeId: '18', x: len(24.5), y: len(24.5), rot: 0 },
-      { sizeId: '24.5', x: len(24.5) + len(18) - WIDTH, y: 0, rot: 90 },
+      { sizeId: '24.5', width: 3.5, x: 0, y: 0, rot: 90 },
+      { sizeId: '24.5', width: 3.5, x: 0, y: len(24.5, 3.5), rot: 0 },
+      { sizeId: '18', width: 3.5, x: len(24.5, 3.5), y: len(24.5, 3.5), rot: 0 },
+      { sizeId: '24.5', width: 3.5, x: len(24.5, 3.5) + len(18, 3.5) - 3.5, y: 0, rot: 90 },
     ],
   };
 
@@ -56,8 +56,8 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
 
   const HINTS = {
     1: 'Elige una forma para empezar. Después puedes mover cada módulo.',
-    2: 'Arrastra un módulo para moverlo. Al acercarlo, se pega solo.',
-    3: 'Este valor es referencial para casas modulares. Te confirmamos el precio por WhatsApp.',
+    2: 'Arrastra un módulo para moverlo. Al acercarlo, se pega solo. Cambia el ancho (2,5 · 3 · 3,5 m) cuando quieras.',
+    3: 'Cuando el layout te guste, envíalo por WhatsApp y te armamos la cotización.',
   };
 
   const TONES = ['#8C6239', '#6E655C', '#A68462', '#4E5C54', '#7A5A3A', '#8A8175'];
@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   let nextId = 1;
   let selectedId = null;
   let selectedSizeId = '24.5';
+  let selectedWidth = DEFAULT_WIDTH;
   let activePreset = null;
   let step = 1;
   let drag = null;
@@ -83,27 +84,32 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   const tip = root.querySelector('[data-mb-tip]');
   const live = root.querySelector('[data-mb-live]');
   const totalM2El = root.querySelector('[data-mb-total-m2]');
-  const totalPriceEl = root.querySelector('[data-mb-total-price]');
   const countEl = root.querySelector('[data-mb-count]');
   const humanEl = root.querySelector('[data-mb-human]');
   const dockM2 = root.querySelector('[data-mb-dock-m2]');
-  const dockPrice = root.querySelector('[data-mb-dock-price]');
+  const dockCount = root.querySelector('[data-mb-dock-count]');
 
   function sizeById(id) {
     return SIZES.find((s) => s.id === id) || SIZES[3];
   }
 
+  function moduleWidth(mod) {
+    const w = Number(mod && mod.width);
+    return WIDTHS.indexOf(w) >= 0 ? w : DEFAULT_WIDTH;
+  }
+
   function dims(mod) {
     const s = sizeById(mod.sizeId);
-    const long = s.m2 / WIDTH;
+    const short = moduleWidth(mod);
+    const long = s.m2 / short;
     const turned = mod.rot % 180 !== 0;
     return {
-      w: turned ? WIDTH : long,
-      h: turned ? long : WIDTH,
+      w: turned ? short : long,
+      h: turned ? long : short,
       m2: s.m2,
       label: s.label,
       long,
-      short: WIDTH,
+      short,
     };
   }
 
@@ -290,10 +296,6 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     return { minX, minY, maxX, maxY, w: maxX - minX, h: maxY - minY };
   }
 
-  function formatCLP(n) {
-    return '$' + Math.round(n).toLocaleString('es-CL');
-  }
-
   function fmtArea(n) {
     return n.toLocaleString('es-CL', { maximumFractionDigits: 1 }) + ' m²';
   }
@@ -303,9 +305,13 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     return v.toLocaleString('es-CL', { maximumFractionDigits: 2 });
   }
 
+  function dimLabel(m2, width) {
+    return `${fmtMeters(width)} × ${fmtMeters(m2 / width)} m`;
+  }
+
   function totals() {
     const m2 = modules.reduce((acc, m) => acc + dims(m).m2, 0);
-    return { m2, price: m2 * PRICE_PER_M2, count: modules.length };
+    return { m2, count: modules.length };
   }
 
   function dormLabel(m2) {
@@ -321,7 +327,14 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
 
   function cloneState() {
     return {
-      modules: modules.map((m) => ({ id: m.id, sizeId: m.sizeId, x: m.x, y: m.y, rot: m.rot })),
+      modules: modules.map((m) => ({
+        id: m.id,
+        sizeId: m.sizeId,
+        width: moduleWidth(m),
+        x: m.x,
+        y: m.y,
+        rot: m.rot,
+      })),
       preset: activePreset,
       selectedId,
     };
@@ -344,19 +357,35 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     requestAnimationFrame(() => { live.textContent = msg; });
   }
 
+  function syncSizeLabels() {
+    root.querySelectorAll('[data-mb-size]').forEach((btn) => {
+      const size = sizeById(btn.getAttribute('data-mb-size'));
+      const dim = btn.querySelector('[data-mb-size-dim]');
+      if (dim) dim.textContent = dimLabel(size.m2, selectedWidth);
+      const on = btn.getAttribute('data-mb-size') === selectedSizeId;
+      btn.classList.toggle('is-active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    root.querySelectorAll('[data-mb-width]').forEach((btn) => {
+      const w = Number(btn.getAttribute('data-mb-width'));
+      const on = w === selectedWidth;
+      btn.classList.toggle('is-active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
   function updateSummary() {
     const t = totals();
     const area = fmtArea(t.m2);
-    const price = formatCLP(t.price);
+    const countLabel = `${t.count} ${t.count === 1 ? 'módulo' : 'módulos'}`;
     if (totalM2El) totalM2El.textContent = area;
-    if (totalPriceEl) totalPriceEl.textContent = price;
     if (countEl) countEl.textContent = String(t.count);
     if (dockM2) dockM2.textContent = area;
-    if (dockPrice) dockPrice.textContent = price;
+    if (dockCount) dockCount.textContent = countLabel;
     if (humanEl) {
       humanEl.textContent = t.count === 0
         ? 'Todavía no hay módulos. Elige una forma o agrega el primero.'
-        : `${t.count} ${t.count === 1 ? 'módulo' : 'módulos'} · ${area} · aprox. ${dormLabel(t.m2)}*`;
+        : `${countLabel} · ${area} · aprox. ${dormLabel(t.m2)}*`;
     }
 
     const layout = modules.map((m, i) => {
@@ -365,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     }).join(', ');
     const note = t.count === 0
       ? 'Interés en casa modular (sin layout aún)'
-      : `${t.count} ${t.count === 1 ? 'módulo' : 'módulos'}, ${fmtArea(t.m2)} (${layout}). Ref. ~${price} — solo casas modulares`;
+      : `${countLabel}, ${fmtArea(t.m2)} (${layout})`;
     window.__prefabModularLayout = note;
     root.querySelectorAll('[data-mb-whatsapp]').forEach((btn) => {
       btn.setAttribute('data-preset-layout', note);
@@ -375,11 +404,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     root.querySelectorAll('[data-mb-preset]').forEach((btn) => {
       btn.classList.toggle('is-active', btn.getAttribute('data-mb-preset') === activePreset);
     });
-    root.querySelectorAll('[data-mb-size]').forEach((btn) => {
-      const on = btn.getAttribute('data-mb-size') === selectedSizeId;
-      btn.classList.toggle('is-active', on);
-      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
+    syncSizeLabels();
   }
 
   function syncScale() {
@@ -493,6 +518,17 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       bar.appendChild(b);
     });
 
+    WIDTHS.forEach((w) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.mbSetWidth = String(w);
+      b.textContent = `${fmtMeters(w)} m`;
+      b.className = moduleWidth(mod) === w ? 'is-active' : '';
+      b.setAttribute('aria-label', `Ancho ${fmtMeters(w)} metros`);
+      b.setAttribute('aria-pressed', moduleWidth(mod) === w ? 'true' : 'false');
+      bar.appendChild(b);
+    });
+
     const del = document.createElement('button');
     del.type = 'button';
     del.dataset.mbRemove = '1';
@@ -513,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       return;
     }
     const d = dims(mod);
-    label.textContent = `Módulo ${modIndex(mod) + 1} · ${d.label}`;
+    label.textContent = `Módulo ${modIndex(mod) + 1} · ${d.label} · ${fmtMeters(d.short)} m de ancho`;
     const tools = buildFloat(mod);
     while (tools.firstChild) box.appendChild(tools.firstChild);
   }
@@ -623,6 +659,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     modules = list.map((p) => ({
       id: nextId++,
       sizeId: p.sizeId,
+      width: p.width || DEFAULT_WIDTH,
       x: p.x,
       y: p.y,
       rot: p.rot || 0,
@@ -641,7 +678,14 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
 
   function addModule(sizeId) {
     const s = sizeById(sizeId || selectedSizeId);
-    const mod = { id: nextId++, sizeId: s.id, x: 0, y: 0, rot: 0 };
+    const mod = {
+      id: nextId++,
+      sizeId: s.id,
+      width: selectedWidth,
+      x: 0,
+      y: 0,
+      rot: 0,
+    };
     const d = dims(mod);
 
     if (!modules.length) {
@@ -744,6 +788,31 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     }
     activePreset = null;
     announce(`Módulo ${modIndex(mod) + 1} ahora mide ${sizeById(sizeId).label}.`);
+    render({ keepFocus: true, animateId: mod.id, from: prevPos });
+  }
+
+  function setWidthSelected(width) {
+    const w = Number(width);
+    const mod = modules.find((m) => m.id === selectedId);
+    if (!mod || WIDTHS.indexOf(w) < 0 || moduleWidth(mod) === w) return;
+    const prevWidth = moduleWidth(mod);
+    const prevPos = { x: mod.x, y: mod.y };
+    pushHistory();
+    mod.width = w;
+    settle(mod, prevPos);
+    if (!canPlace(mod.x, mod.y, mod)) {
+      mod.width = prevWidth;
+      mod.x = prevPos.x;
+      mod.y = prevPos.y;
+      history.pop();
+      updateUndo();
+      announce('Ese ancho no cabe ahí.');
+      render({ keepFocus: true });
+      return;
+    }
+    selectedWidth = w;
+    activePreset = null;
+    announce(`Módulo ${modIndex(mod) + 1} ahora tiene ${fmtMeters(w)} m de ancho.`);
     render({ keepFocus: true, animateId: mod.id, from: prevPos });
   }
 
@@ -888,6 +957,12 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       updateSummary();
       return;
     }
+    const widthBtn = e.target.closest('[data-mb-width]');
+    if (widthBtn && root.contains(widthBtn)) {
+      selectedWidth = Number(widthBtn.getAttribute('data-mb-width'));
+      updateSummary();
+      return;
+    }
     if (e.target.closest('[data-mb-add]')) { addModule(selectedSizeId); return; }
     if (e.target.closest('[data-mb-rotate]')) { rotateSelected(); return; }
     if (e.target.closest('[data-mb-remove]')) { removeSelected(); return; }
@@ -895,7 +970,14 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     if (e.target.closest('[data-mb-undo]')) { undo(); return; }
     if (e.target.closest('[data-mb-tip-close]')) { dismissTip(); return; }
     const resizeBtn = e.target.closest('[data-mb-resize]');
-    if (resizeBtn && root.contains(resizeBtn)) resizeSelected(resizeBtn.getAttribute('data-mb-resize'));
+    if (resizeBtn && root.contains(resizeBtn)) {
+      resizeSelected(resizeBtn.getAttribute('data-mb-resize'));
+      return;
+    }
+    const setWidthBtn = e.target.closest('[data-mb-set-width]');
+    if (setWidthBtn && root.contains(setWidthBtn)) {
+      setWidthSelected(setWidthBtn.getAttribute('data-mb-set-width'));
+    }
   });
 
   root.addEventListener('keydown', (e) => {
