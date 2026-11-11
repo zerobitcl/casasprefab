@@ -38,7 +38,7 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="styles.css?v=20261110a" />
+  <link rel="stylesheet" href="styles.css?v=20261110c" />
 
   <!-- JSON-LD: ProfessionalService (asesoría + cotización) -->
   <script type="application/ld+json">
@@ -98,7 +98,7 @@
         {
           "@type": "Offer",
           "itemOffered": { "@type": "Service", "name": "Casas modulares transportables" },
-          "description": "Módulos de 18 a 24,5 m², anchos de 2,5 · 3 · 3,5 m, que se combinan según el cliente. Sistema llave en mano. Valor referencial alrededor de $698.000 por m². Traslado e instalación según zona."
+          "description": "Módulos de 18 a 24,5 m² (ancho 3,5 m) que se combinan según el cliente. Sistema llave en mano. Valor referencial alrededor de $698.000 por m². Traslado e instalación según zona."
         },
         {
           "@type": "Offer",
@@ -136,7 +136,7 @@
       {
         "@type": "Question",
         "name": "¿Cuánto cuesta una casa modular en la Cuarta Región?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Los módulos van desde 18 a 24,5 m², con anchos de 2,5 · 3 · 3,5 m. El valor referencial ronda los $698.000 por m². Por ejemplo, un módulo de 24,5 m² queda en alrededor de $17.101.000 (24,5 × $698.000). El valor final se confirma por WhatsApp según tu configuración y ubicación en la Cuarta Región." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Los módulos van desde 18 a 24,5 m² (ancho 3,5 m). El valor referencial ronda los $698.000 por m² llave en mano. Por ejemplo, un módulo de 24,5 m² queda en alrededor de $17.101.000 (24,5 × $698.000). El valor final se confirma por WhatsApp según tu configuración y ubicación en la Cuarta Región." }
       },
       {
         "@type": "Question",
@@ -273,9 +273,7 @@
       </h1>
 
       <p class="hero-lead">
-        No ensamblamos casas todas iguales. Las creamos desde cero para tu terreno.
-        Hay ofertas de ~$1,6 millones que son solo el esqueleto y el mismo modelo para todos:
-        aquí el valor es <strong style="color:rgba(255,255,255,0.92);">llave en mano</strong>, a tu medida.
+        No ensamblamos casas iguales: las creamos desde cero para tu terreno.
       </p>
 
       <div class="hero-banner-actions">
@@ -309,39 +307,65 @@
 </section>
 
 
-<!-- Hub regional — toda la Cuarta Región -->
-<aside class="region-hub-strip" aria-label="Cobertura en la Cuarta Región">
+<!-- Selector de línea: modular vs prefabricada -->
+<section id="elige" class="line-fork" aria-labelledby="elige-title">
   <div class="section-container">
-    <p><strong>Atendemos en toda la Cuarta Región</strong></p>
-  </div>
-</aside>
+    <p class="section-label" style="text-align:center; margin-bottom:0.5rem;">Elige tu línea</p>
+    <h2 id="elige-title" class="line-fork-title">¿Casas modulares o prefabricadas?</h2>
+    <p class="line-fork-lead">Son dos productos distintos, cada uno con su número. Elige por dónde empezar.</p>
 
+    <div class="line-fork-grid">
+      <article class="fork-card fork-card--modular">
+        <div class="fork-card-media">
+          <img src="images/modular-costa.jpg" alt="Casa modular llave en mano en la Región de Coquimbo" width="720" height="480" loading="lazy" decoding="async" />
+        </div>
+        <div class="fork-card-body">
+          <p class="fork-card-kicker">Línea modular</p>
+          <h3 class="fork-card-name">Casas modulares llave en mano</h3>
+          <ul class="fork-card-points">
+            <li>Módulos de 18 a 24,5 m² que armas a tu gusto</li>
+            <li>Ancho fijo 3,5 m · cocina y baño según configuración</li>
+            <li>Desde ~$698.000/m² llave en mano</li>
+          </ul>
+          <div class="fork-card-actions">
+            <a href="#modulares" class="btn btn-primary">Armar mi casa modular</a>
+            <a href="tel:+56977164000" class="btn btn-secondary" data-line="modular">Llamar · <span data-line-number>+56 9 7716 4000</span></a>
+          </div>
+        </div>
+      </article>
 
-<!-- ══════════════════════════════════════════════════
-     STATS BAR
-══════════════════════════════════════════════════ -->
-<div class="stats-bar" aria-label="Indicadores clave del servicio">
-  <div class="section-container">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <span class="stat-number">18–24,5</span>
-        <span class="stat-label">m² por módulo — combina como quieras</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">~$698 mil</span>
-        <span class="stat-label">Llave en mano por m² · solo modulares</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">IV</span>
-        <span class="stat-label">Toda la Cuarta Región — costa e interior</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">15–171</span>
-        <span class="stat-label">m² en casas prefabricadas, kit inicial</span>
-      </div>
+      <article class="fork-card fork-card--prefab">
+        <div class="fork-card-media">
+          <img src="images/casa-serena-costa.webp" alt="Casa prefabricada a medida en La Serena" width="720" height="480" loading="lazy" decoding="async" />
+        </div>
+        <div class="fork-card-body">
+          <p class="fork-card-kicker">Línea prefabricada</p>
+          <h3 class="fork-card-name">Casas prefabricadas a medida</h3>
+          <ul class="fork-card-points">
+            <li>Catálogo de 15 a 171 m²</li>
+            <li>Kit Inicial · madera o Vulcometal</li>
+            <li>Cotización por modelo, metraje y comuna</li>
+          </ul>
+          <div class="fork-card-actions">
+            <a href="#modelos" class="btn btn-primary">Ver catálogo</a>
+            <a href="tel:+56994284048" class="btn btn-secondary" data-line="prefab">Llamar · <span data-line-number>+56 9 9428 4048</span></a>
+          </div>
+        </div>
+      </article>
     </div>
+
+    <p class="line-fork-coverage">
+      Atendemos en toda la Cuarta Región ·
+      <a href="casas-prefabricadas-la-serena.html">La Serena</a>
+      <span aria-hidden="true">·</span>
+      <a href="casas-prefabricadas-coquimbo.html">Coquimbo</a>
+      <span aria-hidden="true">·</span>
+      <a href="ovalle.html">Ovalle / Limarí</a>
+      <span aria-hidden="true">·</span>
+      <a href="cuarta-region.html">Guía IV Región</a>
+    </p>
   </div>
-</div>
+</section>
 
 
 <!-- ══════════════════════════════════════════════════
@@ -355,21 +379,24 @@
         <p class="section-label">Casas Modulares</p>
         <div class="divider-amber"></div>
         <h2 id="modulares-title" style="font-size:clamp(1.75rem,3.5vw,2.5rem); margin-bottom:1rem;">
-          No es el mismo modelo para todos:<br>la armas desde cero
+          Módulos que armas a tu gusto<br>en la Cuarta Región
         </h2>
+        <p class="llave-badge" aria-label="Llave en mano desde aproximadamente 698 mil pesos por metro cuadrado">
+          <span class="llave-badge-label">Llave en mano</span>
+          <span class="llave-badge-price">desde ~$698.000 / m²</span>
+        </p>
         <p style="color:var(--slate-500); font-size:1rem; line-height:1.75; margin-bottom:1rem;">
-          Combina módulos de <strong style="color:var(--slate-800);">18 a 24,5 m²</strong>
-          (anchos <strong style="color:var(--slate-800);">2,5 · 3 · 3,5 m</strong>) en línea, L, C o con patio.
-          No te entregamos un esqueleto genérico: es <strong style="color:var(--slate-800);">llave en mano</strong>,
-          con cocina y baño según tu configuración. Otras ofertas baratas suelen ser solo estructura —y todas iguales.
+          Cada módulo mide entre <strong style="color:var(--slate-800);">18 y 24,5 m²</strong>
+          (ancho <strong style="color:var(--slate-800);">3,5 m</strong>).
+          Los unes en línea, en L, en C o con patio interior — la forma la decides tú.
+          Otras ofertas de ~$1,6 millones son solo el esqueleto y el mismo modelo para todos:
+          aquí es cocina y baño según tu configuración, creada desde cero.
         </p>
         <aside class="mb-callout">
-          <p><strong>Llave en mano desde ~$698.000/m²</strong> (solo modulares). Arma el layout y cotiza.
-          Las <strong>prefabricadas</strong> son otra línea: <a href="#modelos">ver catálogo a medida</a>.</p>
+          <p>Arma tu layout y cotiza por WhatsApp. Las casas <strong>prefabricadas</strong> son otra línea: <a href="#modelos">ver catálogo a medida</a>.</p>
         </aside>
         <div class="modular-chips" aria-label="Características">
           <span class="modular-chip">Transportables</span>
-          <span class="modular-chip">Llave en mano</span>
           <span class="modular-chip">2 dormitorios*</span>
           <span class="modular-chip">Cuarta Región</span>
         </div>
@@ -475,18 +502,12 @@
             </div>
             <p class="mb-help">Toca un módulo para girarlo, cambiar su tamaño o quitarlo. También sirven las flechas del teclado.</p>
             <div class="mb-add">
-              <p class="mb-add-label">Ancho del módulo</p>
-              <div class="mb-widths" role="group" aria-label="Ancho del módulo nuevo">
-                <button type="button" data-mb-width="2.5"><span>2,5 m</span></button>
-                <button type="button" data-mb-width="3"><span>3 m</span></button>
-                <button type="button" data-mb-width="3.5" class="is-active"><span>3,5 m</span></button>
-              </div>
-              <p class="mb-add-label">Superficie</p>
+              <p class="mb-add-label">Agregar un módulo</p>
               <div class="mb-sizes" role="group" aria-label="Tamaño del módulo nuevo">
-                <button type="button" data-mb-size="18"><span>18 m²</span><small data-mb-size-dim></small></button>
-                <button type="button" data-mb-size="20"><span>20 m²</span><small data-mb-size-dim></small></button>
-                <button type="button" data-mb-size="22"><span>22 m²</span><small data-mb-size-dim></small></button>
-                <button type="button" data-mb-size="24.5" class="is-active"><span>24,5 m²</span><small data-mb-size-dim></small></button>
+                <button type="button" data-mb-size="18"><span>18 m²</span><small>3,5 × 5,14 m</small></button>
+                <button type="button" data-mb-size="20"><span>20 m²</span><small>3,5 × 5,71 m</small></button>
+                <button type="button" data-mb-size="22"><span>22 m²</span><small>3,5 × 6,29 m</small></button>
+                <button type="button" data-mb-size="24.5" class="is-active"><span>24,5 m²</span><small>3,5 × 7 m</small></button>
               </div>
               <button type="button" class="btn btn-primary mb-add-btn" data-mb-add>+ Agregar módulo</button>
             </div>
@@ -673,36 +694,6 @@
 <!-- ══════════════════════════════════════════════════
      ASESORÍA PERSONALIZADA
 ══════════════════════════════════════════════════ -->
-<section id="comparativa" class="section-pad-sm" aria-labelledby="comparativa-title">
-  <div class="section-container">
-    <div class="reveal cta-card-inner">
-      <p class="section-label">¿No sabes por dónde empezar?</p>
-      <div class="divider-amber" style="margin:0 auto 1.25rem;"></div>
-      <h2 id="comparativa-title" style="font-size:clamp(1.75rem,3.5vw,2.25rem); margin-bottom:1rem;">
-        Cada producto tiene su número
-      </h2>
-      <p style="color:var(--slate-500); font-size:1rem; line-height:1.75; margin-bottom:2rem;">
-        Modulares y prefabricadas se atienden por separado.
-        Llama a la línea que corresponde o cuéntanos tu caso por WhatsApp.
-      </p>
-      <div class="line-pair" style="margin:0 auto 0.875rem;">
-        <a class="line-card line-card--modular" data-line="modular" href="tel:+56977164000" aria-label="Llamar a la línea de casas modulares">
-          <span class="line-card-kicker">Casas modulares</span>
-          <span class="line-card-action">Llamar <span data-line-number>+56 9 7716 4000</span></span>
-        </a>
-        <a class="line-card line-card--prefab" data-line="prefab" href="tel:+56994284048" aria-label="Llamar a la línea de casas prefabricadas">
-          <span class="line-card-kicker">Casas prefabricadas</span>
-          <span class="line-card-action">Llamar <span data-line-number>+56 9 9428 4048</span></span>
-        </a>
-      </div>
-      <button type="button" class="btn btn-secondary btn-primary-lg btn-cotizador-main">
-        Dejar mis datos
-      </button>
-    </div>
-  </div>
-</section>
-
-
 <!-- ══════════════════════════════════════════════════
      VENTAJAS TÉCNICAS REGIONALES
 ══════════════════════════════════════════════════ -->
@@ -939,7 +930,7 @@
             <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           </button>
           <div class="faq-answer" style="max-height:0;">
-            <p class="faq-answer-inner">Los módulos van de 18 a 24,5 m², con anchos de 2,5 · 3 · 3,5 m. El valor referencial ronda los $698.000 por m². Un módulo de 24,5 m² queda en alrededor de $17.101.000 (24,5 × $698.000). Confirma tu layout y comuna por WhatsApp.</p>
+            <p class="faq-answer-inner">Los módulos van de 18 a 24,5 m² (ancho 3,5 m). El valor referencial ronda los $698.000 por m² llave en mano. Un módulo de 24,5 m² queda en alrededor de $17.101.000 (24,5 × $698.000). Confirma tu layout y comuna por WhatsApp.</p>
           </div>
         </div>
 
@@ -1146,6 +1137,6 @@
 
 <script src="js/main.js?v=20261110a" defer></script>
 <script src="js/prefab-catalog.js?v=20261110a" defer></script>
-<script src="js/modular-builder.js?v=20261110a" defer></script>
+<script src="js/modular-builder.js?v=20261110c" defer></script>
 </body>
 </html>
