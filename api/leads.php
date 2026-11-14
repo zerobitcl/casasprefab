@@ -3,10 +3,10 @@ require __DIR__ . '/bootstrap.php';
 
 const LEAD_STATUSES = ['nuevo', 'conversacion', 'cotizado', 'ganado', 'perdido'];
 const LEAD_LINES = ['modular', 'prefab'];
-const LEAD_BUSCA = ['Vivienda permanente', 'Segunda vivienda o cabaña', 'Local, bodega u oficina', 'Aún no lo defino'];
+const LEAD_BUSCA = ['Vivienda permanente', 'Segunda vivienda o cabaña', 'Ampliar mi casa actual', 'Local, bodega u oficina', 'Aún no lo defino'];
 const LEAD_FUENTE = ['Google', 'Instagram o Facebook', 'Recomendación', 'Letrero u obra', 'Otro'];
-const LEAD_TIPO = ['Modular', 'A medida', 'Prefabricada', 'No sé aún'];
-const LEAD_COMUNA = ['La Serena', 'Coquimbo', 'Peñuelas', 'Ovalle', 'Vicuña', 'Valle del Elqui', 'Limarí', 'Monte Patria', 'Illapel', 'Los Vilos', 'Pichidangui', 'Tongoy', 'Guanaqueros', 'Morrillos', 'La Higuera', 'Otra comuna'];
+const LEAD_TIPO = ['Modular', 'A medida', 'Prefabricada', 'Ampliación', 'No sé aún'];
+const LEAD_COMUNA = ['La Serena', 'Coquimbo', 'Ovalle', 'Vicuña', 'Valle del Elqui', 'Limarí', 'Monte Patria', 'Illapel', 'Los Vilos', 'Pichidangui', 'Tongoy', 'Guanaqueros', 'Morrillos', 'La Higuera', 'Otra comuna'];
 const LEAD_TERRENO = ['Sí, listo', 'En compra', 'Aún no'];
 const LEAD_PLAZO = ['Lo antes posible', '1 a 3 meses', '3 a 6 meses', 'Solo explorando'];
 

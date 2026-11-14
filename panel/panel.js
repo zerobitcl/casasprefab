@@ -3,7 +3,7 @@
 /* Números de cada línea: deben coincidir con LINES en js/main.js. */
 const LINES = {
   modular: { label: 'Casas modulares', phone: '+56 9 7716 4000' },
-  prefab: { label: 'Casas prefabricadas', phone: '+56 9 9428 4048' },
+  prefab: { label: 'A medida y ampliaciones', phone: '+56 9 9428 4048' },
 };
 
 const STATUSES = [
@@ -231,8 +231,11 @@ function renderMetrics() {
 }
 
 function waHref(lead) {
-  const text = 'Hola ' + lead.nombre + ', te escribo de PrefabCoquimbo por tu consulta de casa ' +
-    (lead.line === 'modular' ? 'modular' : 'prefabricada') + ' en ' + lead.comuna + '.';
+  let topic = 'casa prefabricada a medida';
+  if (lead.line === 'modular' || lead.tipo === 'Modular') topic = 'casa modular';
+  else if (lead.tipo === 'Ampliación') topic = 'ampliación';
+  const text = 'Hola ' + lead.nombre + ', te escribo de PrefabCoquimbo por tu consulta de ' +
+    topic + ' en ' + lead.comuna + '.';
   return 'https://wa.me/' + intlPhone(lead.phone) + '?text=' + encodeURIComponent(text);
 }
 

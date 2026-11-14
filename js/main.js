@@ -15,9 +15,9 @@ const LINES = {
     id: 'prefab',
     digits: '56994284048',
     display: '+56 9 9428 4048',
-    label: 'Casas prefabricadas',
-    short: 'Prefabricadas',
-    waHello: 'Hola, quiero cotizar una casa prefabricada a medida en la Cuarta Región.',
+    label: 'Casas a medida y ampliaciones',
+    short: 'A medida',
+    waHello: 'Hola, quiero cotizar una casa prefabricada a medida o una ampliación en la Cuarta Región.',
   },
 };
 
@@ -84,7 +84,7 @@ function defaultLineId() {
 
 function lineIdForTipo(tipo) {
   if (tipo === 'Modular') return 'modular';
-  if (tipo === 'A medida') return 'prefab';
+  if (tipo === 'A medida' || tipo === 'Ampliación' || tipo === 'Prefabricada') return 'prefab';
   return '';
 }
 
@@ -147,22 +147,30 @@ function applyContactLines() {
 }
 
 function initWhatsAppLinks() {
-  document.querySelectorAll('[data-whatsapp]').forEach((el) => {
+  document.querySelectorAll('[data-whatsapp], a[href*="wa.me/"]').forEach((el) => {
     const lineId = el.dataset.line && LINES[el.dataset.line] ? el.dataset.line : defaultLineId();
-    bindLine(el, lineId);
-    el.addEventListener('click', () => trackEvent('whatsapp_direct_click', {
-      line: lineId,
-      link_text: el.textContent?.trim().slice(0, 40),
-    }));
+    if (el.hasAttribute('data-whatsapp') || el.dataset.line) bindLine(el, lineId);
+    el.addEventListener('click', () => {
+      const params = {
+        line: lineId,
+        link_text: el.textContent?.trim().slice(0, 40),
+      };
+      trackEvent('click_whatsapp', params);
+      trackEvent('whatsapp_direct_click', params);
+    });
   });
 }
 
 function initCallLinks() {
   document.querySelectorAll('a[href^="tel:"]').forEach((el) => {
-    el.addEventListener('click', () => trackEvent('call_click', {
-      line: el.dataset.line || defaultLineId(),
-      link_text: el.textContent?.trim().slice(0, 40),
-    }));
+    el.addEventListener('click', () => {
+      const params = {
+        line: el.dataset.line || defaultLineId(),
+        link_text: el.textContent?.trim().slice(0, 40),
+      };
+      trackEvent('phone_click', params);
+      trackEvent('call_click', params);
+    });
   });
 }
 
@@ -270,7 +278,7 @@ function getStickyBarHTML(text) {
     return `<div class="sticky-cot-bar sticky-cot-bar--dual" id="sticky-cot-bar">
   <div class="sticky-cot-bar-actions">
     <a href="tel:+${LINES.modular.digits}" data-line="modular" class="btn btn-primary sticky-cot-bar-btn sticky-cot-bar-btn--stack" aria-label="Llamar casas modulares ${LINES.modular.display}"><span class="sticky-line-kicker">Modulares</span><span class="sticky-line-num" data-line-number>${LINES.modular.display}</span></a>
-    <a href="tel:+${LINES.prefab.digits}" data-line="prefab" class="btn sticky-cot-bar-btn sticky-line-prefab sticky-cot-bar-btn--stack" aria-label="Llamar casas prefabricadas ${LINES.prefab.display}"><span class="sticky-line-kicker">Prefabricadas</span><span class="sticky-line-num" data-line-number>${LINES.prefab.display}</span></a>
+    <a href="tel:+${LINES.prefab.digits}" data-line="prefab" class="btn sticky-cot-bar-btn sticky-line-prefab sticky-cot-bar-btn--stack" aria-label="Llamar a medida y ampliaciones ${LINES.prefab.display}"><span class="sticky-line-kicker">A medida</span><span class="sticky-line-num" data-line-number>${LINES.prefab.display}</span></a>
     <button type="button" class="btn btn-secondary sticky-cot-bar-btn btn-cotizador-main">Datos</button>
   </div>
 </div>`;
@@ -298,19 +306,23 @@ function getCotizadorModalHTML() {
     </div>
 
     <div class="cot-modal-step active" id="modal-step-1">
-      <h2 id="cot-modal-title" class="cot-modal-title">¿Qué tipo de casa buscas?</h2>
-      <p class="cot-modal-desc">Modulares y prefabricadas se atienden en números distintos.</p>
+      <h2 id="cot-modal-title" class="cot-modal-title">¿Qué necesitas?</h2>
+      <p class="cot-modal-desc">Modulares van a un número; proyectos a medida y ampliaciones a otro.</p>
       <div class="cot-modal-options">
         <button type="button" class="cot-modal-opt" data-field="tipo" data-value="Modular">
           Casa modular
-          <small class="cot-modal-opt-sub">Módulos 18–24,5 m² combinables</small>
+          <small class="cot-modal-opt-sub">Módulos 18–24,5 m² combinables · llave en mano</small>
         </button>
         <button type="button" class="cot-modal-opt" data-field="tipo" data-value="A medida">
-          Casa a medida
-          <small class="cot-modal-opt-sub">Diseño según tu terreno</small>
+          Casa prefabricada a medida
+          <small class="cot-modal-opt-sub">Diseño único según tu terreno y clima</small>
+        </button>
+        <button type="button" class="cot-modal-opt" data-field="tipo" data-value="Ampliación">
+          Ampliación de vivienda
+          <small class="cot-modal-opt-sub">2° piso, dormitorios, quincho o anexo</small>
         </button>
         <button type="button" class="cot-modal-opt" data-field="tipo" data-value="No sé aún">
-          No sé aún
+          No sé aún / Quiero asesoría
           <small class="cot-modal-opt-sub">Te orientamos según tu terreno</small>
         </button>
       </div>
@@ -386,6 +398,7 @@ function getCotizadorModalHTML() {
             <option value="">Elige una opción</option>
             <option>Vivienda permanente</option>
             <option>Segunda vivienda o cabaña</option>
+            <option>Ampliar mi casa actual</option>
             <option>Local, bodega u oficina</option>
             <option>Aún no lo defino</option>
           </select>
@@ -632,11 +645,14 @@ function modalSelectOption(field, value) {
 
 function buildCotizadorMessage(lead) {
   const { tipo, comuna, terreno, plazo, estilo, layoutNote } = cotizadorState;
+  const subject = tipo === 'Ampliación'
+    ? `Quiero cotizar una *ampliación* en *${comuna}*.`
+    : `Quiero cotizar una casa *${tipo || 'a medida'}* en *${comuna}*.`;
   const lines = [
     `Hola, soy *${lead.nombre}* y vengo de la web.`,
-    `Quiero cotizar una casa *${tipo || 'prefab'}* en *${comuna}*.`,
+    subject,
   ];
-  if (estilo) lines.push(`Estilo: ${estilo}.`);
+  if (estilo) lines.push(`Alcance / formato: ${estilo}.`);
   lines.push(`Busca: ${lead.busca}.`);
   lines.push(`Terreno: ${terreno}.`);
   lines.push(`Plazo: ${plazo}.`);
@@ -718,6 +734,9 @@ function submitCotizadorModal(forcedLine) {
 
   const { tipo, comuna, terreno, plazo, estilo, layoutNote } = cotizadorState;
   const msg = buildCotizadorMessage(contact);
+  const busca = contact.busca === 'Ampliar mi casa actual (dormitorios, 2° piso, quincho)'
+    ? 'Ampliar mi casa actual'
+    : contact.busca;
 
   queueLead({
     line: lineId,
@@ -725,7 +744,7 @@ function submitCotizadorModal(forcedLine) {
     apellido: '',
     email: '',
     phone: contact.phone,
-    busca: contact.busca,
+    busca,
     fuente: '',
     detalle: contact.detalle || 'Quiere que lo contacten.',
     tipo,
@@ -739,6 +758,7 @@ function submitCotizadorModal(forcedLine) {
   });
 
   trackEvent('cotizador_submit', { tipo, comuna, terreno, plazo, line: lineId });
+  trackEvent('click_whatsapp', { line: lineId, source: 'cotizador_modal' });
   window.open(whatsappUrl(msg, lineId), '_blank', 'noopener,noreferrer');
   closeCotizadorModal();
 }
