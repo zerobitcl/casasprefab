@@ -295,6 +295,7 @@
     });
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'click_whatsapp', { line: 'prefab', source: 'pf_quote' });
+      window.gtag('event', 'generate_lead', { line: 'prefab', source: 'pf_quote' });
     }
     window.open(`https://wa.me/${WA_DIGITS}?text=${encodeURIComponent(messageFor(quote))}`, '_blank', 'noopener,noreferrer');
     closeQuote();

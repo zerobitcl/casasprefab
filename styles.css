@@ -3653,6 +3653,12 @@ body.cot-modal-open {
   line-height: 1.65;
   margin: 0;
 }
+.pf-coverage a {
+  color: var(--amber-800);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .pf-place {
   background: var(--slate-900);
   color: #fff;
@@ -3858,10 +3864,17 @@ body.pf-lock { overflow: hidden; }
 }
 .amp-trust strong { color: #fcd34d; }
 
+.compare-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 1rem 0 1.5rem;
+  -webkit-overflow-scrolling: touch;
+}
 .compare-table {
   width: 100%;
+  min-width: 36rem;
   border-collapse: collapse;
-  margin: 1rem 0 1.5rem;
+  margin: 0;
   background: #fff;
   border: 1px solid var(--slate-200);
   border-radius: 14px;

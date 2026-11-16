@@ -147,7 +147,7 @@ function applyContactLines() {
 }
 
 function initWhatsAppLinks() {
-  document.querySelectorAll('[data-whatsapp], a[href*="wa.me/"]').forEach((el) => {
+  document.querySelectorAll('[data-whatsapp], [data-action="click_whatsapp"], a[href*="wa.me/"]').forEach((el) => {
     const lineId = el.dataset.line && LINES[el.dataset.line] ? el.dataset.line : defaultLineId();
     if (el.hasAttribute('data-whatsapp') || el.dataset.line) bindLine(el, lineId);
     el.addEventListener('click', () => {
@@ -156,6 +156,7 @@ function initWhatsAppLinks() {
         link_text: el.textContent?.trim().slice(0, 40),
       };
       trackEvent('click_whatsapp', params);
+      trackEvent('generate_lead', params);
       trackEvent('whatsapp_direct_click', params);
     });
   });
@@ -759,6 +760,7 @@ function submitCotizadorModal(forcedLine) {
 
   trackEvent('cotizador_submit', { tipo, comuna, terreno, plazo, line: lineId });
   trackEvent('click_whatsapp', { line: lineId, source: 'cotizador_modal' });
+  trackEvent('generate_lead', { line: lineId, source: 'cotizador_modal' });
   window.open(whatsappUrl(msg, lineId), '_blank', 'noopener,noreferrer');
   closeCotizadorModal();
 }
