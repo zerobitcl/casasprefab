@@ -3449,6 +3449,45 @@ body.cot-modal-open {
   text-transform: uppercase;
   color: var(--slate-500);
 }
+.mb-width {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(248, 250, 252, 0.9);
+}
+.mb-width--compact {
+  margin-bottom: 0.85rem;
+  padding: 0.55rem 0.65rem;
+}
+.mb-widths {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+.mb-widths button {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  color: var(--slate-700);
+  padding: 0.45rem 0.2rem;
+  min-height: 40px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.mb-widths button.is-active,
+.mb-widths button:hover {
+  border-color: var(--amber-700);
+  color: var(--amber-800);
+  background: rgba(180, 83, 9, 0.08);
+}
+.mb-width-note {
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--slate-500);
+}
 .mb-sizes {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -3590,6 +3629,7 @@ body.cot-modal-open {
   .mb-step-label { font-size: 0.75rem; }
 }
 @media (max-width: 560px) {
+  .mb-widths button { font-size: 0.68rem; min-height: 38px; padding: 0.35rem 0.1rem; }
   .modular-photo { aspect-ratio: 16 / 10; }
   #modular-builder { padding: 0.7rem; }
   .mb-step { padding: 0.4rem 0.45rem; gap: 0.35rem; }

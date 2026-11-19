@@ -1,14 +1,18 @@
 'use strict';
 
 /**
- * Configurador de módulos a escala real (ancho fijo 3,5 m).
- * El estado vive en metros, no en celdas: así el dibujo coincide con los m²
- * y el imán puede pegar bordes sin depender de una grilla entera.
+ * Configurador de módulos a escala real.
+ * Ancho configurable por proyecto (2 / 2,5 / 2,8 / 3 / 3,5 m).
+ * El estado vive en metros: el dibujo coincide con los m² y el imán pega bordes.
  */
 document.addEventListener('DOMContentLoaded', function initModularBuilder() {
-  const WIDTH = 3.5;
-  const PLOT_W = 24;
-  const PLOT_H = 16;
+  const WIDTH_OPTIONS = [
+    { id: '2', m: 2, label: '2 m' },
+    { id: '2.5', m: 2.5, label: '2,5 m' },
+    { id: '2.8', m: 2.8, label: '2,8 m' },
+    { id: '3', m: 3, label: '3 m' },
+    { id: '3.5', m: 3.5, label: '3,5 m' },
+  ];
   const SNAP = 0.6;
   const EPS = 0.03;
 
@@ -19,32 +23,33 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     { id: '24.5', label: '24,5 m²', m2: 24.5 },
   ];
 
-  const len = (m2) => m2 / WIDTH;
-
-  /** Coordenadas en metros, origen arriba-izquierda, antes de centrar. */
-  const PRESETS = {
-    linea: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-      { sizeId: '24.5', x: len(24.5), y: 0, rot: 0 },
-      { sizeId: '18', x: len(24.5) * 2, y: 0, rot: 0 },
-    ],
-    ele: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-      { sizeId: '24.5', x: 0, y: WIDTH, rot: 90 },
-      { sizeId: '20', x: WIDTH, y: WIDTH, rot: 0 },
-    ],
-    ce: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-      { sizeId: '20', x: 0, y: WIDTH, rot: 90 },
-      { sizeId: '24.5', x: 0, y: WIDTH + len(20), rot: 0 },
-    ],
-    patio: [
-      { sizeId: '24.5', x: 0, y: 0, rot: 90 },
-      { sizeId: '24.5', x: 0, y: len(24.5), rot: 0 },
-      { sizeId: '18', x: len(24.5), y: len(24.5), rot: 0 },
-      { sizeId: '24.5', x: len(24.5) + len(18) - WIDTH, y: 0, rot: 90 },
-    ],
-  };
+  /** Coordenadas en metros según el ancho elegido; origen arriba-izquierda, antes de centrar. */
+  function presetsFor(W) {
+    const L = (m2) => m2 / W;
+    return {
+      linea: [
+        { sizeId: '24.5', x: 0, y: 0, rot: 0 },
+        { sizeId: '24.5', x: L(24.5), y: 0, rot: 0 },
+        { sizeId: '18', x: L(24.5) * 2, y: 0, rot: 0 },
+      ],
+      ele: [
+        { sizeId: '24.5', x: 0, y: 0, rot: 0 },
+        { sizeId: '24.5', x: 0, y: W, rot: 90 },
+        { sizeId: '20', x: W, y: W, rot: 0 },
+      ],
+      ce: [
+        { sizeId: '24.5', x: 0, y: 0, rot: 0 },
+        { sizeId: '20', x: 0, y: W, rot: 90 },
+        { sizeId: '24.5', x: 0, y: W + L(20), rot: 0 },
+      ],
+      patio: [
+        { sizeId: '24.5', x: 0, y: 0, rot: 90 },
+        { sizeId: '24.5', x: 0, y: L(24.5), rot: 0 },
+        { sizeId: '18', x: L(24.5), y: L(24.5), rot: 0 },
+        { sizeId: '24.5', x: L(24.5) + L(18) - W, y: 0, rot: 90 },
+      ],
+    };
+  }
 
   const PRESET_NAMES = {
     linea: 'En línea',
@@ -67,6 +72,9 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   let nextId = 1;
   let selectedId = null;
   let selectedSizeId = '24.5';
+  let moduleWidth = 3.5;
+  let PLOT_W = 24;
+  let PLOT_H = 16;
   let activePreset = null;
   let step = 1;
   let drag = null;
@@ -83,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   const live = root.querySelector('[data-mb-live]');
   const totalM2El = root.querySelector('[data-mb-total-m2]');
   const countEl = root.querySelector('[data-mb-count]');
+  const widthLabelEl = root.querySelector('[data-mb-width-label]');
   const humanEl = root.querySelector('[data-mb-human]');
   const dockM2 = root.querySelector('[data-mb-dock-m2]');
   const dockCount = root.querySelector('[data-mb-dock-count]');
@@ -91,18 +100,91 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     return SIZES.find((s) => s.id === id) || SIZES[3];
   }
 
+  function widthLabel(m) {
+    const hit = WIDTH_OPTIONS.find((w) => Math.abs(w.m - m) < 0.001);
+    return hit ? hit.label : fmtMeters(m) + ' m';
+  }
+
+  /** Con anchos angostos los módulos se alargan: el plano crece para que quepan las tipologías. */
+  function refreshPlotSize() {
+    const maxLong = Math.max(...SIZES.map((s) => s.m2 / moduleWidth));
+    PLOT_W = Math.max(24, Math.ceil(maxLong * 3 + moduleWidth + 2));
+    PLOT_H = Math.max(16, Math.ceil(maxLong * 2 + moduleWidth + 2));
+  }
+
   function dims(mod) {
     const s = sizeById(mod.sizeId);
-    const long = s.m2 / WIDTH;
+    const W = moduleWidth;
+    const long = s.m2 / W;
     const turned = mod.rot % 180 !== 0;
     return {
-      w: turned ? WIDTH : long,
-      h: turned ? long : WIDTH,
+      w: turned ? W : long,
+      h: turned ? long : W,
       m2: s.m2,
       label: s.label,
       long,
-      short: WIDTH,
+      short: W,
     };
+  }
+
+  function sizeFootprintLabel(m2) {
+    return `${fmtMeters(moduleWidth)} × ${fmtMeters(m2 / moduleWidth)} m`;
+  }
+
+  function syncWidthButtons() {
+    root.querySelectorAll('[data-mb-width]').forEach((btn) => {
+      const on = Math.abs(Number(btn.getAttribute('data-mb-width')) - moduleWidth) < 0.001;
+      btn.classList.toggle('is-active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  function updateSizeLabels() {
+    root.querySelectorAll('[data-mb-size]').forEach((btn) => {
+      const s = sizeById(btn.getAttribute('data-mb-size'));
+      const small = btn.querySelector('small');
+      if (small) small.textContent = sizeFootprintLabel(s.m2);
+    });
+  }
+
+  function setModuleWidth(next, opts) {
+    opts = opts || {};
+    const w = Number(next);
+    if (!WIDTH_OPTIONS.some((o) => Math.abs(o.m - w) < 0.001)) return;
+    if (Math.abs(w - moduleWidth) < 0.001) return;
+
+    const oldW = moduleWidth;
+    if (!opts.silent) pushHistory();
+    moduleWidth = w;
+    refreshPlotSize();
+
+    if (activePreset && presetsFor(moduleWidth)[activePreset]) {
+      applyPreset(activePreset, { silent: true, skipHistory: true });
+    } else if (modules.length) {
+      modules.forEach((m) => {
+        const s = sizeById(m.sizeId);
+        const oldLong = s.m2 / oldW;
+        const turned = m.rot % 180 !== 0;
+        const oldDw = turned ? oldW : oldLong;
+        const oldDh = turned ? oldLong : oldW;
+        const cx = m.x + oldDw / 2;
+        const cy = m.y + oldDh / 2;
+        const newLong = s.m2 / moduleWidth;
+        const newDw = turned ? moduleWidth : newLong;
+        const newDh = turned ? newLong : moduleWidth;
+        m.x = cx - newDw / 2;
+        m.y = cy - newDh / 2;
+        clamp(m);
+      });
+      centerGroup(modules);
+    }
+
+    syncWidthButtons();
+    updateSizeLabels();
+    if (!opts.silent) {
+      announce(`Ancho del módulo: ${widthLabel(moduleWidth)}.`);
+      render({ keepFocus: true });
+    }
   }
 
   function boxOf(mod) {
@@ -256,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       maxY = Math.max(maxY, m.y + d.h);
     });
     // El centro geométrico rara vez cae en la grilla; se acerca a 0,5 m
-    // para que los bordes de 3,5 m coincidan con las líneas del plano.
+    // para que los bordes del ancho elegido coincidan con las líneas del plano.
     const snapHalf = (n) => Math.round(n * 2) / 2;
     let ox = snapHalf((PLOT_W - (maxX - minX)) / 2 - minX);
     let oy = snapHalf((PLOT_H - (maxY - minY)) / 2 - minY);
@@ -318,6 +400,8 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       modules: modules.map((m) => ({ id: m.id, sizeId: m.sizeId, x: m.x, y: m.y, rot: m.rot })),
       preset: activePreset,
       selectedId,
+      moduleWidth,
+      selectedSizeId,
     };
   }
 
@@ -344,12 +428,13 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     const countLabel = `${t.count} ${t.count === 1 ? 'módulo' : 'módulos'}`;
     if (totalM2El) totalM2El.textContent = area;
     if (countEl) countEl.textContent = String(t.count);
+    if (widthLabelEl) widthLabelEl.textContent = widthLabel(moduleWidth);
     if (dockM2) dockM2.textContent = area;
     if (dockCount) dockCount.textContent = countLabel;
     if (humanEl) {
       humanEl.textContent = t.count === 0
         ? 'Todavía no hay módulos. Elige una forma o agrega el primero.'
-        : `${countLabel} · ${area} · aprox. ${dormLabel(t.m2)}*`;
+        : `${countLabel} · ${area} · ancho ${widthLabel(moduleWidth)} · aprox. ${dormLabel(t.m2)}*`;
     }
 
     const layout = modules.map((m, i) => {
@@ -357,8 +442,8 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       return `M${i + 1}: ${fmtArea(d.m2)} (${fmtMeters(d.short)} × ${fmtMeters(d.long)} m)`;
     }).join(', ');
     const note = t.count === 0
-      ? 'Interés en casa modular (sin layout aún)'
-      : `${countLabel}, ${fmtArea(t.m2)} (${layout})`;
+      ? `Interés en casa modular (sin layout aún; ancho ${widthLabel(moduleWidth)})`
+      : `${countLabel}, ${fmtArea(t.m2)}, ancho ${widthLabel(moduleWidth)} (${layout})`;
     window.__prefabModularLayout = note;
     root.querySelectorAll('[data-mb-whatsapp]').forEach((btn) => {
       btn.setAttribute('data-preset-layout', note);
@@ -373,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       btn.classList.toggle('is-active', on);
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    syncWidthButtons();
   }
 
   function syncScale() {
@@ -506,7 +592,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       return;
     }
     const d = dims(mod);
-    label.textContent = `Módulo ${modIndex(mod) + 1} · ${d.label}`;
+    label.textContent = `Módulo ${modIndex(mod) + 1} · ${d.label} · ${fmtMeters(d.short)} × ${fmtMeters(d.long)} m`;
     const tools = buildFloat(mod);
     while (tools.firstChild) box.appendChild(tools.firstChild);
   }
@@ -609,10 +695,10 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   }
 
   function applyPreset(name, opts) {
-    const list = PRESETS[name];
+    const list = presetsFor(moduleWidth)[name];
     if (!list) return;
     opts = opts || {};
-    if (!opts.silent) pushHistory();
+    if (!opts.silent && !opts.skipHistory) pushHistory();
     modules = list.map((p) => ({
       id: nextId++,
       sizeId: p.sizeId,
@@ -625,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     activePreset = name;
     const t = totals();
     if (!opts.silent) {
-      announce(`${PRESET_NAMES[name]}: ${t.count} módulos, ${fmtArea(t.m2)}.`);
+      announce(`${PRESET_NAMES[name]}: ${t.count} módulos, ${fmtArea(t.m2)}, ancho ${widthLabel(moduleWidth)}.`);
       setStep(2);
       return;
     }
@@ -759,6 +845,11 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     modules = prev.modules;
     activePreset = prev.preset;
     selectedId = prev.selectedId;
+    if (typeof prev.moduleWidth === 'number') moduleWidth = prev.moduleWidth;
+    if (prev.selectedSizeId) selectedSizeId = prev.selectedSizeId;
+    refreshPlotSize();
+    syncWidthButtons();
+    updateSizeLabels();
     updateUndo();
     announce('Cambio deshecho.');
     render({ keepFocus: true });
@@ -875,6 +966,11 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       applyPreset(name);
       return;
     }
+    const widthBtn = e.target.closest('[data-mb-width]');
+    if (widthBtn && root.contains(widthBtn)) {
+      setModuleWidth(widthBtn.getAttribute('data-mb-width'));
+      return;
+    }
     const sizeBtn = e.target.closest('[data-mb-size]');
     if (sizeBtn && root.contains(sizeBtn)) {
       selectedSizeId = sizeBtn.getAttribute('data-mb-size');
@@ -913,6 +1009,9 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     resizeTimer = setTimeout(() => render(), 120);
   }, { passive: true });
 
+  refreshPlotSize();
+  syncWidthButtons();
+  updateSizeLabels();
   applyPreset('linea', { silent: true });
   setStep(1);
 });

@@ -17,7 +17,7 @@ const LINES = {
     display: '+56 9 9428 4048',
     label: 'Casas a medida y ampliaciones',
     short: 'A medida',
-    waHello: 'Hola, quiero cotizar una casa prefabricada a medida o una ampliación en la Cuarta Región.',
+    waHello: 'Hola, quiero cotizar una casa prefabricada a medida en la Cuarta Región (o una ampliación en Ovalle y alrededores).',
   },
 };
 
