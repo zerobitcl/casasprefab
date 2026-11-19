@@ -32,10 +32,12 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
         { sizeId: '24.5', x: L(24.5), y: 0, rot: 0 },
         { sizeId: '18', x: L(24.5) * 2, y: 0, rot: 0 },
       ],
+      // L clásica: brazo horizontal (2 módulos) + pierna bajo el izquierdo.
+      // Misma orientación = proporciones claras y se parece al ícono.
       ele: [
         { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-        { sizeId: '24.5', x: 0, y: W, rot: 90 },
-        { sizeId: '20', x: W, y: W, rot: 0 },
+        { sizeId: '20', x: L(24.5), y: 0, rot: 0 },
+        { sizeId: '24.5', x: 0, y: W, rot: 0 },
       ],
       ce: [
         { sizeId: '24.5', x: 0, y: 0, rot: 0 },
@@ -59,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   };
 
   const HINTS = {
-    1: 'Elige una forma para empezar. Después puedes mover cada módulo.',
-    2: 'Arrastra un módulo para moverlo. Al acercarlo, se pega solo.',
+    1: 'Prueba el ancho y elige una forma. Después puedes mover, girar y agregar módulos a tu gusto.',
+    2: 'Arrastra para mover · al acercarlos se pegan solos. Cambia el ancho cuando quieras.',
     3: 'Cuando el layout te guste, envíalo por WhatsApp y te armamos la cotización.',
   };
 
@@ -92,12 +94,20 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   const totalM2El = root.querySelector('[data-mb-total-m2]');
   const countEl = root.querySelector('[data-mb-count]');
   const widthLabelEl = root.querySelector('[data-mb-width-label]');
+  const widthExampleEl = root.querySelector('[data-mb-width-example]');
   const humanEl = root.querySelector('[data-mb-human]');
   const dockM2 = root.querySelector('[data-mb-dock-m2]');
   const dockCount = root.querySelector('[data-mb-dock-count]');
 
   function sizeById(id) {
     return SIZES.find((s) => s.id === id) || SIZES[3];
+  }
+
+  function parseWidth(raw) {
+    const w = Number(String(raw == null ? '' : raw).replace(',', '.'));
+    if (!Number.isFinite(w)) return null;
+    const hit = WIDTH_OPTIONS.find((o) => Math.abs(o.m - w) < 0.001);
+    return hit ? hit.m : null;
   }
 
   function widthLabel(m) {
@@ -149,9 +159,13 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
 
   function setModuleWidth(next, opts) {
     opts = opts || {};
-    const w = Number(next);
-    if (!WIDTH_OPTIONS.some((o) => Math.abs(o.m - w) < 0.001)) return;
-    if (Math.abs(w - moduleWidth) < 0.001) return;
+    const w = parseWidth(next);
+    if (w == null) return;
+    if (Math.abs(w - moduleWidth) < 0.001) {
+      // Refuerza feedback si tocan el mismo ancho: no parece “roto”.
+      pulseWidthButtons();
+      return;
+    }
 
     const oldW = moduleWidth;
     if (!opts.silent) pushHistory();
@@ -176,15 +190,58 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
         m.y = cy - newDh / 2;
         clamp(m);
       });
+      // Tras cambiar ancho pueden solaparse: reacomoda sin perder el layout relativo.
+      reflowAfterWidthChange();
       centerGroup(modules);
     }
 
     syncWidthButtons();
     updateSizeLabels();
+    updateWidthExample();
+    pulseWidthButtons();
     if (!opts.silent) {
-      announce(`Ancho del módulo: ${widthLabel(moduleWidth)}.`);
-      render({ keepFocus: true });
+      const demo = sizeById('24.5');
+      announce(
+        `Ancho ${widthLabel(moduleWidth)}: un módulo de ${demo.label} mide ${sizeFootprintLabel(demo.m2)}.`
+      );
+      render({ keepFocus: true, widthFlash: true });
     }
+  }
+
+  /** Evita solapes al ensanchar/angostar módulos que ya estaban pegados. */
+  function reflowAfterWidthChange() {
+    if (modules.length < 2) return;
+    let guard = 0;
+    while (guard++ < modules.length * 4) {
+      let moved = false;
+      for (let i = 0; i < modules.length; i++) {
+        const mod = modules[i];
+        if (canPlace(mod.x, mod.y, mod)) continue;
+        const free = findNearestFree(mod, { x: mod.x, y: mod.y });
+        if (free) {
+          mod.x = free.x;
+          mod.y = free.y;
+          moved = true;
+        }
+      }
+      if (!moved) break;
+    }
+  }
+
+  function pulseWidthButtons() {
+    root.querySelectorAll('.mb-widths').forEach((group) => {
+      group.classList.remove('is-pulse');
+      // reinicia animación si ya estaba
+      void group.offsetWidth;
+      group.classList.add('is-pulse');
+    });
+  }
+
+  function updateWidthExample() {
+    if (!widthExampleEl) return;
+    const demo = sizeById(selectedSizeId);
+    widthExampleEl.textContent =
+      `Ej.: ${demo.label} → ${sizeFootprintLabel(demo.m2)}. Prueba otro ancho y míralo en el plano.`;
   }
 
   function boxOf(mod) {
@@ -459,10 +516,14 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
     syncWidthButtons();
+    updateWidthExample();
   }
 
   function syncScale() {
     if (!canvas) return;
+    // El aspect-ratio del plano sigue al terreno real; si no, al angostar
+    // el ancho los módulos se cortan o parecen no cambiar.
+    canvas.style.aspectRatio = `${PLOT_W} / ${PLOT_H}`;
     const width = canvas.clientWidth;
     if (width < 20) return;
     pxPerM = width / PLOT_W;
@@ -494,7 +555,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     if (!modules.length) {
       const empty = document.createElement('p');
       empty.className = 'mb-empty';
-      empty.textContent = 'El plano está vacío. Elige una forma o agrega un módulo.';
+      empty.textContent = 'El plano está vacío. Elige un ancho, una forma, o agrega el primer módulo.';
       canvas.appendChild(empty);
     }
 
@@ -514,6 +575,10 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       el.style.background = TONES[idx % TONES.length];
       el.setAttribute('aria-label', `Módulo ${idx + 1}, ${d.label}, ${fmtMeters(d.w)} por ${fmtMeters(d.h)} metros. Arrastrar para mover.`);
       el.innerHTML = `<span class="mb-module-idx">M${idx + 1}</span><span class="mb-module-label">${d.label}</span><span class="mb-module-dim">${fmtMeters(d.w)} × ${fmtMeters(d.h)} m</span>`;
+
+      if (!reduceMotion && opts.widthFlash) {
+        el.classList.add('is-width-flash');
+      }
 
       if (!reduceMotion && opts.animateId === mod.id && opts.from) {
         el.style.left = (opts.from.x * pxPerM) + 'px';
@@ -850,6 +915,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     refreshPlotSize();
     syncWidthButtons();
     updateSizeLabels();
+    updateWidthExample();
     updateUndo();
     announce('Cambio deshecho.');
     render({ keepFocus: true });
@@ -967,13 +1033,15 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       return;
     }
     const widthBtn = e.target.closest('[data-mb-width]');
-    if (widthBtn && root.contains(widthBtn)) {
+    if (widthBtn && root.contains(widthBtn) && !widthBtn.disabled) {
       setModuleWidth(widthBtn.getAttribute('data-mb-width'));
       return;
     }
     const sizeBtn = e.target.closest('[data-mb-size]');
     if (sizeBtn && root.contains(sizeBtn)) {
       selectedSizeId = sizeBtn.getAttribute('data-mb-size');
+      updateSizeLabels();
+      updateWidthExample();
       updateSummary();
       return;
     }

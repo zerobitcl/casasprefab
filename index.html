@@ -38,7 +38,7 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="styles.css?v=20261116a" />
+  <link rel="stylesheet" href="styles.css?v=20261119a" />
 
   <!-- JSON-LD: ProfessionalService (asesoría + cotización) -->
   <script type="application/ld+json">
@@ -481,9 +481,10 @@
 
         <aside class="mb-panel">
           <div class="mb-panel-step" data-mb-panel="1">
-            <h3>¿Qué forma te imaginas?</h3>
+            <h3>Ármala como quieras</h3>
             <div class="mb-width" role="group" aria-label="Ancho del módulo">
-              <p class="mb-add-label">Ancho del módulo</p>
+              <p class="mb-add-label">1 · Elige el ancho</p>
+              <p class="mb-width-lead">Cada módulo mide este ancho. Al cambiarlo, el largo se ajusta solo (m² ÷ ancho).</p>
               <div class="mb-widths">
                 <button type="button" data-mb-width="2" aria-pressed="false">2 m</button>
                 <button type="button" data-mb-width="2.5" aria-pressed="false">2,5 m</button>
@@ -491,8 +492,9 @@
                 <button type="button" data-mb-width="3" aria-pressed="false">3 m</button>
                 <button type="button" data-mb-width="3.5" class="is-active" aria-pressed="true">3,5 m</button>
               </div>
-              <p class="mb-width-note">Configurable según tu requerimiento, hasta 3,5 m.</p>
+              <p class="mb-width-note" data-mb-width-example>Ej.: 24,5 m² → 3,5 × 7 m. Prueba otro ancho y míralo en el plano.</p>
             </div>
+            <p class="mb-add-label mb-add-label--shapes">2 · Elige una forma de partida</p>
             <div class="mb-shapes">
               <button type="button" class="mb-shape-card" data-mb-preset="linea">
                 <svg viewBox="0 0 64 40" aria-hidden="true"><rect x="2" y="14" width="20" height="12"/><rect x="22" y="14" width="20" height="12"/><rect x="42" y="14" width="18" height="12"/></svg>
@@ -500,7 +502,7 @@
                 <span class="mb-shape-desc">Ideal para terrenos angostos</span>
               </button>
               <button type="button" class="mb-shape-card" data-mb-preset="ele">
-                <svg viewBox="0 0 64 40" aria-hidden="true"><rect x="6" y="4" width="50" height="12"/><rect x="6" y="16" width="16" height="20"/></svg>
+                <svg viewBox="0 0 64 40" aria-hidden="true"><rect x="6" y="4" width="28" height="12"/><rect x="34" y="4" width="22" height="12"/><rect x="6" y="16" width="28" height="12"/></svg>
                 <span class="mb-shape-name">Forma L</span>
                 <span class="mb-shape-desc">Separa el día de la noche</span>
               </button>
@@ -529,7 +531,7 @@
               <button type="button" data-mb-tip-close>Entendido</button>
             </p>
             <div class="mb-width mb-width--compact" role="group" aria-label="Ancho del módulo">
-              <p class="mb-add-label">Ancho</p>
+              <p class="mb-add-label">Ancho del módulo</p>
               <div class="mb-widths">
                 <button type="button" data-mb-width="2" aria-pressed="false">2</button>
                 <button type="button" data-mb-width="2.5" aria-pressed="false">2,5</button>
@@ -537,6 +539,7 @@
                 <button type="button" data-mb-width="3" aria-pressed="false">3</button>
                 <button type="button" data-mb-width="3.5" class="is-active" aria-pressed="true">3,5</button>
               </div>
+              <p class="mb-width-note mb-width-note--compact">Cámbialo cuando quieras: el plano se actualiza al toque.</p>
             </div>
             <div class="mb-selected" data-mb-selected>
               <p class="mb-selected-label" data-mb-selected-label>Toca un módulo del plano</p>
@@ -1215,6 +1218,6 @@
 
 <script src="js/main.js?v=20261114a" defer></script>
 <script src="js/prefab-catalog.js?v=20261114a" defer></script>
-<script src="js/modular-builder.js?v=20261110c" defer></script>
+<script src="js/modular-builder.js?v=20261119a" defer></script>
 </body>
 </html>
