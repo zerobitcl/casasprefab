@@ -2,8 +2,8 @@
 
 /**
  * Configurador de módulos a escala real.
- * Ancho configurable por proyecto (2 / 2,5 / 2,8 / 3 / 3,5 m).
- * El estado vive en metros: el dibujo coincide con los m² y el imán pega bordes.
+ * Ancho configurable (2–3,5 m). El largo de cada tipología es fijo;
+ * la superficie es ancho × largo y cambia al cambiar el ancho.
  */
 document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   const WIDTH_OPTIONS = [
@@ -15,40 +15,41 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   ];
   const SNAP = 0.6;
   const EPS = 0.03;
+  /** Ancho de referencia del catálogo (18–24,5 m²). El largo de cada tipología nace de ahí. */
+  const REF_WIDTH = 3.5;
 
   const SIZES = [
-    { id: '18', label: '18 m²', m2: 18 },
-    { id: '20', label: '20 m²', m2: 20 },
-    { id: '22', label: '22 m²', m2: 22 },
-    { id: '24.5', label: '24,5 m²', m2: 24.5 },
+    { id: '18', len: 18 / REF_WIDTH },
+    { id: '20', len: 20 / REF_WIDTH },
+    { id: '22', len: 22 / REF_WIDTH },
+    { id: '24.5', len: 24.5 / REF_WIDTH },
   ];
 
-  /** Coordenadas en metros según el ancho elegido; origen arriba-izquierda, antes de centrar. */
+  /** Coordenadas en metros; origen arriba-izquierda, antes de centrar. Largos fijos; el ancho W separa filas. */
   function presetsFor(W) {
-    const L = (m2) => m2 / W;
+    const L = (id) => sizeById(id).len;
     return {
       linea: [
         { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-        { sizeId: '24.5', x: L(24.5), y: 0, rot: 0 },
-        { sizeId: '18', x: L(24.5) * 2, y: 0, rot: 0 },
+        { sizeId: '24.5', x: L('24.5'), y: 0, rot: 0 },
+        { sizeId: '18', x: L('24.5') * 2, y: 0, rot: 0 },
       ],
       // L clásica: brazo horizontal (2 módulos) + pierna bajo el izquierdo.
-      // Misma orientación = proporciones claras y se parece al ícono.
       ele: [
         { sizeId: '24.5', x: 0, y: 0, rot: 0 },
-        { sizeId: '20', x: L(24.5), y: 0, rot: 0 },
+        { sizeId: '20', x: L('24.5'), y: 0, rot: 0 },
         { sizeId: '24.5', x: 0, y: W, rot: 0 },
       ],
       ce: [
         { sizeId: '24.5', x: 0, y: 0, rot: 0 },
         { sizeId: '20', x: 0, y: W, rot: 90 },
-        { sizeId: '24.5', x: 0, y: W + L(20), rot: 0 },
+        { sizeId: '24.5', x: 0, y: W + L('20'), rot: 0 },
       ],
       patio: [
         { sizeId: '24.5', x: 0, y: 0, rot: 90 },
-        { sizeId: '24.5', x: 0, y: L(24.5), rot: 0 },
-        { sizeId: '18', x: L(24.5), y: L(24.5), rot: 0 },
-        { sizeId: '24.5', x: L(24.5) + L(18) - W, y: 0, rot: 90 },
+        { sizeId: '24.5', x: 0, y: L('24.5'), rot: 0 },
+        { sizeId: '18', x: L('24.5'), y: L('24.5'), rot: 0 },
+        { sizeId: '24.5', x: L('24.5') + L('18') - W, y: 0, rot: 90 },
       ],
     };
   }
@@ -103,6 +104,14 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     return SIZES.find((s) => s.id === id) || SIZES[3];
   }
 
+  function areaOf(size) {
+    return moduleWidth * size.len;
+  }
+
+  function sizeLabel(size) {
+    return fmtArea(areaOf(size));
+  }
+
   function parseWidth(raw) {
     const w = Number(String(raw == null ? '' : raw).replace(',', '.'));
     if (!Number.isFinite(w)) return null;
@@ -115,9 +124,8 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     return hit ? hit.label : fmtMeters(m) + ' m';
   }
 
-  /** Con anchos angostos los módulos se alargan: el plano crece para que quepan las tipologías. */
   function refreshPlotSize() {
-    const maxLong = Math.max(...SIZES.map((s) => s.m2 / moduleWidth));
+    const maxLong = Math.max(...SIZES.map((s) => s.len));
     PLOT_W = Math.max(24, Math.ceil(maxLong * 3 + moduleWidth + 2));
     PLOT_H = Math.max(16, Math.ceil(maxLong * 2 + moduleWidth + 2));
   }
@@ -125,20 +133,21 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   function dims(mod) {
     const s = sizeById(mod.sizeId);
     const W = moduleWidth;
-    const long = s.m2 / W;
+    const long = s.len;
+    const m2 = W * long;
     const turned = mod.rot % 180 !== 0;
     return {
       w: turned ? W : long,
       h: turned ? long : W,
-      m2: s.m2,
-      label: s.label,
+      m2,
+      label: fmtArea(m2),
       long,
       short: W,
     };
   }
 
-  function sizeFootprintLabel(m2) {
-    return `${fmtMeters(moduleWidth)} × ${fmtMeters(m2 / moduleWidth)} m`;
+  function sizeFootprintLabel(size) {
+    return `${fmtMeters(moduleWidth)} × ${fmtMeters(size.len)} m`;
   }
 
   function syncWidthButtons() {
@@ -152,8 +161,10 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
   function updateSizeLabels() {
     root.querySelectorAll('[data-mb-size]').forEach((btn) => {
       const s = sizeById(btn.getAttribute('data-mb-size'));
+      const span = btn.querySelector('span');
       const small = btn.querySelector('small');
-      if (small) small.textContent = sizeFootprintLabel(s.m2);
+      if (span) span.textContent = sizeLabel(s);
+      if (small) small.textContent = sizeFootprintLabel(s);
     });
   }
 
@@ -162,12 +173,12 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     const w = parseWidth(next);
     if (w == null) return;
     if (Math.abs(w - moduleWidth) < 0.001) {
-      // Refuerza feedback si tocan el mismo ancho: no parece “roto”.
       pulseWidthButtons();
       return;
     }
 
     const oldW = moduleWidth;
+    const prevTotal = totals().m2;
     if (!opts.silent) pushHistory();
     moduleWidth = w;
     refreshPlotSize();
@@ -175,22 +186,20 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     if (activePreset && presetsFor(moduleWidth)[activePreset]) {
       applyPreset(activePreset, { silent: true, skipHistory: true });
     } else if (modules.length) {
+      // Largo fijo: solo cambia el lado corto → la superficie (ancho × largo) se actualiza.
       modules.forEach((m) => {
         const s = sizeById(m.sizeId);
-        const oldLong = s.m2 / oldW;
         const turned = m.rot % 180 !== 0;
-        const oldDw = turned ? oldW : oldLong;
-        const oldDh = turned ? oldLong : oldW;
+        const oldDw = turned ? oldW : s.len;
+        const oldDh = turned ? s.len : oldW;
         const cx = m.x + oldDw / 2;
         const cy = m.y + oldDh / 2;
-        const newLong = s.m2 / moduleWidth;
-        const newDw = turned ? moduleWidth : newLong;
-        const newDh = turned ? newLong : moduleWidth;
+        const newDw = turned ? moduleWidth : s.len;
+        const newDh = turned ? s.len : moduleWidth;
         m.x = cx - newDw / 2;
         m.y = cy - newDh / 2;
         clamp(m);
       });
-      // Tras cambiar ancho pueden solaparse: reacomoda sin perder el layout relativo.
       reflowAfterWidthChange();
       centerGroup(modules);
     }
@@ -200,9 +209,10 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     updateWidthExample();
     pulseWidthButtons();
     if (!opts.silent) {
-      const demo = sizeById('24.5');
+      const nextTotal = totals().m2;
       announce(
-        `Ancho ${widthLabel(moduleWidth)}: un módulo de ${demo.label} mide ${sizeFootprintLabel(demo.m2)}.`
+        `Ancho ${widthLabel(moduleWidth)}: superficie ${fmtArea(nextTotal)}` +
+        (modules.length ? ` (antes ${fmtArea(prevTotal)}).` : '.')
       );
       render({ keepFocus: true, widthFlash: true });
     }
@@ -241,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     if (!widthExampleEl) return;
     const demo = sizeById(selectedSizeId);
     widthExampleEl.textContent =
-      `Ej.: ${demo.label} → ${sizeFootprintLabel(demo.m2)}. Prueba otro ancho y míralo en el plano.`;
+      `Ej.: ${sizeFootprintLabel(demo)} → ${sizeLabel(demo)}. Al cambiar el ancho, cambia la superficie.`;
   }
 
   function boxOf(mod) {
@@ -630,9 +640,9 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       const b = document.createElement('button');
       b.type = 'button';
       b.dataset.mbResize = s.id;
-      b.textContent = s.id === '24.5' ? '24,5' : s.id;
+      b.textContent = areaOf(s).toLocaleString('es-CL', { maximumFractionDigits: 1 });
       b.className = mod.sizeId === s.id ? 'is-active' : '';
-      b.setAttribute('aria-label', `Cambiar a ${s.label}`);
+      b.setAttribute('aria-label', `Cambiar a ${sizeLabel(s)}`);
       b.setAttribute('aria-pressed', mod.sizeId === s.id ? 'true' : 'false');
       bar.appendChild(b);
     });
@@ -828,7 +838,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
     modules.push(mod);
     selectedId = mod.id;
     activePreset = null;
-    announce(`Módulo ${modules.length} agregado, ${s.label}.`);
+    announce(`Módulo ${modules.length} agregado, ${sizeLabel(s)}.`);
     render({ keepFocus: true });
   }
 
@@ -887,7 +897,7 @@ document.addEventListener('DOMContentLoaded', function initModularBuilder() {
       return;
     }
     activePreset = null;
-    announce(`Módulo ${modIndex(mod) + 1} ahora mide ${sizeById(sizeId).label}.`);
+    announce(`Módulo ${modIndex(mod) + 1} ahora mide ${sizeLabel(sizeById(sizeId))}.`);
     render({ keepFocus: true, animateId: mod.id, from: prevPos });
   }
 
